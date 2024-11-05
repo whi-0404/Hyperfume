@@ -132,6 +132,12 @@ main {
     flex-grow: 1;
 }
 
+hr {
+    position: relative;
+    right: 8px;
+    border-width: 1px;
+}
+
 .main-img img {
     width: 726px;
     height: 480px;
@@ -159,6 +165,14 @@ main {
 .first-brand-list, .second-brand-list {
     margin: 0;
     padding: 0;
+}
+
+/* Flash Sale */
+.Flash-Sale p {
+    text-align: center;
+    font-size: 36px;
+    font-weight: bolder;
+    color: red;
 }
 
 /*Footer*/
