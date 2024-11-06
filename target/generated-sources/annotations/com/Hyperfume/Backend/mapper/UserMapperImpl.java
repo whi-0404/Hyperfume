@@ -4,6 +4,8 @@ import com.Hyperfume.Backend.dto.request.UserCreationRequest;
 import com.Hyperfume.Backend.dto.request.UserUpdateRequest;
 import com.Hyperfume.Backend.dto.response.UserResponse;
 import com.Hyperfume.Backend.entity.User;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
@@ -42,12 +44,15 @@ public class UserMapperImpl implements UserMapper {
         UserResponse.UserResponseBuilder userResponse = UserResponse.builder();
 
         userResponse.username( user.getUsername() );
-        userResponse.password( user.getPassword() );
         userResponse.email( user.getEmail() );
         userResponse.fullname( user.getFullname() );
         userResponse.phone( user.getPhone() );
         userResponse.address( user.getAddress() );
         userResponse.dob( user.getDob() );
+        Set<String> set = user.getRoles();
+        if ( set != null ) {
+            userResponse.roles( new LinkedHashSet<String>( set ) );
+        }
 
         return userResponse.build();
     }

@@ -1,7 +1,7 @@
 package com.Hyperfume.Backend.controller;
 
 import com.nimbusds.jose.JOSEException;
-import com.Hyperfume.Backend.dto.request.ApiResponse;
+import com.Hyperfume.Backend.dto.response.ApiResponse;
 import com.Hyperfume.Backend.dto.request.AuthenticationRequest;
 import com.Hyperfume.Backend.dto.request.IntrospectRequest;
 import com.Hyperfume.Backend.dto.response.AuthenticationResponse;

@@ -1,4 +1,4 @@
-package com.Hyperfume.Backend.dto.request;
+package com.Hyperfume.Backend.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;

@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Data
@@ -43,4 +44,5 @@ public class User {
     @Column(name="role_id")
      int roleId;
 
+    Set<String> roles;
 }

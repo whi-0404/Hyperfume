@@ -1,16 +1,14 @@
 package com.Hyperfume.Backend.controller;
 
-import com.Hyperfume.Backend.dto.request.ApiResponse;
+import com.Hyperfume.Backend.dto.response.ApiResponse;
 import com.Hyperfume.Backend.dto.request.UserCreationRequest;
 import com.Hyperfume.Backend.dto.request.UserUpdateRequest;
 import com.Hyperfume.Backend.dto.response.UserResponse;
-import com.Hyperfume.Backend.entity.User;
 import com.Hyperfume.Backend.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,28 +21,44 @@ public class UserController {
     UserService userService;
 
     @PostMapping
-    ApiResponse<User> createUser(@RequestBody @Valid UserCreationRequest request)
+    ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request)
     {
-        ApiResponse<User> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(userService.createUser(request));
-        return apiResponse;
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.createUser(request))
+                .build();
     }
+
     @GetMapping
-    List<UserResponse> getUsers()
+    ApiResponse<List<UserResponse>> getUsers()
     {
 
-        return userService.getUsers();
+        return ApiResponse.<List<UserResponse>>builder()
+                .result(userService.getUsers())
+                .build();
     }
+
     @GetMapping("/{userId}")
-    UserResponse getUser(@PathVariable("userId") Integer userId)
+    ApiResponse<UserResponse> getUser(@PathVariable("userId") Integer userId)
     {
-        return userService.getUser(userId);
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.getUser(userId))
+                .build();
     }
+
+    @GetMapping("/my-info")
+    ApiResponse<UserResponse> getMyInfo()
+    {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.getMyInfo())
+                .build();
+    }
+
     @PutMapping("/{userId}")
     UserResponse updateUser(@PathVariable("userId") Integer userId, @RequestBody UserUpdateRequest request)
     {
         return userService.updateUser(userId, request);
     }
+
     @DeleteMapping("/{userId}")
     String deleteUser(@PathVariable Integer userId){
         userService.deleteUser(userId);
