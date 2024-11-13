@@ -1,0 +1,18 @@
+@use "sass:map";
+@import "theme";
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+* {
+    font-family: "Alumni Sans", sans-serif;
+
+}
+
+.container {
+    width: 100%;
+    // background: map.get($theme-colors, "main");
+}

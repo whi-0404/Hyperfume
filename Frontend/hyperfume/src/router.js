@@ -3,6 +3,7 @@ import HomePage from './pages/homePage';
 import { Routes, Route } from "react-router-dom";
 import MasterLayout from "./pages/themes/masterLayout";
 import SignIn from "./pages/signIn";
+import SignUp from "./pages/signUp";
 
 const renderUserRouter = () => {
     const userRouters = [
@@ -14,9 +15,13 @@ const renderUserRouter = () => {
             path: ROUTERS.USER.SIGNIN,
             component: <SignIn></SignIn>
         },
+        {
+            path: ROUTERS.USER.SIGNUP,
+            component: <SignUp></SignUp>
+        },
         // {
-        //     path: ROUTERS.USER.SIGNUP,
-        //     component: <SignUp></SignUp>
+        //     path: ROUTERS.USER.CART,
+        //     component: <Cart></Cart>
         // }
     ]
 

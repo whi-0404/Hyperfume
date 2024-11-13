@@ -2,6 +2,7 @@ export const ROUTERS = {
     USER: {
         HOME: "",
         SIGNIN: "Sign-In",
-        SIGNUP: "Sign-Up"
+        SIGNUP: "Sign-Up",
+        CART: "Cart"
     }
 }
