@@ -1,6 +1,8 @@
 import { ROUTERS } from "./utils/router";
 import HomePage from './pages/homePage';
 import { Routes, Route } from "react-router-dom";
+import MasterLayout from "./pages/themes/masterLayout";
+import SignIn from "./pages/signIn";
 
 const renderUserRouter = () => {
     const userRouters = [
@@ -8,24 +10,26 @@ const renderUserRouter = () => {
             path: ROUTERS.USER.HOME,
             component: <HomePage></HomePage>,
         },
-        // {
-        //     path: ROUTERS.USER.SIGNIN,
-        //     component: <SignInPage></SignInPage>
-        // },
+        {
+            path: ROUTERS.USER.SIGNIN,
+            component: <SignIn></SignIn>
+        },
         // {
         //     path: ROUTERS.USER.SIGNUP,
-        //     component: <SignUpPage></SignUpPage>
+        //     component: <SignUp></SignUp>
         // }
     ]
 
     return (
-        <Routes>
-            {
-                userRouters.map((item, key) => (
-                    <Route key={key} path={item.path} element={item.component} />
-                ))
-            }
-        </Routes>
+        <MasterLayout>
+            <Routes>
+                {
+                    userRouters.map((item, key) => (
+                        <Route key={key} path={item.path} element={item.component} />
+                    ))
+                }
+            </Routes>
+        </MasterLayout>
     )
 }
 
