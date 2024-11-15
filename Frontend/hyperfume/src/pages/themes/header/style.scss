@@ -1,3 +1,132 @@
-.header_top {
+@use "sass:map";
+@import "../../../styles/pages/all";
+@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap');
+
+
+$color_1: white;
+$color_2: #3E2723;
+$font-family_1: "Alumni Sans", sans-serif;
+$background-color_1: #D4A373;
+$background-color_2: #FFE0B2;
+$background-color_3: #E7AE77;
+
+/*Search bar*/
+/* Nav bar*/
+.header {
     background: #FBFAFA;
+
+    img {
+        float: left;
+        padding: 0;
+        width: 171px;
+        height: 168px;
+    }
+
+    h1 {
+        font-family: 'Alex Brush', cursive;
+        margin-top: 0;
+        text-align: center;
+        position: relative;
+        top: 18px;
+        right: 80px;
+        font-weight: lighter;
+        font-size: 45px;
+        margin-bottom: 112px;
+    }
+
+    .search-bar {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        bottom: 50px;
+    }
+
+    form {
+        width: 583px;
+        height: 32px;
+        background-color: $background-color_1;
+        border: 2px solid #D4A373;
+        border-radius: 10px;
+        position: relative;
+    }
+
+    input {
+        width: 548px;
+        height: 30px;
+        display: block;
+        border-radius: 10px;
+        font-size: 16px;
+        font-family: $font-family_1;
+        border: none;
+
+        &::placeholder {
+            font-style: italic;
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        border-radius: 10px;
+        cursor: pointer;
+        border: none;
+        background: none;
+        color: $color_1;
+        font-size: 22px;
+
+        i {
+            &:hover {
+                color: $color_2;
+            }
+        }
+    }
+
+    nav {
+        height: 39px;
+        width: 100%;
+        position: sticky;
+        top: 0;
+        background-color: $background-color_2;
+
+        ul {
+            font-size: 24px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 110px;
+
+            li {
+                a {
+                    &:hover {
+                        border-left: 22px solid #E7AE77;
+                        border-right: 22px solid #E7AE77;
+                        border-radius: 6px;
+                        background-color: $background-color_3;
+                        transition: all 0.03s ease;
+                    }
+                }
+            }
+        }
+
+        li {
+            text-align: center;
+        }
+
+        a {
+            text-decoration: none;
+            color: $color_2;
+        }
+    }
 }

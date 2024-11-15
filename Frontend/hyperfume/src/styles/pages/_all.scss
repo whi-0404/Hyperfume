@@ -1,5 +1,6 @@
 @use "sass:map";
 @import "theme";
+@import url('https://fonts.googleapis.com/css2?family=Alumni+Sans&display=swap');
 
 html,
 body {
@@ -15,4 +16,9 @@ body {
 .container {
     width: 100%;
     // background: map.get($theme-colors, "main");
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
 }

@@ -1,0 +1,53 @@
+@use "sass:map";
+@import "../../../styles/pages/all";
+
+$color_1: #3E2723;
+
+.footer {
+    width: 100%;
+    background: #FBFAFA;
+    font-size: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0;
+    column-gap: 200px;
+
+    a {
+        text-decoration: none;
+        color: $color_1;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    p {
+        font-size: 25px;
+        font-weight: bolder;
+    }
+
+    .Follow {
+        a {
+            border: dashed #3E2723;
+            padding: 5px;
+            margin-right: 20px;
+            border-radius: 50%;
+            font-size: 30px;
+            font-weight: bolder;
+            width: 30px;
+            color: $color_1;
+            text-align: center;
+        }
+    }
+
+    .Thong-tin {
+        a {
+            &:hover {
+                opacity: 60%;
+            }
+        }
+    }
+}
