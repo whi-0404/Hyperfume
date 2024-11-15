@@ -1,5 +1,7 @@
 import { memo } from 'react';
 import './style.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-regular-svg-icons';
 
 const signIn = () => {
     return (
@@ -18,7 +20,7 @@ const signIn = () => {
                         </label>
                         <div className="password-field">
                             <input type="password" id="password" placeholder=" Mật khẩu" />
-                            <i className="icon-eye"></i>
+                            <i className='icon-eye'> <FontAwesomeIcon icon={faEye} /></i>
                         </div>
 
                         <div className="remember-me">
