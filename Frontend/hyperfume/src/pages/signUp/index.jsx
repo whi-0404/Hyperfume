@@ -2,7 +2,7 @@ import { memo } from 'react';
 import './style.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-regular-svg-icons';
-
+import { Link } from 'react-router-dom';
 
 const signIn = () => {
     return (
@@ -48,13 +48,17 @@ const signIn = () => {
                             <span>HOẶC</span>
                         </div>
 
-                        <div className="social-login">
+                        <div className="social-signUp">
                             <button className="facebook-button">
                                 <i className="fa fa-facebook"></i> Facebook
                             </button>
                             <button className="google-button">
                                 <i className="fa fa-google"></i> Google
                             </button>
+                        </div>
+
+                        <div className='signIn-text'>
+                            Bạn đã có tài khoản? <Link to="/Sign-In">Đăng nhập</Link>
                         </div>
                     </form>
                 </div>

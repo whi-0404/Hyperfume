@@ -2,6 +2,7 @@ import { memo } from 'react';
 import './style.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-regular-svg-icons';
+import { Link } from 'react-router-dom';
 
 const signIn = () => {
     return (
@@ -46,7 +47,7 @@ const signIn = () => {
                         </div>
 
                         <p className="signup-text">
-                            Bạn chưa có tài khoản? <a href="#">Đăng ký</a>
+                            Bạn chưa có tài khoản? <Link to="/Sign-Up">Đăng ký</Link>
                         </p>
                     </form>
                 </div>

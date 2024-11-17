@@ -1,0 +1,76 @@
+@use "sass:map";
+@import "../../styles/pages/all";
+
+
+.container {
+    .intruct {
+        padding-top: 50px;
+        margin: 0 100px;
+        font-size: 28px;
+
+        h1 {
+            color: red;
+            font-size: 40px;
+            margin: 0;
+        }
+
+        hr {
+            height: 3px;
+            background-color: #8D6E63;
+            border-width: 0;
+        }
+
+        .guid,
+        .policy {
+            h2 {
+                font-size: 32px;
+                font-weight: bold;
+                margin: 0;
+                margin-left: 20px;
+            }
+
+            p {
+                margin-left: 20px;
+            }
+
+            ol {
+                margin: 15px;
+
+                li {
+                    font-weight: bold;
+
+                    ul {
+                        li {
+                            color: black;
+                            list-style-type: disc;
+                            font-weight: normal;
+                        }
+                    }
+                }
+            }
+        }
+
+        .guid {
+            img {
+                width: 20px;
+                height: 20px;
+            }
+        }
+
+        .policy {
+            .returnProduct {
+                ul {
+                    margin-top: 0;
+
+                    li {
+                        margin-left: 20px;
+                    }
+                }
+            }
+
+            .payment {
+                padding-bottom: 80px;
+            }
+        }
+    }
+}

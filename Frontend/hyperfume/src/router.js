@@ -1,9 +1,10 @@
 import { ROUTERS } from "./utils/router";
-import HomePage from './pages/homePage';
 import { Routes, Route } from "react-router-dom";
 import MasterLayout from "./pages/themes/masterLayout";
+import HomePage from './pages/homePage';
 import SignIn from "./pages/signIn";
 import SignUp from "./pages/signUp";
+import Instruction from "./pages/instruction";
 
 const renderUserRouter = () => {
     const userRouters = [
@@ -22,7 +23,11 @@ const renderUserRouter = () => {
         // {
         //     path: ROUTERS.USER.CART,
         //     component: <Cart></Cart>
-        // }
+        // },
+        {
+            path: ROUTERS.USER.INSTRUCTION,
+            component: <Instruction></Instruction>
+        },
     ]
 
     return (

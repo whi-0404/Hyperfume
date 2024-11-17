@@ -1,0 +1,71 @@
+@use "sass:map";
+@import "../../styles/pages/all";
+
+.container {
+    main {
+        hr {
+            width: 700px;
+            height: 3px;
+            background-color: #8D6E63;
+            border-width: 0;
+        }
+
+        .main-img {
+            img {
+                width: 726px;
+                height: 480px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                padding-top: 30px;
+            }
+        }
+
+        /* Famous brand */
+        .famous-brand {
+            text-align: center;
+        }
+
+        .famous-brand {
+            img {
+                height: 112px;
+                width: 112px;
+                padding: 0;
+                margin: 0px 15px 15px 0px;
+                display: inline-block;
+                border: solid #3E2723;
+                border-radius: 7%;
+                border-width: thin;
+            }
+        }
+
+        .first-brand-list,
+        .second-brand-list {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Flash Sale */
+        .Flash-Sale {
+            display: table;
+            margin: 0 auto;
+
+            &::before,
+            &::after {
+                display: inline-block;
+                content: "";
+                border-top: .3rem solid red;
+                width: 60px;
+                margin: 0 15px;
+                transform: translateY(-10px);
+            }
+
+            span {
+                text-align: center;
+                font-size: 36px;
+                font-weight: bolder;
+                color: red;
+            }
+        }
+    }
+}

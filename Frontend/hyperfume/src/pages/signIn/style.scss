@@ -65,7 +65,7 @@
         label {
             font-weight: bolder;
             font-size: 20px;
-
+            margin: 0;
         }
 
         input[type="checkbox"] {
@@ -73,13 +73,9 @@
             height: 20px;
             margin: 0;
             margin-right: 8px;
-            accent-color: #FFF3E0;
+            accent-color: blue;
             border-radius: 10px;
             cursor: pointer;
-
-            &:checked {
-                outline: 1px #3E2723 solid;
-            }
         }
 
     }
