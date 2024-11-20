@@ -49,13 +49,14 @@
         .Flash-Sale {
             display: table;
             margin: 0 auto;
+            margin-top: 10px;
 
             &::before,
             &::after {
                 display: inline-block;
                 content: "";
-                border-top: .3rem solid red;
-                width: 60px;
+                border-top: 4px solid red;
+                width: 70px;
                 margin: 0 15px;
                 transform: translateY(-10px);
             }
