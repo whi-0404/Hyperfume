@@ -37,7 +37,7 @@ const signIn = () => {
                             <span>HOẶC</span>
                         </div>
 
-                        <div className="social-login">
+                        <div className="social-signIn">
                             <button className="facebook-button">
                                 <i className="fa fa-facebook"></i> Facebook
                             </button>
