@@ -34,27 +34,15 @@
 
     input[type="text"],
     input[type="password"] {
-        width: 400px;
-        padding: 10px 5px;
+        width: 395px;
+        padding: 10px 0;
+        padding-left: 5px;
         margin-top: 5px;
         margin-bottom: 15px;
         border: 1px solid #4e3b28;
         border-radius: 4px;
         background-color: #FFF3E0;
         font-size: 20px;
-    }
-
-    .password-field {
-        position: relative;
-
-        .icon-eye {
-            color: #3E2723;
-            position: absolute;
-            top: 50%;
-            right: 10px;
-            transform: translateY(-65%);
-            cursor: pointer;
-        }
     }
 
     .signUp-button {

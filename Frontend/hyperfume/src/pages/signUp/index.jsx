@@ -1,8 +1,7 @@
 import { memo } from 'react';
 import './style.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-regular-svg-icons';
 import { Link } from 'react-router-dom';
+import PasswordToggle from '../../components/passHide-Unhide';
 
 const signIn = () => {
     return (
@@ -14,33 +13,27 @@ const signIn = () => {
                         <label htmlFor="username">
                             Tên tài khoản hoặc địa chỉ email <span>*</span>
                         </label>
-                        <input type="text" id="email" placeholder=" Email " />
+                        <input type="text" id="email" placeholder="Email " />
 
                         <label htmlFor="username">
                             Tên tài khoản <span>*</span>
                         </label>
-                        <input type="text" id="accountName" placeholder=" Tên tài khoản" />
+                        <input type="text" id="accountName" placeholder="Tên tài khoản" />
 
                         <label htmlFor="username">
                             Tên người dùng <span>*</span>
                         </label>
-                        <input type="text" id="userName" placeholder=" Tên người dùng" />
+                        <input type="text" id="userName" placeholder="Tên người dùng" />
 
                         <label htmlFor="password">
                             Mật khẩu <span>*</span>
                         </label>
-                        <div className="password-field">
-                            <input type="password" id="password" placeholder=" Mật khẩu" />
-                            <i className='icon-eye'> <FontAwesomeIcon icon={faEye} /></i>
-                        </div>
+                        <PasswordToggle />
 
                         <label htmlFor="password">
                             Nhập lại mật khẩu <span>*</span>
                         </label>
-                        <div className="password-field">
-                            <input type="password" id="password" placeholder=" Nhập lại mật khẩu" />
-                            <i className='icon-eye'> <FontAwesomeIcon icon={faEye} /></i>
-                        </div>
+                        <PasswordToggle placeholder='Nhập lại mật khẩu' />
 
                         <button type="submit" className="signUp-button">Đăng ký</button>
 

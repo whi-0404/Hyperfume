@@ -6,7 +6,7 @@
 }
 
 .login-form {
-    width: 100%;
+    width: 400px;
     max-width: 400px;
     margin: auto;
     padding: 20px;
@@ -34,26 +34,15 @@
 
     input[type="text"],
     input[type="password"] {
-        width: 400px;
-        padding: 10px 5px;
+        width: 395px;
+        padding: 10px 0;
+        padding-left: 5px;
         margin-top: 5px;
         margin-bottom: 15px;
         border: 1px solid #4e3b28;
         border-radius: 4px;
         background-color: #FFF3E0;
         font-size: 20px;
-    }
-
-    .password-field {
-        position: relative;
-
-        .icon-eye {
-            position: absolute;
-            top: 50%;
-            right: 10px;
-            transform: translateY(-65%);
-            cursor: pointer;
-        }
     }
 
     .remember-me {

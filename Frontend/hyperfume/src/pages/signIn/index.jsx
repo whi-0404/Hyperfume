@@ -1,8 +1,7 @@
 import { memo } from 'react';
 import './style.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-regular-svg-icons';
 import { Link } from 'react-router-dom';
+import PasswordToggle from '../../components/passHide-Unhide';
 
 const signIn = () => {
     return (
@@ -14,15 +13,12 @@ const signIn = () => {
                         <label htmlFor="username">
                             Tên tài khoản hoặc địa chỉ email <span>*</span>
                         </label>
-                        <input type="text" id="username" placeholder=" Tên tài khoản hoặc email" />
+                        <input type="text" id="username" placeholder="Tên tài khoản hoặc email" />
 
                         <label htmlFor="password">
                             Mật khẩu <span>*</span>
                         </label>
-                        <div className="password-field">
-                            <input type="password" id="password" placeholder=" Mật khẩu" />
-                            <i className='icon-eye'> <FontAwesomeIcon icon={faEye} /></i>
-                        </div>
+                        <PasswordToggle></PasswordToggle>
 
                         <div className="remember-me">
                             <input type="checkbox" id="remember" />
