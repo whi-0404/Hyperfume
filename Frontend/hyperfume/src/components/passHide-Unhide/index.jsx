@@ -18,7 +18,7 @@ const PasswordToggle = ({ placeholder = "Nhập mật khẩu" }) => {
                 className="password-toggle__input"
             />
             <span
-                className="password-toggle__icon"
+                className="eyeIcon"
                 onClick={togglePasswordVisibility}
             >
                 <FontAwesomeIcon icon={passwordVisible ? faEye : faEyeSlash} />
