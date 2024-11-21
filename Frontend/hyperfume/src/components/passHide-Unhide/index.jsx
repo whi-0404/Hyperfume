@@ -4,10 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 
 const PasswordToggle = ({ placeholder = "Nhập mật khẩu" }) => {
-    const [passwordVisible, setPasswordVisible] = useState(false);
+    const [passwordVisible, setPasswordVisible] = useState(false); // Khởi tạo state với giá trị false
 
     const togglePasswordVisibility = () => {
-        setPasswordVisible(!passwordVisible);
+        setPasswordVisible(!passwordVisible); // Cập nhật giá trị ngược lại (true -> false hoặc false -> true)
     };
 
     return (
