@@ -1,2 +1,30 @@
 @use "sass:map";
 @import "../../styles/style.scss";
+
+.sliderStyle {
+    height: 100%;
+    position: relative;
+
+
+    .leftArrow {
+        position: absolute;
+        top: 50%;
+        left: 32px;
+        transform: translate(0, -50%);
+        font-size: 30px;
+        z-index: 1;
+        color: beige;
+        cursor: pointer;
+    }
+
+    .rightArrow {
+        position: absolute;
+        top: 50%;
+        transform: translate(0, -50%);
+        right: 32px;
+        font-size: 30px;
+        z-index: 1;
+        color: beige;
+        cursor: pointer;
+    }
+}

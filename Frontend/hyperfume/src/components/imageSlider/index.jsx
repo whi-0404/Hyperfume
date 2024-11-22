@@ -1,4 +1,4 @@
-import React, { useState, memo } from "react";
+import React, { useState, memo, useEffect } from "react";
 import "./style.scss";
 
 import image1 from '../../assets/productImages/image-1.jpg';
@@ -18,11 +18,6 @@ const slides = [
 const ImageSlider = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    const sliderStyle = {
-        height: "100%",
-        position: "relative"
-    };
-
     const slideStyle = {
         width: "100%",
         height: "100%",
@@ -31,10 +26,32 @@ const ImageSlider = () => {
         backgroundImage: `url(${slides[currentIndex].url})`,
     };
 
+    const goToPre = () => {
+        const isFirstSlide = currentIndex === 0;
+        const newIndex = isFirstSlide ? slides.length - 1 : currentIndex - 1;
+        setCurrentIndex(newIndex)
+    }
+
+    const goToNext = () => {
+        const isLastSlide = currentIndex === slides.length - 1;
+        const newIndex = isLastSlide ? 0 : currentIndex + 1;
+        setCurrentIndex(newIndex);
+    }
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            goToNext();
+        }, 3000);
+
+        // Cleanup interval khi component bị unmount
+        return () => clearInterval(intervalId);
+    }, [currentIndex]); // Mỗi khi currentIndex thay đổi, useEffect sẽ chạy lại
+
     return (
         <>
-            <div style={sliderStyle}>
-                <div></div>
+            <div className="sliderStyle">
+                <div className="leftArrow" set onClick={goToPre}>❰</div>
+                <div className="rightArrow" onClick={goToNext}>❱</div>
                 <div style={slideStyle}></div>
             </div>
         </>

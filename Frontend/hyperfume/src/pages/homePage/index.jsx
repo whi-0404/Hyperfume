@@ -2,22 +2,13 @@ import { memo } from 'react';
 import './style.scss';
 import ImageSlider from '../../components/imageSlider';
 
-const containerStyles = {
-    width: '500px',
-    height: '280px',
-    margin: '0 auto',
-};
-
 const homePage = () => {
 
     return (
         <>
             <div className='container'>
                 <main>
-                    {/* <div class="main-img">
-                        <img src={require("../../assets/image/eau-de-toilette-diptyque.jpg")} alt="" />
-                    </div> */}
-                    <div style={containerStyles}>
+                    <div className='sliderStyle'>
                         <ImageSlider />
                     </div>
 
