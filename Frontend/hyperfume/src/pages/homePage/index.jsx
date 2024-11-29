@@ -1,6 +1,8 @@
 import { memo } from 'react';
 import './style.scss';
 import ImageSlider from '../../components/imageSlider';
+import ProductCard from '../../components/productCard';
+
 
 const homePage = () => {
 
@@ -35,6 +37,12 @@ const homePage = () => {
                     <div class="Flash-Sale">
                         <span>Flash Sale</span>
                     </div>
+                    <ProductCard
+                        src={require("../../assets/productImages/green-irish-tweed.png")}
+                        brandName="Creed"
+                        name="Green Irish Tweed"
+                        price="650,000đ - 6,100,000đ" />
+
                 </main>
             </div>
         </>
