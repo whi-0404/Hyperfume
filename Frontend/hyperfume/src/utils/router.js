@@ -4,6 +4,8 @@ export const ROUTERS = {
         SIGNIN: "Sign-In",
         SIGNUP: "Sign-Up",
         CART: "Cart",
-        INSTRUCTION: "Instruction"
+        INSTRUCTION: "Instruction",
+        FORGOTPASS: "Forgot-Password",
+        RESETPASS: "Reset-Password"
     }
 }

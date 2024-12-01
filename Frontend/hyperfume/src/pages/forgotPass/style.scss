@@ -15,7 +15,7 @@
         h2 {
             color: #3E2723;
             text-align: left;
-            font-size: 40px;
+            font-size: 30px;
             margin-bottom: 20px;
             font-weight: normal;
         }
@@ -31,8 +31,7 @@
             }
         }
 
-        input[type="text"],
-        input[type="password"] {
+        input[type="text"] {
             width: 395px;
             padding: 10px 0;
             padding-left: 5px;
@@ -44,37 +43,12 @@
             font-size: 20px;
         }
 
-        .remember-me {
-            display: flex;
-            align-items: center;
-            color: #3E2723;
-            margin-bottom: 15px;
-
-            label {
-                font-weight: bolder;
-                font-size: 20px;
-                margin: 0;
-            }
-
-            input[type="checkbox"] {
-                width: 20px;
-                height: 20px;
-                margin: 0;
-                margin-right: 8px;
-                accent-color: blue;
-                border-radius: 10px;
-                cursor: pointer;
-            }
-
-        }
-
-        .login-button {
+        .resetPass-button {
             width: 100%;
             padding: 10px;
             background-color: #FFE0B2;
             border: none;
             border-radius: 4px;
-            color: #4e3b28;
             font-size: 25px;
             cursor: pointer;
             margin-top: 10px;
@@ -82,24 +56,6 @@
             &:hover {
                 background-color: #4e3b28;
                 color: #FFE0B2;
-            }
-        }
-
-        .forgot-password {
-            display: block;
-            text-align: left;
-            color: #777CFE;
-            font-size: 20px;
-            margin-top: 10px;
-            text-decoration: none;
-
-            a {
-                color: #777CFE;
-                text-decoration: none;
-
-                &:hover {
-                    text-decoration: underline;
-                }
             }
         }
 

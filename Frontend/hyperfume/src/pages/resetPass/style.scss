@@ -1,11 +1,11 @@
 @use "sass:map";
 @import "../../styles/style.scss";
 
-.login {
+.signUp {
     background-color: #F5F1EB;
 
-    .login-form {
-        width: 400px;
+    .signUp-form {
+        width: 100%;
         max-width: 400px;
         margin: auto;
         padding: 20px;
@@ -44,31 +44,7 @@
             font-size: 20px;
         }
 
-        .remember-me {
-            display: flex;
-            align-items: center;
-            color: #3E2723;
-            margin-bottom: 15px;
-
-            label {
-                font-weight: bolder;
-                font-size: 20px;
-                margin: 0;
-            }
-
-            input[type="checkbox"] {
-                width: 20px;
-                height: 20px;
-                margin: 0;
-                margin-right: 8px;
-                accent-color: blue;
-                border-radius: 10px;
-                cursor: pointer;
-            }
-
-        }
-
-        .login-button {
+        .ResetPass-button {
             width: 100%;
             padding: 10px;
             background-color: #FFE0B2;
@@ -82,24 +58,6 @@
             &:hover {
                 background-color: #4e3b28;
                 color: #FFE0B2;
-            }
-        }
-
-        .forgot-password {
-            display: block;
-            text-align: left;
-            color: #777CFE;
-            font-size: 20px;
-            margin-top: 10px;
-            text-decoration: none;
-
-            a {
-                color: #777CFE;
-                text-decoration: none;
-
-                &:hover {
-                    text-decoration: underline;
-                }
             }
         }
 
@@ -124,7 +82,7 @@
             }
         }
 
-        .social-signIn {
+        .social-signUp {
             display: flex;
             justify-content: space-between;
             gap: 10px;
@@ -148,7 +106,6 @@
                 }
             }
 
-
             .fa {
                 padding: 5px;
                 font-size: 20px;
@@ -160,7 +117,7 @@
 
         }
 
-        .signup-text {
+        .signIn-text {
             text-align: center;
             font-size: 20px;
             color: #3E2723;

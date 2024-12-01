@@ -7,6 +7,8 @@ import SignIn from "./pages/signIn";
 import SignUp from "./pages/signUp";
 import Instruction from "./pages/instruction";
 import Cart from "./pages/cart";
+import ForgotPass from "./pages/forgotPass";
+import ResetPass from "./pages/resetPass";
 
 const renderUserRouter = () => {
     const userRouters = [
@@ -30,6 +32,14 @@ const renderUserRouter = () => {
             path: ROUTERS.USER.INSTRUCTION,
             component: <Instruction></Instruction>
         },
+        {
+            path: ROUTERS.USER.FORGOTPASS,
+            component: <ForgotPass></ForgotPass>
+        },
+        {
+            path: ROUTERS.USER.RESETPASS,
+            component: <ResetPass></ResetPass>
+        }
     ]
 
     return (

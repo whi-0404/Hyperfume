@@ -1,35 +1,25 @@
 import { memo } from 'react';
 import './style.scss';
 import { Link } from 'react-router-dom';
-import PasswordToggle from '../../components/passHide-Unhide';
 
 const signIn = () => {
     return (
         <>
             <div className="login">
                 <div className="login-form">
-                    <h2>Đăng nhập</h2>
+                    <h2>Quên mật khẩu? <br />
+                        Vui lòng nhập tên đăng nhập hoặc địa chỉ email. Bạn sẽ nhận được một liên kết tạo mật khẩu mới qua email.</h2>
                     <form>
                         <label htmlFor="username">
                             Tên tài khoản hoặc địa chỉ email <span>*</span>
                         </label>
                         <input type="text" id="username" placeholder="Tên tài khoản hoặc email" />
 
-                        <label htmlFor="password">
-                            Mật khẩu <span>*</span>
-                        </label>
-                        <PasswordToggle></PasswordToggle>
-
-                        <div className="remember-me">
-                            <input type="checkbox" id="remember" />
-                            <label htmlFor="remember">Ghi nhớ mật khẩu</label>
-                        </div>
-
-                        <button type="submit" className="login-button">Đăng nhập</button>
-
-                        <p className="forgot-password">
-                            <Link to="/Forgot-Password">Quên mật khẩu</Link>
-                        </p>
+                        <Link to="/Reset-Password">
+                            <button type="submit" className="resetPass-button">
+                                Đặt lại mật khẩu
+                            </button>
+                        </Link>
 
                         <div className="divider">
                             <span>HOẶC</span>
