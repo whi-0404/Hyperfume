@@ -1,8 +1,7 @@
-.nuoc-hoa-nam {
+.flash-sale {
   padding: 20px;
   background-color: #F5F1EB;
   max-width: 100%;
-
 
   // dieu huong 
   .breadcrumb {
@@ -41,11 +40,45 @@
   font-weight: bold;
   color: #3E2723; // Dark color
   text-align: center; // Center the title
-  margin: 20px 0; // Space above and below the title
+  margin: 0; // Space above and below the title
 
   // Optional: Add a text-shadow for a subtle effect
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+
+  .product-title-1 {
+    color: #3E2723;
+    margin: 0;
+    vertical-align: text-top;
+    font-size: 55px;
+  }
+  
+  .icon {
+    color: #3E2723; // Change the color of the icon
+    font-size: 100px; // Adjust the size of the icon
+    margin: 0 10px; // Space around the icon
+    
+    vertical-align: text-top; // Align icon with text vertically
+  }
+  
 }
+
+//poster flashsale
+  .poster-flashsale {
+    display: block;
+    max-width: 100%;
+    margin: 0 auto 50px auto;
+    width: 70%;
+
+    border: 5px solid #D4A373;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s, box-shadow 0.3s; /* Hiệu ứng chuyển đổi */
+  }
+
+  .poster-flashsale:hover {
+    transform: scale(1.05); /* Phóng to hình ảnh khi hover */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5); /* Tăng bóng đổ khi hover */
+  }
 
 //filter 5 thuoc tinh
   .filter-section {

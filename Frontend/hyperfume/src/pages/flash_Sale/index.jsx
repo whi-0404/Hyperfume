@@ -1,8 +1,13 @@
+/* eslint-disable no-unused-vars */
 import { memo, useState } from "react";
 import './style.scss';
 import DiorSavage from "../../assets/product_img/dior_sauvage.png";
+import { CiClock2 } from "react-icons/ci";
+import { TbNumber23Small } from "react-icons/tb";
+import Flashsaleimg from "../../assets/image/flashsale.png";
 
-const NuocHoaNam = () => {
+
+const FlashSale = () => {
     const [sortOption, setSortOption] = useState("latest");
     const [filters, setFilters] = useState({
         fragrance: '',
@@ -101,100 +106,18 @@ const NuocHoaNam = () => {
     const totalPages = Math.ceil(currentProducts.length / productsPerPage);
 
     return (
-        <div className="nuoc-hoa-nam">
+        <div className="flash-sale">
             <div className="breadcrumb">
               <a href="/" className="breadcrumb-link">Trang chủ</a>
               <span className="arrow"> &gt; </span>
-              <a href="/nuoc-hoa-nu" className="breadcrumb-link">Sản phẩm</a>
-              <span className="arrow"> &gt; </span>
-              <span className="current">Nước hoa Nam</span>
+              <span className="current">Flashsale</span>
               <hr className="divider" />
             </div>
 
-            <h1 className="product-title">Nước hoa nam</h1>
+            <h1 className="product-title">Flash sale <span className="icon"><CiClock2 /></span>kết thúc trong <span className="icon"><TbNumber23Small /><span className="product-title-1">:</span><TbNumber23Small /><span className="product-title-1">:</span><TbNumber23Small /></span></h1>
 
-            <div className="filter-section">
-                <div className="filter-group">
-                    <label>Độ lưu hương</label>
-                    <select name="fragrance" onChange={handleFilterChange}>
-                        <option value="">All</option>
-                        <option value="Tạm ổn 3 - 6 giờ">Tạm ổn 3 - 6 giờ</option>
-                        <option value="Lâu 7 - 12 giờ">Lâu 7 - 12 giờ</option>
-                        <option value="Rất lâu > 12 giờ">Rất lâu &gt; 12 giờ</option>
-                    </select>
-                </div>
-                <div className="filter-group">
-                    <label>Thương hiệu</label>
-                    <select name="brand" onChange={handleFilterChange}>
-                        <option value="">All</option>
-                        <option value="Afnan">Afnan</option>
-                        <option value="Armaf">Armaf</option>
-                        <option value="Creed">Creed</option>
-                        <option value="Chanel">Chanel</option>
-                        <option value="Clive Christian">Clive Christian</option>
-                        <option value="CreeGiorgiod">Giorgio</option>
-                        <option value="Diesel">Diesel</option>
-                        <option value="D&G">D&G</option>
-                        <option value="Dior">Dior</option>
-                        <option value="Marc Jacobs">Marc Jacobs</option>
-                        <option value="Montblanc">Montblanc</option>
-                        <option value="Narciso">Narciso</option>
-                        <option value="Prada">Prada</option>
-                        <option value="Gucci">Gucci</option>
-                        <option value="Roja">Roja</option>
-                        <option value="Lancome">Lancome</option>
-                        <option value="Yves">Yves</option>
-                        <option value="YSL">YSL</option>
-                        <option value="Jean Paul">Jean Paul</option>
-
-
-
-                    </select>
-                </div>
-                <div className="filter-group">
-                    <label>Nồng độ</label>
-                    <select name="concentration" onChange={handleFilterChange}>
-                        <option value="">All</option>
-                        <option value="Eau de Parfum">Eau de Parfum</option>
-                        <option value="Eau de Toilette">Eau de Toilette</option>
-                        <option value="Parfum">Parfum</option>
-                    </select>
-                </div>
-                <div className="filter-group">
-                    <label>Nhóm hương</label>
-                    <select name="fragranceGroup" onChange={handleFilterChange}>
-                        <option value="">All</option>
-                        <option value="Hương phương đông">Hương phương đông</option>
-                        <option value="Hương gỗ">Hương gỗ</option>
-                        <option value="Hương ngọt">Hương ngọt</option>
-                        <option value="Hương thơm mát">Hương thơm mát</option>
-                    </select>
-                </div>
-                <div className="filter-group">
-                    <label>Khoảng giá</label>
-                    <select name="maxPrice" onChange={handleFilterChange}>
-                        <option value="">All</option>
-                        <option value="500000">Dưới 500 nghìn</option>
-                        <option value="1000000">Dưới 1 triệu</option>
-                        <option value="2000000">Dưới 2 triệu</option>
-                        <option value="3000000">Dưới 3 triệu</option>
-                        <option value="5000000">Dưới 5 triệu</option>
-                        <option value="10000000">Dưới 10 triệu</option>
-                        <option value="20000000">Dưới 20 triệu</option>
-
-                    </select>
-                </div>
-            </div>
-
-            <div className="sort-section">
-                <h3>Sắp xếp theo</h3>
-                <select onChange={handleSortChange} value={sortOption}>
-                    <option value="latest">Mới nhất</option>
-                    <option value="bestSelling">Bán chạy nhất</option>
-                    <option value="highToLow">Giá từ cao - thấp</option>
-                    <option value="lowToHigh">Giá từ thấp - cao</option>
-                </select>
-            </div>
+            <img className="poster-flashsale" src={Flashsaleimg} alt="Poster flashsale" />
+            
 
             <div className="product-grid">
                 {displayedProducts.map((perfume, index) => (
@@ -226,4 +149,4 @@ const NuocHoaNam = () => {
     );
 };
 
-export default memo(NuocHoaNam);
+export default memo(FlashSale);

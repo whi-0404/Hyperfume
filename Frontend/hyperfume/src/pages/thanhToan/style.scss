@@ -1,0 +1,20 @@
+.breadcrumb {
+  font-size: 24px;
+  padding-left: 150px;
+  padding-right: 150px;
+}
+
+.arrow {
+  margin: 0 10px;
+}
+
+.current {
+  font-weight: bold;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #000; /* Change color as needed */
+  margin-top: 5px;
+  width: 100%;
+}

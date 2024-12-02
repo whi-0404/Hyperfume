@@ -2,7 +2,7 @@ import { memo, useState } from "react";
 import './style.scss';
 import DiorSavage from "../../assets/product_img/dior_sauvage.png";
 
-const NuocHoaNam = () => {
+const NuocHoaNu = () => {
     const [sortOption, setSortOption] = useState("latest");
     const [filters, setFilters] = useState({
         fragrance: '',
@@ -101,17 +101,17 @@ const NuocHoaNam = () => {
     const totalPages = Math.ceil(currentProducts.length / productsPerPage);
 
     return (
-        <div className="nuoc-hoa-nam">
+        <div className="nuoc-hoa-nu">
             <div className="breadcrumb">
               <a href="/" className="breadcrumb-link">Trang chủ</a>
               <span className="arrow"> &gt; </span>
               <a href="/nuoc-hoa-nu" className="breadcrumb-link">Sản phẩm</a>
               <span className="arrow"> &gt; </span>
-              <span className="current">Nước hoa Nam</span>
+              <span className="current">Nước hoa Nữ</span>
               <hr className="divider" />
             </div>
 
-            <h1 className="product-title">Nước hoa nam</h1>
+            <h1 className="product-title">Nước hoa nữ</h1>
 
             <div className="filter-section">
                 <div className="filter-group">
@@ -226,4 +226,4 @@ const NuocHoaNam = () => {
     );
 };
 
-export default memo(NuocHoaNam);
+export default memo(NuocHoaNu);
