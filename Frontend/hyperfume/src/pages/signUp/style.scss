@@ -1,8 +1,8 @@
 @use "sass:map";
 @import "../../styles/style.scss";
 
-.signUp {
-    background-color: #F5F1EB;
+.container {
+    padding: 50px 0px;
 
     .signUp-form {
         width: 100%;
@@ -10,12 +10,13 @@
         margin: auto;
         padding: 20px;
         border-radius: 8px;
-        font-family: 'Alumni Sans', sans-serif;
+        background-color: #FFFCF7;
 
         h2 {
             color: #3E2723;
             text-align: left;
             font-size: 40px;
+            margin-top: 0;
             margin-bottom: 20px;
             font-weight: normal;
         }
