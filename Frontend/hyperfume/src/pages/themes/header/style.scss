@@ -100,18 +100,6 @@
             align-items: center;
             justify-content: center;
             gap: 110px;
-
-            li {
-                a {
-                    &:hover {
-                        border-left: 22px solid #E7AE77;
-                        border-right: 22px solid #E7AE77;
-                        border-radius: 6px;
-                        background-color: #E7AE77;
-                        transition: all 0.03s ease;
-                    }
-                }
-            }
         }
 
         li {
@@ -121,7 +109,22 @@
         a {
             text-decoration: none;
             color: #3E2723;
+
+            &:hover {
+                border-left: 22px solid #E7AE77;
+                border-right: 22px solid #E7AE77;
+                border-radius: 6px;
+                background-color: #E7AE77;
+                transition: all 0.03s ease;
+            }
+
+            &.active {
+                border-left: 22px solid #E7AE77;
+                border-right: 22px solid #E7AE77;
+                border-radius: 6px;
+                background-color: #E7AE77;
+                color: white;
+            }
         }
     }
-
 }

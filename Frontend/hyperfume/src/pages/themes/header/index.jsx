@@ -2,9 +2,13 @@ import { memo } from 'react';
 import './style.scss';
 import logo from '../../../assets/logo.png';
 import 'font-awesome/css/font-awesome.min.css';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Header = () => {
+    const location = useLocation();
+
+    const isActive = (path) => location.pathname === path;
+
     return (
         <>
             <div className='header'>
@@ -24,19 +28,33 @@ const Header = () => {
                 <div className='navigation'>
                     <nav>
                         <ul>
-                            <li><Link to="/">Trang chủ</Link></li>
-                            <li><a href="#">Sản phẩm</a></li>
-                            <li><a href="#">Flash sale</a></li>
-                            <li><a href="#">Tư vấn</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Cẩm nang Nước hoa</a></li>
-                            <li><Link to="/Instruction">Hướng dẫn</Link></li>
+                            <li>
+                                <Link to="/" className={isActive('/') ? 'active' : ''}>Trang chủ</Link>
+                            </li>
+                            <li>
+                                <a href="#" >Sản phẩm</a>
+                            </li>
+                            <li>
+                                <a href="#" >Flash sale</a>
+                            </li>
+                            <li>
+                                <a href="#" >Tư vấn</a>
+                            </li>
+                            <li>
+                                <a href="#" >Blog</a>
+                            </li>
+                            <li>
+                                <a href="#" >Cẩm nang Nước hoa</a>
+                            </li>
+                            <li>
+                                <Link to="/Instruction" className={isActive('/Instruction') ? 'active' : ''}>Hướng dẫn</Link>
+                            </li>
                         </ul>
                     </nav>
                 </div>
             </div>
         </>
-    )
+    );
 };
 
 export default memo(Header);
