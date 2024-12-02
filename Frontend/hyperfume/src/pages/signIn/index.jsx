@@ -6,7 +6,7 @@ import PasswordToggle from '../../components/passHide-Unhide';
 const signIn = () => {
     return (
         <>
-            <div className="container">
+            <div className="login">
                 <div className="login-form">
                     <h2>Đăng nhập</h2>
                     <form>

@@ -4,7 +4,7 @@
 .container {
     main {
         hr {
-            width: 650px;
+            width: 670px;
             height: 2px;
             background-color: #8D6E63;
             border-width: 0;
@@ -18,12 +18,15 @@
             padding: 20px 0;
         }
 
-        /* Famous brand */
         .famous-brand {
+            width: 650px;
+            margin-bottom: 40px;
+            margin-left: auto;
+            margin-right: auto;
             text-align: center;
-        }
+            display: grid;
+            gap: 15px;
 
-        .famous-brand {
             h1 {
                 padding-top: 10px;
             }
@@ -32,19 +35,22 @@
                 height: 112px;
                 width: 112px;
                 padding: 0;
-                margin: 0px 15px 15px 0px;
                 display: inline-block;
                 border: solid #3E2723;
                 border-radius: 7%;
                 border-width: thin;
             }
+
+            .first-brand-list,
+            .second-brand-list {
+                display: grid;
+                grid-template-columns: auto auto auto auto auto;
+                gap: 10px;
+                margin: 0 auto;
+                padding: 0;
+            }
         }
 
-        .first-brand-list,
-        .second-brand-list {
-            margin: 0;
-            padding: 0;
-        }
 
         /* Flash Sale */
         .Flash-Sale {
