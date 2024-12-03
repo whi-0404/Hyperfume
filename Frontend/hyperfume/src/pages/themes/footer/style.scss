@@ -2,15 +2,17 @@
 @import "../../../styles/pages/all";
 
 .footer {
-    .container {
+    background: white;
+
+    .footer-container {
         width: 100%;
+        margin: 0;
+        margin-top: 30px;
         position: absolute;
-        background: white;
         font-size: 25px;
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        margin: 0;
         column-gap: 400px;
 
         a {
@@ -32,12 +34,15 @@
         .Follow {
             a {
                 border: dashed #3E2723;
-                padding: 5px;
+                display: inline-flex; // Đảm bảo nội dung căn giữa
+                align-items: center; // Căn giữa icon theo trục dọc
+                justify-content: center; // Căn giữa icon theo trục ngang
+                width: 50px; // Chiều rộng
+                height: 50px; // Chiều cao
                 margin-right: 20px;
-                border-radius: 50%;
-                font-size: 30px;
+                border-radius: 50%; // Tạo hình tròn
+                font-size: 30px; // Kích thước icon
                 font-weight: bolder;
-                width: 30px;
                 color: #3E2723;
                 text-align: center;
 

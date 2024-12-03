@@ -1,59 +1,86 @@
-import { memo } from 'react';
-import './style.scss';
+import { memo } from "react";
+import "./style.scss";
 import logo from '../../../assets/logo.png';
-import 'font-awesome/css/font-awesome.min.css';
-import { Link, useLocation } from 'react-router-dom';
+import slogan from '../../../assets/slogan.png';
+import { CiSearch } from "react-icons/ci";
+import { FiSmartphone } from "react-icons/fi";
+import { BsCart2 } from "react-icons/bs";
+import { RiArrowDownWideFill } from "react-icons/ri";
+import { NavLink } from 'react-router-dom';
 
 const Header = () => {
-    const location = useLocation();
-
-    const isActive = (path) => location.pathname === path;
-
     return (
-        <>
-            <div className='header'>
-                <Link to="/"><img src={logo} alt='Logo'></img></Link>
-
-                <h1>Hương thơm đánh thức ký ức, định hình lựa chọn</h1>
-
-                <div className="search-bar">
-                    <form>
-                        <input type="text" name="" placeholder="Tìm kiếm nước hoa hoặc nhãn hiệu......" />
-                        <button type="submit">
-                            <i className="fa fa-search" aria-hidden="true"></i>
-                        </button>
-                    </form>
+        <div className="header">
+            <div className="row">
+                <div className="col logo">
+                    <a href="/">
+                        <img src={logo} alt="Logo" />
+                    </a>
                 </div>
 
-                <div className='navigation'>
-                    <nav>
-                        <ul>
-                            <li>
-                                <Link to="/" className={isActive('/') ? 'active' : ''}>Trang chủ</Link>
-                            </li>
-                            <li>
-                                <a href="#" >Sản phẩm</a>
-                            </li>
-                            <li>
-                                <a href="#" >Flash sale</a>
-                            </li>
-                            <li>
-                                <a href="#" >Tư vấn</a>
-                            </li>
-                            <li>
-                                <a href="#" >Blog</a>
-                            </li>
-                            <li>
-                                <a href="#" >Cẩm nang Nước hoa</a>
-                            </li>
-                            <li>
-                                <Link to="/Instruction" className={isActive('/Instruction') ? 'active' : ''}>Hướng dẫn</Link>
-                            </li>
-                        </ul>
-                    </nav>
+                <div className="col mid">
+                    <img src={slogan} alt="Slogan" />
+                </div>
+
+                <div className="col right">
+                    <div className="others">
+                        <div className="cart-login">
+                            <div className="cart-icon">
+                                <NavLink to="/">
+                                    <i className="fa-solid fa-cart-shopping"><BsCart2 /></i>
+                                    <span className="cart-count">0</span>
+                                </NavLink>
+                            </div>
+                            <span className="login-text"><NavLink to="/">ĐĂNG NHẬP</NavLink></span>
+                        </div>
+
+                        <div className="hotline-search">
+                            <div className="hotline">
+                                <i className="fa-solid fa-mobile"><FiSmartphone /></i>
+                                <div className="hotline-info">
+                                    <span className="phone-number">0273-686-868</span>
+                                    <span className="hotline-text">Hotline bán hàng</span>
+                                </div>
+                            </div>
+                            <div className="search-bar">
+                                <input type="text" placeholder="Tìm kiếm ..." />
+                                <i className="fa-solid fa-magnifying-glass"><CiSearch /></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </>
+
+            <div>
+                <nav>
+                    <ul>
+                        <li>
+                            <NavLink to="/" exact activeClassName="active">Trang chủ</NavLink>
+                        </li>
+                        <li>
+                            <a href="#news">Sản phẩm <i className="fa-solid fa-angle-down"><RiArrowDownWideFill /></i></a>
+                            <ul className="dropdown">
+                                <li><NavLink to="/nuoc-hoa-nam" activeClassName="active">Nước hoa Nam</NavLink></li>
+                                <li><NavLink to="/nuoc-hoa-nu" activeClassName="active">Nước hoa Nữ</NavLink></li>
+                                <li><NavLink to="/nuoc-hoa-unisex" activeClassName="active">Nước hoa Unisex</NavLink></li>
+                            </ul>
+                        </li>
+                        <li><NavLink to="/flash-sale" activeClassName="active">Flashsale</NavLink></li>
+                        <li><a href="#about">Tư vấn</a></li>
+                        <li><NavLink to="/thanh-toan" activeClassName="active">Blog</NavLink></li>
+                        <li><a href="#contact">Cẩm nang Nước Hoa</a></li>
+                        <li>
+                            <a href="#about">Hướng dẫn <i className="fa-solid fa-angle-down"><RiArrowDownWideFill /></i></a>
+                            <ul className="dropdown">
+                                <li><NavLink to="/Instruction" activeClassName="active">Hướng dẫn mua hàng</NavLink></li>
+                                <li><NavLink to="/Instruction" activeClassName="active">Chính sách</NavLink></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
     );
 };
 

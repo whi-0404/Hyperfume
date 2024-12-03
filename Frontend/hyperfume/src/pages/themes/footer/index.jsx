@@ -3,12 +3,15 @@ import './style.scss';
 import boCongThuong from "../../../assets/image/boCongThuong.jpg";
 import FrameCard from "../../../assets/image/Frame-Card.jpg";
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebookF } from "@fortawesome/free-brands-svg-icons";
+import { faInstagram } from "@fortawesome/free-brands-svg-icons";
 
 const Footer = () => {
     return (
         <>
             <div className='footer'>
-                <div className='container'>
+                <div className='footer-container'>
                     <div class="Thong-tin">
                         <p>Thông tin thêm</p>
                         <ul>
@@ -40,8 +43,12 @@ const Footer = () => {
                     <div class="Follow">
                         <p>Follow us</p>
                         <div class="media icon">
-                            <a href="" class="fa fa-facebook"></a>
-                            <a href="" class="fa fa-instagram"></a>
+                            <a href="">
+                                <FontAwesomeIcon icon={faFacebookF} />
+                            </a>
+                            <a href="" >
+                                <FontAwesomeIcon icon={faInstagram} />
+                            </a>
                         </div>
                     </div>
                 </div>

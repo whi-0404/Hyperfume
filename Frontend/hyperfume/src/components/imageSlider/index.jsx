@@ -18,44 +18,47 @@ const slides = [
 const ImageSlider = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    const slideStyle = {
-        width: "100%",
-        height: "100%",
-        backgroundPosition: "center",
-        backgroundSize: "cover",
-        backgroundImage: `url(${slides[currentIndex].url})`,
-    };
-
     const goToPre = () => {
         const isFirstSlide = currentIndex === 0;
         const newIndex = isFirstSlide ? slides.length - 1 : currentIndex - 1;
-        setCurrentIndex(newIndex)
-    }
+        setCurrentIndex(newIndex);
+    };
 
     const goToNext = () => {
         const isLastSlide = currentIndex === slides.length - 1;
         const newIndex = isLastSlide ? 0 : currentIndex + 1;
         setCurrentIndex(newIndex);
-    }
+    };
 
     useEffect(() => {
         const intervalId = setInterval(() => {
             goToNext();
         }, 3000);
 
-        // Cleanup interval khi component bị unmount
         return () => clearInterval(intervalId);
-    }, [currentIndex]); // Mỗi khi currentIndex thay đổi, useEffect sẽ chạy lại
+    }, [currentIndex]);
 
     return (
-        <>
-            <div className="sliderStyle">
-                <div className="leftArrow" set onClick={goToPre}>❰</div>
-                <div className="rightArrow" onClick={goToNext}>❱</div>
-                <div style={slideStyle}></div>
-            </div>
-        </>
+        <div className="sliderStyle">
+            <div className="leftArrow" onClick={goToPre}>❰</div>
+            <div className="rightArrow" onClick={goToNext}>❱</div>
+
+            {slides.map((slide, index) => {
+                let slideClass = "slide";
+                if (index === currentIndex) slideClass += " activeSlide";
+                if (index === (currentIndex - 1 + slides.length) % slides.length) slideClass += " previousSlide";
+
+                return (
+                    <div
+                        key={index}
+                        className={slideClass}
+                        style={{ backgroundImage: `url(${slide.url})` }}
+                    ></div>
+                );
+            })}
+        </div>
     );
 };
 
 export default memo(ImageSlider);
+

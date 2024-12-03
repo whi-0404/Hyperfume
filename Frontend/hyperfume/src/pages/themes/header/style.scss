@@ -1,130 +1,268 @@
-@use "sass:map";
-@import "../../../styles/pages/all";
-@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap');
-
-
-/*Search bar*/
-/* Nav bar*/
 .header {
+    background-color: #FBFAFA;
+}
 
-    background: white;
+
+.logo {
+    display: grid;
+    justify-content: start;
+    padding-left: 20px;
 
     img {
-        float: left;
-        padding: 0;
-        width: 171px;
-        height: 168px;
+        height: 140px;
+        width: 140px;
+    }
+}
+
+.mid {
+    padding-top: 30px;
+    padding-right: 50px;
+
+    img {
+        height: 80px;
+        width: 750px;
+    }
+}
+
+/* Others */
+.others {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 50px;
+}
+
+/* Giỏ hàng và Đăng nhập */
+.cart-login {
+    text-align: center;
+    color: #4b2f2f;
+    padding-top: 30px;
+
+}
+
+.cart-icon {
+    background-color: #D4A373;
+    padding: 8px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    color: #ffffff;
+    gap: 5px;
+}
+
+.cart-icon i {
+    font-size: 24px;
+    margin-top: 5px;
+}
+
+.cart-count {
+    font-size: 24px;
+}
+
+.cart-icon a {
+    color: inherit;
+    /* Inherit color from parent */
+    text-decoration: none;
+    /* Remove underline */
+}
+
+.cart-icon a:visited {
+    color: inherit;
+    /* Keep the same color for visited link */
+}
+
+//login text
+.login-text {
+    font-size: 24px;
+    display: block;
+    color: #3E2723;
+    /* Default color */
+    margin-top: 15px;
+
+    a {
+        color: inherit;
+        /* Inherit color from parent */
+        text-decoration: none;
+        /* Remove underline */
     }
 
-    h1 {
-        font-family: 'Alex Brush', cursive;
-        margin-top: 0;
-        text-align: center;
-        position: relative;
-        top: 18px;
-        right: 80px;
-        font-weight: lighter;
-        font-size: 45px;
-        margin-bottom: 112px;
+    a:visited {
+        color: inherit;
+        /* Keep the same color for visited link */
     }
+}
 
-    .search-bar {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        bottom: 50px;
-    }
+/* Hotline và Tìm kiếm */
+.hotline-search {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    margin-top: 10px;
+}
 
-    form {
-        width: 583px;
-        height: 32px;
-        background-color: #D4A373;
-        border: 2px solid #D4A373;
-        border-radius: 10px;
-        position: relative;
-    }
+.hotline {
+    display: flex;
+    align-items: center;
+    background-color: #D4A373;
+    padding: 8px 12px;
+    border-radius: 20px;
+    color: #ffffff;
+    gap: 8px;
+}
 
-    input {
-        width: 548px;
-        height: 30px;
-        display: block;
-        border-radius: 10px;
-        font-size: 16px;
-        font-family: "Alumni Sans", sans-serif;
-        border: none;
+.hotline i {
+    font-size: 30px;
+    margin-top: 7px;
+}
 
-        &::placeholder {
-            font-style: italic;
-        }
+.phone-number {
+    display: block;
+    font-weight: semibold;
+    font-size: 20px;
+}
 
-        &:focus {
-            outline: none;
-        }
-    }
+.hotline-text {
+    display: block;
+    font-weight: semibold;
+    font-size: 20px;
+}
 
-    button {
-        position: absolute;
-        top: 0;
-        right: 0;
-        height: 100%;
-        border-radius: 10px;
-        cursor: pointer;
-        border: none;
-        background: none;
-        color: white;
-        font-size: 22px;
+/* Thanh tìm kiếm */
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #D4A373;
+    padding: 3px 5px;
+    border-radius: 20px;
+    gap: 8px;
 
-        i {
-            &:hover {
-                color: #3E2723;
-            }
-        }
-    }
+}
 
-    nav {
-        height: 39px;
-        width: 100%;
-        position: sticky;
-        top: 0;
-        background-color: #FFE0B2;
+.search-bar input {
+    border: none;
+    outline: none;
+    padding: 5px;
+    font-size: 20px;
+    border-radius: 15px;
+    width: 160px;
+    background-color: #ffffff;
+}
 
-        ul {
-            font-size: 24px;
-            margin: 0;
-            padding: 0;
-            list-style: none;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 110px;
-        }
+.search-bar input::placeholder {
+    color: #3E2723;
+}
 
-        li {
-            text-align: center;
-        }
+.search-button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    color: #ffffff;
+    cursor: pointer;
+}
 
-        a {
-            text-decoration: none;
-            color: #3E2723;
+.search-bar i {
+    color: #ffffff;
+    font-size: 25px;
+    margin-top: 5px;
+}
 
-            &:hover {
-                border-left: 22px solid #E7AE77;
-                border-right: 22px solid #E7AE77;
-                border-radius: 6px;
-                background-color: #E7AE77;
-                transition: all 0.03s ease;
-            }
 
-            &.active {
-                border-left: 22px solid #E7AE77;
-                border-right: 22px solid #E7AE77;
-                border-radius: 6px;
-                background-color: #E7AE77;
-                color: white;
-            }
-        }
-    }
+//nav
+nav ul {
+    max-width: 100%;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    /* Sử dụng Flexbox */
+    justify-content: center;
+    /* Căn giữa các mục */
+    background-color: #FFE0B2;
+}
+
+nav li {
+    float: left;
+    max-width: 100%;
+    margin: 0 80px;
+}
+
+/* Active link style */
+nav li a.active {
+    background-color: #E7AE77;
+    /* Change background color for active link */
+    color: #ffffff;
+    /* Change text color for active link */
+    border-radius: 5px;
+    /* Optional: add rounded corners */
+}
+
+nav li a {
+    display: block;
+    color: #3E2723;
+    text-align: center;
+    font-size: 24px;
+    font-weight: regular;
+    padding: 14px 14px;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+    /* Smooth transition for hover and active states */
+
+}
+
+
+nav li a:hover {
+    background-color: #E7AE77;
+    transition: 0.3s;
+    padding: 14px;
+    border-radius: 5px;
+
+}
+
+
+nav li i {
+    color: #3E2723;
+    /* Màu mặc định cho mũi tên */
+    vertical-align: middle;
+}
+
+
+
+.dropdown {
+    display: none;
+    /* Ẩn menu sổ xuống mặc định */
+    position: absolute;
+    /* Đặt vị trí tuyệt đối */
+    background-color: #FFE0B2;
+    /* Màu nền cho menu sổ xuống */
+    z-index: 1;
+    /* Đảm bảo menu sổ xuống hiển thị trên các phần tử khác */
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+nav li:hover .dropdown {
+    display: grid;
+    /* Hiển thị menu sổ xuống khi hover */
+}
+
+.dropdown li {
+    margin: 0;
+    /* Xóa margin cho các mục trong menu sổ xuống */
+}
+
+.dropdown li a {
+    padding: 10px 20px;
+    /* Padding cho các mục trong menu sổ xuống */
+    color: #3E2723;
+    /* Màu chữ cho các mục trong menu sổ xuống */
+}
+
+.dropdown li a:hover {
+    background-color: #E7AE77;
+    /* Thay đổi màu nền khi hover trong menu sổ xuống */
+    transition: 0.4s;
 }

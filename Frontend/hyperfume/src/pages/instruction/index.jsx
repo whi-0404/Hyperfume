@@ -6,6 +6,15 @@ const intruct = () => {
     return (
         <>
             <div className='container'>
+                <div className="breadcrumb">
+                    <a href="/" className="breadcrumb-link">Trang chủ</a>
+                    <span className="arrow"> &gt; </span>
+                    <a href="/Instruction" className="breadcrumb-link">
+                        <span className="current">Hướng dẫn</span>
+                    </a>
+                    <hr />
+                </div>
+
                 <div className='intruct'>
                     <div className='guid'>
                         <h1>Hướng dẫn mua hàng</h1>
