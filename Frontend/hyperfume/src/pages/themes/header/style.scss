@@ -79,6 +79,7 @@
     color: #3E2723;
     /* Default color */
     margin-top: 15px;
+    padding: 5px;
 
     a {
         color: inherit;
@@ -90,6 +91,12 @@
     a:visited {
         color: inherit;
         /* Keep the same color for visited link */
+    }
+
+    &:hover {
+        background-color: #D4A373;
+        color: #FFFFFF;
+        border-radius: 10px;
     }
 }
 

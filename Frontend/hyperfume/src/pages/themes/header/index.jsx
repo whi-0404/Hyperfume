@@ -32,7 +32,7 @@ const Header = () => {
                                 </NavLink>
                             </div>
 
-                            <span className="login-text"><NavLink to="/">ĐĂNG NHẬP</NavLink></span>
+                            <span className="login-text"><NavLink to="/Sign-in">ĐĂNG NHẬP</NavLink></span>
                         </div>
 
                         <div className="hotline-search">
