@@ -26,11 +26,12 @@ const Header = () => {
                     <div className="others">
                         <div className="cart-login">
                             <div className="cart-icon">
-                                <NavLink to="/">
+                                <NavLink to="/Cart">
                                     <i className="fa-solid fa-cart-shopping"><BsCart2 /></i>
                                     <span className="cart-count">0</span>
                                 </NavLink>
                             </div>
+
                             <span className="login-text"><NavLink to="/">ĐĂNG NHẬP</NavLink></span>
                         </div>
 
