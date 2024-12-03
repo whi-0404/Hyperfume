@@ -119,7 +119,7 @@ const NuocHoaNu = () => {
                     <select name="fragrance" onChange={handleFilterChange}>
                         <option value="">All</option>
                         <option value="Tạm ổn 3 - 6 giờ">Tạm ổn 3 - 6 giờ</option>
-                        <option value="Lâu 7 - 12 giờ">Lâu 7 - 12 giờ</option>
+                        <option value="Lâu - 7h đến 12h">Lâu 7 - 12 giờ</option>
                         <option value="Rất lâu > 12 giờ">Rất lâu &gt; 12 giờ</option>
                     </select>
                 </div>

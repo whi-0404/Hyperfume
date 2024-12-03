@@ -1,20 +1,168 @@
-.breadcrumb {
-  font-size: 24px;
-  padding-left: 150px;
-  padding-right: 150px;
-}
+.thanhtoan {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    background-color: #F5F1EB;
 
-.arrow {
-  margin: 0 10px;
-}
+    
 
-.current {
-  font-weight: bold;
-}
 
-.divider {
-  border: none;
-  border-top: 1px solid #000; /* Change color as needed */
-  margin-top: 5px;
-  width: 100%;
+    .grid1 {
+        display: grid;
+        grid-template-columns: 1fr; /* Single column */
+        width: 100%; /* Optional: Set width to full */
+        max-width: 1200px; /* Optional: Set a max width for the grid */    }
+
+
+        .box1 {
+
+            border: 2px solid #EBD8D8;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 15px;
+            background-color: #f9f9f9;
+
+            .text_box_info {
+                max-width: 500px;
+                margin-right: 10px;
+                font-size: 24px;
+            }
+            
+            .address-dropdowns {
+                display: flex;
+                justify-content: space-between; /* Adjusts space between dropdowns */
+                margin-bottom: 10px;
+                max-width: 1055px;
+                
+            
+                select {
+                    flex: 1; /* Makes each dropdown take equal space */
+                    margin-right: 10px; /* Adds space between dropdowns */
+                    font-size: 24px;
+
+                }
+            
+                select:last-child {
+                    margin-right: 0; /* Removes margin from the last dropdown */
+                    font-size: 24px;
+
+                }
+            }
+            
+        
+            h2 {
+                margin-bottom: 15px;
+                font-size: 30px;
+            }
+        
+            input[type="text"],
+            input[type="email"],
+            input[type="tel"],
+            input[type="text"], // Added phone number input style
+            select {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+        
+
+            .hop2 {
+                font-size: 24px;
+            }
+            .lable_sp {
+                display: flex;
+                .l1 {
+                    margin-left: 20px;
+                }
+                .l2 {
+                    margin-left: 45px;
+                }
+                .l3 {
+                    margin-left: 40px;
+                }
+                .l4 {
+                    margin-left: 50px;
+                }
+                .l5 {
+                    margin-left: 90px;
+                }
+            } 
+            .product1 {
+                display: flex;
+                align-items: center;
+                margin-bottom: 10px;
+                margin: 30px;
+                gap: 70px;
+                
+
+                .name1 {
+                    white-space: nowrap; 
+                }
+
+                .ml {
+                    white-space: nowrap; 
+                }
+                
+                .giatien1 {
+
+                    white-space: nowrap; 
+                }
+                .soluong1 {
+                    text-align: center;
+                    font-size: 20px;
+                    max-width: 40px;
+                    font-weight: bold;
+
+                }
+                .note_seller {
+                    margin: 10px;
+                    max-width: 300px;
+                    font-size: 20px;
+                }
+
+                .thumbnail1 {
+                    width: 60px;
+                    height: 60px;
+                    margin-right: 10px;
+                    border: 2px solid #ddd;
+                }
+
+
+
+                
+            }
+            .hop3 {
+                font-size: 24px;
+            }
+            .hop4_button {
+                font-size: 24px;
+                padding: 5px 15px;
+            }
+            .hop4_box {
+                font-size: 24px;
+                max-width: 500px;
+                margin-right: 10px;
+            }
+            .hop5_box {
+                font-size: 24px;
+            }
+            .hop5_text {
+                font-size: 24px;
+                font-weight: bold;
+                margin: 10px;
+                color: red;
+            }
+            .hop5_button {
+                font-size: 24px;
+                margin: 10px;
+                padding: 10px 30px;
+                font-weight: bold;
+                background-color: red;
+                color: white;
+                border: 3px solid orange;
+            }
+        }
 }

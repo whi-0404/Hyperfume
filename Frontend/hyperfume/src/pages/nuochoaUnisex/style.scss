@@ -8,6 +8,7 @@
   .breadcrumb {
     font-size: 24px;
     margin-bottom: 20px;
+    margin: 0 100px;//ne
 
     .breadcrumb-link {
         color: #000000; // Default link color
@@ -31,7 +32,7 @@
     .divider {
         border: 0;
         border-top: 1px solid #ccc;
-        margin: 10px 0;
+        margin: 10px -40px; //ne
     }
 }
 

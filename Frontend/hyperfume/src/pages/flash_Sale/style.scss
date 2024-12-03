@@ -7,6 +7,8 @@
   .breadcrumb {
     font-size: 24px;
     margin-bottom: 20px;
+    margin: 0 100px;//ne
+
 
     .breadcrumb-link {
         color: #000000; // Default link color
@@ -30,7 +32,7 @@
     .divider {
         border: 0;
         border-top: 1px solid #ccc;
-        margin: 10px 0;
+        margin: 10px -40px; //ne
     }
 }
 
@@ -62,6 +64,12 @@
   
 }
 
+// time countdown
+.countdown {
+    margin: 0 10px;
+}
+
+
 //poster flashsale
   .poster-flashsale {
     display: block;
@@ -69,7 +77,7 @@
     margin: 0 auto 50px auto;
     width: 70%;
 
-    border: 5px solid #D4A373;
+    border: 3px solid #D4A373;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s, box-shadow 0.3s; /* Hiệu ứng chuyển đổi */
@@ -80,60 +88,8 @@
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5); /* Tăng bóng đổ khi hover */
   }
 
-//filter 5 thuoc tinh
-  .filter-section {
-          margin: 10px 50px;
-          padding: 10px; 
-          border-radius: 15px;
-          background-color: #FFE0B2;
-          border: 1px solid #3E2723;
-    .filter-group {
-          display: inline-block;
-          padding: 0 20px;
-          align-items: center; 
-          label {
-              font-size: 32px;
-              color: #3E2723;
-              margin-right: 10px;
-          }
-          select {
-              border-radius: 15px;
-              border: 1px solid #3E2723;
-              cursor: pointer;
-              font-size: 32px;
-              text-align: center;
-              color: #3E2723;
-          }
-      }
-  }
 
-
-  // sort theo gia thap - cao
-  .sort-section {
-      display: flex;
-      gap: 10px;
-      text-align: center;
-      padding: 30px 250px 30px 30px;
-      justify-content: flex-end;
-      h3 {
-          font-size: 32px;
-          color: #3E2723;
-          font-weight: lighter;
-          text-align: center;
-      }
-      select {
-          padding: 0 15px;
-          text-align: center;
-          font-size: 32px;
-          background-color: #D4A373;
-          color: #fff;
-          border-radius: 15px;
-          cursor: pointer;
-          border: 1px solid #3E2723;
-      }
-  }
-
-  // list san pham
+  // list san pham discount
   .product-grid {
       display: grid;
       margin: 0 300px;
@@ -153,6 +109,10 @@
           box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
       }
 
+      .image-container {
+        position: relative; // Allows absolute positioning of child elements
+    }
+
       .product-image {
           width: 100%;
           height: auto;
@@ -161,18 +121,53 @@
       }
 
       .product-name {
-          font-size: 24px;
+          font-size: 26px;
           font-weight: lighter;
           margin: 10px 0 7px 0;
           color: #7b1616;
       }
 
 
-      .product-price {
-          font-size: 24px;
-          color: #3E2723;
-          font-weight: lighter;
-      }
+      .old-price {
+        text-decoration: line-through;
+        color: #727272;
+        margin: 0 5px;
+        font-size: 20px;
+        font-weight: lighter;
+    }
+    
+    .new-price {
+        font-weight: lighter;
+        color: #E00000; // New price highlighted
+        font-size: 26px;
+    }
+
+      .discount-tag {
+        position: absolute; // Positioning relative to the image container
+        top: -10px; // Adjust top position as needed
+        right: -10px; // Adjust right position as needed
+        width: 50px; // Set a fixed width for your discount image
+        height: auto; // Maintain aspect ratio
+        z-index: 10; // Ensure it appears above the product image
+    }
+
+    .quantity-sold {
+        width: 100%;
+        background-color: #f0f0f0; // Background of the bar
+        border-radius: 5px;
+        margin-top: 5px;
+    }
+    
+    .sold-bar {
+        height: 10px; // Height of the sold bar
+        background-color: pink; // Color of the sold bar
+        border-radius: 5px;
+    }
+    
+    .quantity-text {
+        margin-top: 5px;
+        font-size: 20px; // Font size for quantity text
+    }
   }
 
   .pagination {
