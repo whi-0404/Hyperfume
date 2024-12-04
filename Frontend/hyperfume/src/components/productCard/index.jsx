@@ -1,20 +1,3 @@
-// import { memo } from "react";
-// import "./style.scss";
-
-// const ProductCard = () => {
-//     return (
-//         <>
-//             <div className="container_product_card">
-//                 <div className="product_card">
-
-//                 </div>
-//             </div>
-//         </>
-//     );
-// };
-
-// export default memo(ProductCard);
-
 import { memo } from "react";
 import "./style.scss";
 

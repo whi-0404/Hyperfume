@@ -1,10 +1,10 @@
 import { memo } from 'react';
+import { Link } from "react-router-dom";
 import './style.scss';
 import ImageSlider from '../../components/imageSlider';
-import ProductCard from '../../components/productCard';
+import ProductCardSlider from '../../components/productCard_Slider';
 
-
-const homePage = () => {
+function homePage() {
 
     return (
         <>
@@ -34,19 +34,22 @@ const homePage = () => {
 
                     <hr />
 
-                    <div class="Flash-Sale">
-                        <span>Flash Sale</span>
+                    <div className="Sale-Container">
+                        <div className="Flash-Sale">
+                            <span><Link to="/">Flash Sale</Link></span>
+                        </div>
+
+                        <ProductCardSlider />
                     </div>
-                    <ProductCard
-                        src={require("../../assets/productImages/green-irish-tweed.png")}
-                        brandName="Creed"
-                        name="Green Irish Tweed"
-                        price="650,000đ - 6,100,000đ" />
+
+                    <div className="famous-product">
+                        <h1>Sản phẩm nổi bật</h1>
+                    </div>
 
                 </main>
             </div>
         </>
     );
-};
+}
 
 export default memo(homePage);

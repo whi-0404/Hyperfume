@@ -1,5 +1,6 @@
 import React, { memo } from "react";
 import CartItem from "./cartItem";
+import CartQuantityCount from "../cartQuantityCount";
 import "./style.scss";
 
 const Cart = ({ initialCartItems }) => {
@@ -52,6 +53,7 @@ const Cart = ({ initialCartItems }) => {
                 </div>
 
                 <div className="cart-summary">
+                    <h3>Tổng số lượng: <CartQuantityCount items={initialCartItems} /></h3>
                     <h3>Tạm tính (Tổng giá sản phẩm): {(totalPrice).toLocaleString("vi-VN")} đồng</h3>
                     <h3>Phí vận chuyển: {(shippingCost).toLocaleString("vi-VN")} đồng</h3>
                     <h3>Giảm giá: {(sale).toLocaleString("vi-VN")} đồng</h3>

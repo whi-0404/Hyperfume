@@ -1,2 +1,59 @@
-@use "sass:map";
-@import "../../styles/style.scss";
+.cardSlider-container {
+    width: 70%;
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+}
+
+.cardSlider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+
+.cardSlider-inner {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.cardSlider-item {
+    min-width: 200px;
+    /* Width của mỗi card */
+    margin: 0 10px;
+    opacity: 0.6;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.cardSlider-item.active {
+    opacity: 1;
+}
+
+button {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    font-size: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #FFE0B2;
+}
+
+.prev-btn {
+    left: 200px;
+}
+
+.next-btn {
+    right: 200px;
+}
