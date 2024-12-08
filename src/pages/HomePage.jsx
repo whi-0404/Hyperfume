@@ -1,13 +1,14 @@
 import React from "react";
 import "./HomePage.css";
 
-function HomePage() {
+const HomePage = () => {
   return (
     <div className="home-page">
-      <h1>Welcome to React Blog</h1>
-      <p>Explore our latest articles and updates.</p>
+      <Header />
+      <h2>Welcome to the Blog</h2>
+      <p>Explore our latest posts and updates.</p>
     </div>
   );
-}
+};
 
 export default HomePage;
