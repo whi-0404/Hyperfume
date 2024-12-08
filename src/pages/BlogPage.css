@@ -1,9 +1,9 @@
-.blog-page {
-  padding: 2rem;
-}
+.blog-page {  
+  padding: 20px;  
+}  
 
-.blog-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
+.blog-list {  
+  display: flex;  
+  flex-wrap: wrap;  
+  justify-content: space-between;  
+}  
