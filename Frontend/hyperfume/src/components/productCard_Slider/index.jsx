@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import './style.scss'; // Import file SCSS cho styling
-import ProductCard from '../productCard'; // Giả sử bạn đã có component ProductCard
+import React, { memo } from 'react';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
+import './style.scss';
+import ProductCard from '../productCard';
 
-const data = [
+const productData = [
     {
         img: require("../../assets/productImages/green-irish-tweed.png"),
         name: "Green Irish Tweed",
@@ -33,49 +35,64 @@ const data = [
         brandName: "Maison Margiela",
         price: "350,000đ - 2,700,000đ"
     },
+    {
+        img: require("../../assets/productImages/green-irish-tweed.png"),
+        name: "Replica ",
+        brandName: "Maison Margiela",
+        price: "350,000đ - 2,700,000đ"
+    },
+    {
+        img: require("../../assets/productImages/green-irish-tweed.png"),
+        name: "Apple Brandy On the Rock",
+        brandName: "By Kilian",
+        price: "900,000đ - 4,100,000đ"
+    },
 ];
 
+const product = productData.map((item) => <ProductCard
+    srcImg={item.img}
+    name={item.name}
+    brandName={item.brandName}
+    price={item.price}
+/>);
+
 const CardSlider = () => {
-    const [currentIndex, setCurrentIndex] = useState(0);
-
-    const nextSlide = () => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % data.length);
+    const responsive = {
+        desktop: {
+            breakpoint: {
+                max: 3000,
+                min: 1024
+            },
+            items: 3,
+            partialVisibilityGutter: 40
+        },
+        mobile: {
+            breakpoint: {
+                max: 464,
+                min: 0
+            },
+            items: 1,
+            partialVisibilityGutter: 30
+        },
+        tablet: {
+            breakpoint: {
+                max: 1024,
+                min: 464
+            },
+            items: 2,
+            partialVisibilityGutter: 30
+        }
     };
-
-    const prevSlide = () => {
-        setCurrentIndex((prevIndex) => (prevIndex - 1 + data.length) % data.length);
-    };
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            nextSlide(); // Tự động chuyển đến slide tiếp theo
-        }, 2000); // Thời gian giữa các lần chuyển slide (2000ms = 2 giây)
-
-        return () => clearInterval(interval); // Dọn dẹp interval khi component unmount
-    }, [currentIndex]); // Chạy 1 lần khi component mount
 
     return (
-        <div className="cardSlider-container">
-            <div className="cardSlider">
-                <button className="prev-btn" onClick={prevSlide}>❰</button>
-                <div className="cardSlider-inner">
-                    {data.map((d, index) => (
-                        <div
-                            key={index}
-                            className={`cardSlider-item ${index === currentIndex ? 'active' : ''}`}>
-                            <ProductCard
-                                src={d.img}
-                                brandName={d.brandName}
-                                name={d.name}
-                                price={d.price}
-                            />
-                        </div>
-                    ))}
-                </div>
-                <button className="next-btn" onClick={nextSlide}>❱</button>
+        <>
+            <div className="cardSlider-container">
+                <Carousel responsive={responsive}>
+                    {product}
+                </Carousel>
             </div>
-        </div>
-    );
-};
+        </>
+    )
+}
 
-export default CardSlider;
+export default memo(CardSlider);
