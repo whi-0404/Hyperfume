@@ -22,10 +22,9 @@ const intruct = () => {
                         <ul>
                             <li><b>B1:</b> Đầu tiên, nhấn vào sản phẩm bạn muốn mua.</li>
                             <li><b>B2:</b> Nếu muốn mua nhiều sản phẩm: nhấn vào nút “<b>Thêm vào giỏ hàng</b>”,
-                                sau đó sản phẩm sẽ được thêm vào giỏ hàng của  bạn. Hoặc nhấn nút “<b>Mua ngay</b>” nếu chỉ muốn mua sản phẩm đó.</li>
+                                sau đó sản phẩm sẽ được thêm vào giỏ hàng của bạn. Hoặc nhấn nút “<b>Mua ngay</b>” nếu chỉ muốn mua sản phẩm đó.</li>
                             <li><b>B3:</b> Nếu nhấn nút “<b>Mua ngay</b>” thì có thể bỏ qua bước này. Trong phần giỏ hàng của bạn sẽ hiển thị các thông tin: Tên và ảnh sản phẩm, đơn giá, số lượng, khuyến mãi của từng sản phẩm và thành tiền.
-                                Bên tay phải của phần sản phẩm sẽ có các ô vuông như này <img src={img} alt="" />,
-                                tick vào ô những sản phẩm mà bạn muốn mua. Sau khi chọn xong, nhấn vào nút “<b>Thanh toán</b>” để đi đến bước thanh toán.</li>
+                                Bên cạnh sản phẩm sẽ có ô vuông như sau <img src={img} />, tick vào các sản phẩm bạn muốn mua. Sau khi chọn xong nhấn vào nút “<b>Thanh toán</b>” để đi đến bước thanh toán.</li>
                             <li><b>B4:</b> Khi đến bước thanh toán, bạn điền các thông tin cá nhân như họ tên, địa chỉ nhận hàng, số điện thoại, mã giảm giá (nếu có). Sau đó chọn phương thức thanh toán bạn mong muốn. Cuối cùng là nhấn đặt hàng.</li>
                         </ul>
                     </div>

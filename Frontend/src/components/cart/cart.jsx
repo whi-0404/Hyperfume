@@ -1,10 +1,13 @@
-import React, { memo } from "react";
+import React, { memo, useState, useEffect } from "react";
 import CartItem from "./cartItem";
 import CartQuantityCount from "../cartQuantityCount";
 import "./style.scss";
 
 const Cart = ({ initialCartItems }) => {
     const [cartItems, setCartItems] = React.useState(initialCartItems);
+
+    const [selectedItems, setSelectedItems] = useState([]);
+    const [isAllChecked, setIsAllChecked] = useState(false);
 
     const handleUpdateQuantity = (id, quantity) => {
         setCartItems((prevItems) =>
@@ -22,6 +25,32 @@ const Cart = ({ initialCartItems }) => {
     const shippingCost = (totalPrice <= 600000) ? 30000 : 0;
     const sale = totalPrice * 10 / 100;
 
+    // Xử lý khi checkbox của từng item thay đổi
+    const handleSelectAll = (checked) => {
+        setIsAllChecked(checked);
+        if (checked) {
+            setSelectedItems(cartItems.map((item) => item.id));
+        } else {
+            setSelectedItems([]);
+        }
+    };
+
+    // Xử lý khi checkbox của từng item thay đổi
+    const handleItemCheckboxChange = (id, checked) => {
+        setSelectedItems((prevSelected) => {
+            if (checked) {
+                return [...prevSelected, id];
+            } else {
+                return prevSelected.filter((itemId) => itemId !== id);
+            }
+        });
+    };
+
+    // Cập nhật trạng thái của checkbox tổng
+    useEffect(() => {
+        setIsAllChecked(selectedItems.length === cartItems.length && cartItems.length > 0);
+    }, [selectedItems, cartItems]);
+
     return (
         <div className="container">
             <div className="breadcrumb">
@@ -35,21 +64,39 @@ const Cart = ({ initialCartItems }) => {
 
             <div className="cart-container">
                 <h1>Shopping Cart</h1>
+
+                <div className="total-checkbox-container">
+                    <label className="custom-checkbox">
+                        <input
+                            type="checkbox"
+                            checked={isAllChecked}
+                            onChange={(e) => handleSelectAll(e.target.checked)}
+                        />
+                        <span className="checkbox-box">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M9 16.2l-3.5-3.5L4 14l5 5L20 8l-1.4-1.4L9 16.2z" />
+                            </svg>
+                        </span>
+                    </label>
+                </div>
+
                 <div className="cart-content">
                     {cartItems.map((item) => (
                         <CartItem
                             key={item.id}
                             item={item}
+                            checked={selectedItems.includes(item.id)}
+                            onCheckboxChange={handleItemCheckboxChange}
                             onUpdateQuantity={handleUpdateQuantity}
                             onRemoveItem={handleRemoveItem}
                         />
-                    ))}
+                    ))
+                    }
+
                 </div>
 
                 <div className="sale-code">
                     <p>(*) Phụ thu 30.000 vnđ phí giao hàng đối với đơn hàng {"<"}= 600.000đ.</p>
-                    <input type="text" placeholder="Nhập mã giảm giá" />
-                    <button>Áp dụng</button>
                 </div>
 
                 <div className="cart-summary">
@@ -62,7 +109,7 @@ const Cart = ({ initialCartItems }) => {
                     <button className="checkout-btn">Tiến hành thanh toán</button>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 
