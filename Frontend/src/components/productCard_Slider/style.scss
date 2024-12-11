@@ -1,5 +1,25 @@
 .cardSlider-container {
-    width: 70%;
+    width: 100%;
     max-width: 1200px;
     margin: 0 auto;
+
+    .swiper-button-next,
+    .swiper-button-prev {
+        width: 40px;
+        height: 40px;
+        color: #3E2723;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 50%;
+
+        &:hover {
+            background: #FFE0B2;
+            color: #3E2723;
+        }
+
+        &::after {
+            font-size: 25px;
+            font-weight: bolder;
+            margin: 0;
+        }
+    }
 }

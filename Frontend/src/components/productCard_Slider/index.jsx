@@ -1,9 +1,9 @@
 import React, { memo } from 'react';
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
+import { Navigation, Pagination, A11y, Autoplay } from 'swiper/modules';
 import './style.scss';
+import 'swiper/css';
+import 'swiper/css/bundle';
 import ProductCard from '../productCard';
 
 const productData = [
@@ -62,14 +62,21 @@ const CardSlider = () => {
     return (
         <>
             <div className="cardSlider-container">
-                {/* <Carousel responsive={responsive}>
-                    {product}
-                </Carousel> */}
                 <Swiper
-                    spaceBetween={50}
-                    slidesPerView={4}
-                    onSlideChange={() => console.log('slide change')}
-                    onSwiper={(swiper) => console.log(swiper)}>
+                    modules={[Navigation, Pagination, A11y, Autoplay]}
+                    spaceBetween={35}
+                    slidesPerView={5}
+                    autoplay={{
+                        delay: 2500,
+                        disableOnInteraction: false,
+                    }}
+                    navigation
+                    pagination={{
+                        clickable: true,
+                        dynamicBullets: true,
+                    }}
+                    onSwiper={(swiper) => console.log(swiper)}
+                    onSlideChange={() => console.log('slide change')}>
 
                     {productData.map((product) => (
                         <SwiperSlide>

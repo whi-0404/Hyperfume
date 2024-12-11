@@ -1,6 +1,9 @@
 import { memo } from 'react';
-import './style.scss';
 import { Link } from 'react-router-dom';
+import './style.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebook } from "@fortawesome/free-brands-svg-icons";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import PasswordToggle from '../../components/passHide-Unhide';
 
 const signIn = () => {
@@ -43,10 +46,10 @@ const signIn = () => {
 
                         <div className="social-signUp">
                             <button className="facebook-button">
-                                <i className="fa fa-facebook"></i> Facebook
+                                <FontAwesomeIcon icon={faFacebook} /> Facebook
                             </button>
                             <button className="google-button">
-                                <i className="fa fa-google"></i> Google
+                                <FontAwesomeIcon icon={faGoogle} /> Google
                             </button>
                         </div>
 
