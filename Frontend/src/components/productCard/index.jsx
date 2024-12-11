@@ -1,13 +1,13 @@
 import { memo } from "react";
 import "./style.scss";
 
-const ProductCard = ({ srcImg, brandName, name, price }) => {
+const ProductCard = ({ img, brandName, name, price }) => {
     return (
         <>
             <div className="product-card">
                 <div className="product-image">
                     <img
-                        src={srcImg}
+                        src={img}
                         alt={name}
                     />
                 </div>
