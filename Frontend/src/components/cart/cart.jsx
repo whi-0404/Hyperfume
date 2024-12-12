@@ -77,6 +77,7 @@ const Cart = ({ initialCartItems }) => {
                                 <path d="M9 16.2l-3.5-3.5L4 14l5 5L20 8l-1.4-1.4L9 16.2z" />
                             </svg>
                         </span>
+                        Selct All
                     </label>
                 </div>
 
@@ -95,9 +96,7 @@ const Cart = ({ initialCartItems }) => {
 
                 </div>
 
-                <div className="sale-code">
-                    <p>(*) Phụ thu 30.000 vnđ phí giao hàng đối với đơn hàng {"<"}= 600.000đ.</p>
-                </div>
+                <p>(*) Phụ thu 30.000 vnđ phí giao hàng đối với đơn hàng {"<"}= 600.000đ.</p>
 
                 <div className="cart-summary">
                     <h3>Tổng số lượng: <CartQuantityCount items={initialCartItems} /></h3>
