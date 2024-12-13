@@ -1,7 +1,7 @@
 import { ROUTERS } from "./utils/router";
 import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/homePage";
-import MasterLayout from "./pages/theme/masterLayout";
+import MasterLayout from "./pages/themes/masterLayout";
 import SignIn from "./pages/signIn";
 import SignUp from "./pages/signUp";
 import Instruction from "./pages/instruction";
@@ -77,7 +77,7 @@ const renderUserRouter = () => {
                 {
                     userRouters.map((item, key) => (
                         <Route key={key} path={item.path} element={item.component} />
-                ))}
+                    ))}
             </Routes>
         </MasterLayout>
     )
