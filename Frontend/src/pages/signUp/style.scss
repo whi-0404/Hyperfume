@@ -1,0 +1,137 @@
+@use "sass:map";
+@import "../../styles/style.scss";
+
+.signUp {
+    padding: 50px 0px;
+
+    .signUp-form {
+        width: 100%;
+        max-width: 400px;
+        margin: auto;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #FFFCF7;
+
+        h2 {
+            color: #3E2723;
+            text-align: left;
+            font-size: 40px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-weight: normal;
+        }
+
+        label {
+            display: block;
+            color: #3E2723;
+            margin-top: 10px;
+            font-size: 20px;
+
+            span {
+                color: #F02121;
+            }
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 395px;
+            padding: 10px 0;
+            padding-left: 5px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #4e3b28;
+            border-radius: 4px;
+            background-color: #FFF3E0;
+            font-size: 20px;
+        }
+
+        .signUp-button {
+            width: 100%;
+            padding: 10px;
+            background-color: #FFE0B2;
+            border: none;
+            border-radius: 4px;
+            color: #4e3b28;
+            font-size: 25px;
+            cursor: pointer;
+            margin-top: 10px;
+
+            &:hover {
+                background-color: #4e3b28;
+                color: #FFE0B2;
+            }
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+
+            &::before,
+            &::after {
+                content: "";
+                flex: 1;
+                height: 1px;
+                background-color: #3E2723;
+            }
+
+            span {
+                padding: 0 10px;
+                color: #3E2723;
+                font-size: 30px;
+            }
+        }
+
+        .social-signUp {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+
+            .facebook-button,
+            .google-button {
+                flex: 1;
+                padding: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: #FFF3E0;
+                border: 1px solid #3E2723;
+                border-radius: 10px;
+                font-size: 25px;
+                cursor: pointer;
+                color: #3E2723;
+
+                i {
+                    margin-right: 5px;
+                }
+            }
+
+            .fa {
+                padding: 5px;
+                font-size: 20px;
+                width: 20px;
+                text-align: center;
+                text-decoration: none;
+                border-radius: 50%;
+            }
+
+        }
+
+        .signIn-text {
+            text-align: center;
+            font-size: 20px;
+            color: #3E2723;
+            margin-top: 15px;
+
+            a {
+                color: #777CFE;
+                text-decoration: none;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}

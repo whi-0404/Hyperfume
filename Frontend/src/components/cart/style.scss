@@ -1,0 +1,206 @@
+@use "sass:map";
+@import "../../styles/style.scss";
+
+.cart-container {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+
+    .product-image {
+        width: 110px;
+        height: 110px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .product-details {
+        flex: 1;
+        margin-left: 15px;
+        font-size: 25px;
+
+        h4 {
+            margin: 0;
+        }
+
+        p {
+            font-size: 25px;
+            margin: 5px 0;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+
+            button {
+                background-color: #D4A373;
+                color: #fff;
+                border: none;
+                padding: 5px 10px;
+                cursor: pointer;
+                border-radius: 4px;
+                font-size: 25px;
+
+                &:hover {
+                    background-color: darken(#D4A373, 10%);
+                }
+            }
+
+            span {
+                margin: 0 10px;
+            }
+        }
+    }
+
+    .checkbox-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 20px;
+        background-color: #f9f7f1;
+        margin-right: 20px;
+
+        .custom-checkbox {
+            position: relative;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+
+            input {
+                display: none;
+            }
+
+            .checkbox-box {
+                width: 100%;
+                height: 100%;
+                background-color: wheat;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 4px;
+                transition: all 0.3s ease;
+
+                svg {
+                    display: none;
+                    width: 20px;
+                    height: 20px;
+                    fill: wheat;
+                }
+            }
+
+            input:checked+.checkbox-box {
+                background-color: #4e3b28;
+
+                svg {
+                    display: block;
+                }
+            }
+        }
+    }
+
+    .remove-btn {
+        font-size: 20px;
+        background-color: #FFE0B2;
+        color: #8D6E63;
+        border: 1px solid #8D6E63;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 4px;
+
+        &:hover {
+            background-color: darken(#FFE0B2, 10%);
+        }
+    }
+}
+
+.total-checkbox-container {
+    display: flex;
+    align-items: center;
+    height: 30px;
+    margin-top: 20px;
+    font-size: 20px;
+    position: relative;
+    left: 15px;
+
+    .custom-checkbox {
+        position: relative;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+
+        input {
+            display: none;
+        }
+
+        .checkbox-box {
+            width: 100%;
+            height: 100%;
+            background-color: wheat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+
+            svg {
+                display: none;
+                width: 20px;
+                height: 20px;
+                fill: wheat;
+            }
+        }
+
+        input:checked+.checkbox-box {
+            background-color: #4e3b28;
+
+            svg {
+                display: block;
+            }
+        }
+    }
+
+    span {
+        font-size: 18px;
+        color: black;
+    }
+}
+
+p {
+    font-size: 20px;
+}
+
+.cart-summary {
+    text-align: right;
+    margin-top: 20px;
+    font-size: 25px;
+
+    h3 {
+        font-weight: lighter;
+    }
+
+    .checkout-btn {
+        background-color: #D4A373;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 25px;
+        cursor: pointer;
+        border-radius: 4px;
+
+        &:hover {
+            background-color: darken(#D4A373, 10%);
+        }
+    }
+
+    .total {
+        margin-top: 30px;
+    }
+}

@@ -1,0 +1,32 @@
+@use "sass:map";
+@import "../../styles/style.scss";
+
+.password-toggle {
+    position: relative;
+    display: inline-block;
+
+    input {
+        width: 395px;
+        padding: 10px 0;
+        padding-left: 5px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        border: 1px solid #4e3b28;
+        border-radius: 4px;
+        background-color: #FFF3E0;
+        font-size: 20px;
+    }
+
+    .eyeIcon {
+        color: #3E2723;
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-65%);
+        cursor: pointer;
+
+        &:hover {
+            color: #000;
+        }
+    }
+}
