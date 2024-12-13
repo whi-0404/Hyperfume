@@ -36,7 +36,13 @@ const CartItem = ({ item, checked, onCheckboxChange, onUpdateQuantity, onRemoveI
                     <span>{item.quantity}</span>
                     <button onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}>+</button>
                 </div>
+
             </div>
+
+            <div className="total-cost">
+                <p>{(item.price * item.quantity).toLocaleString("vi-VN")} đồng</p>
+            </div>
+
 
             <button className="remove-btn" onClick={() => onRemoveItem(item.id)}>
                 <FontAwesomeIcon icon={faTrash} />

@@ -68,7 +68,7 @@ const Header = () => {
                         </li>
                         <li><NavLink to="/flash-sale" activeClassName="active">Flashsale</NavLink></li>
                         <li><a href="#about">Tư vấn</a></li>
-                        <li><NavLink to="/thanh-toan" activeClassName="active">Blog</NavLink></li>
+                        <li><a href="">Blog</a></li>
                         <li><a href="#contact">Cẩm nang Nước Hoa</a></li>
                         <li>
                             <a href="#about">Hướng dẫn <i className="fa-solid fa-angle-down"><RiArrowDownWideFill /></i></a>

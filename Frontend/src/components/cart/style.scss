@@ -22,6 +22,15 @@
         border-radius: 8px;
     }
 
+    p {
+        font-size: 25px;
+        margin: 5px 0;
+    }
+
+    .total-cost {
+        margin-right: 30px;
+    }
+
     .product-details {
         flex: 1;
         margin-left: 15px;
@@ -29,11 +38,6 @@
 
         h4 {
             margin: 0;
-        }
-
-        p {
-            font-size: 25px;
-            margin: 5px 0;
         }
 
         .quantity-controls {
@@ -173,10 +177,6 @@
     }
 }
 
-p {
-    font-size: 20px;
-}
-
 .cart-summary {
     text-align: right;
     margin-top: 20px;
@@ -188,7 +188,6 @@ p {
 
     .checkout-btn {
         background-color: #D4A373;
-        color: #fff;
         border: none;
         padding: 10px 20px;
         font-size: 25px;
@@ -198,9 +197,22 @@ p {
         &:hover {
             background-color: darken(#D4A373, 10%);
         }
+
+        a {
+            text-decoration: none;
+            color: #fff;
+        }
     }
 
     .total {
         margin-top: 30px;
     }
+}
+
+.total-cost-item {
+    font-size: 25px;
+    position: relative;
+    text-align: right;
+    right: 85px;
+    font-weight: 600;
 }

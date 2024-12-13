@@ -5,7 +5,7 @@ import img from '../../assets/image/check-box.png';
 const intruct = () => {
     return (
         <>
-            <div className='container'>
+            <div className='instruction-container'>
                 <div className="breadcrumb">
                     <a href="/" className="breadcrumb-link">Trang chủ</a>
                     <span className="arrow"> &gt; </span>
