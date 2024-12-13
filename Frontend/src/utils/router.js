@@ -6,6 +6,7 @@ export const ROUTERS = {
         CART: "Cart",
         INSTRUCTION: "Instruction",
         FORGOTPASS: "Forgot-Password",
-        RESETPASS: "Reset-Password"
+        RESETPASS: "Reset-Password",
+        PRODUCT_DETAIL: "Dior"
     }
 }

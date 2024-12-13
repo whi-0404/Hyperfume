@@ -1,7 +1,6 @@
 import { ROUTERS } from "./utils/router";
 import { Routes, Route } from "react-router-dom";
 import MasterLayout from "./pages/themes/masterLayout";
-
 import HomePage from './pages/homePage';
 import SignIn from "./pages/signIn";
 import SignUp from "./pages/signUp";
@@ -9,6 +8,7 @@ import Instruction from "./pages/instruction";
 import Cart from "./pages/cart";
 import ForgotPass from "./pages/forgotPass";
 import ResetPass from "./pages/resetPass";
+import ProductDetail from "./pages/productDetail";
 
 const renderUserRouter = () => {
     const userRouters = [
@@ -39,6 +39,10 @@ const renderUserRouter = () => {
         {
             path: ROUTERS.USER.RESETPASS,
             component: <ResetPass></ResetPass>
+        },
+        {
+            path: ROUTERS.USER.PRODUCT_DETAIL,
+            component: <ProductDetail></ProductDetail>
         }
     ]
 

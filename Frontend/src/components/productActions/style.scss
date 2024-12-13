@@ -1,0 +1,110 @@
+.product-actions {
+    width: 765px;
+    height: 124px;
+    display: grid;
+    grid-template-columns: 319px 90px 315px;
+    grid-template-rows: 56px 56px;
+    gap: 13px 23px;
+    align-items: center;
+  
+    .price {
+        grid-column: 1;
+        grid-row: 1;
+        font-size: 48px;
+        color: red;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+  
+    .buy-now {
+        grid-column: 1;
+        grid-row: 2;
+        width: 319px;
+        height: 56px;
+        font-size: 40px;
+        background-color: red;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+
+        &:hover {
+            border: 5px solid black;
+        }
+    }
+  
+    .quantity-box {
+        grid-column: 2;
+        grid-row: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 90px;
+        height: 56px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: white;
+  
+        .quantity {
+            font-size: 40px;
+            margin: 0 8px;
+        }
+  
+        .adjust-button {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    }
+  
+    .add-to-cart {
+        grid-column: 3;
+        grid-row: 1;
+        width: 315px;
+        height: 56px;
+        font-size: 40px;
+        background-color: orange;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        cursor: pointer;
+    
+        .cart-icon {
+            font-size: 50px;
+        }
+
+        &:hover {
+            border: 5px solid black;
+        }
+    }
+  
+    .installment {
+        grid-column: 2 / 4;
+        grid-row: 2;
+        width: 100%;
+        height: 56px;
+        font-size: 40px;
+        background-color: blue;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+
+        &:hover {
+            border: 5px solid black;
+        }
+    }
+}
+  

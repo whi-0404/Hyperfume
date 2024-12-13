@@ -120,3 +120,4 @@ const intruct = () => {
 };
 
 export default memo(intruct);
+
