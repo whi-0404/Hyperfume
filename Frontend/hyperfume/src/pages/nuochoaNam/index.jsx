@@ -14,7 +14,7 @@ const NuocHoaNam = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const productsPerPage = 12; // Show 12 products per page
 
-    // tien viet dung dau phay
+    // tien viet dung dau phay , ,
     const formatCurrency = (amount) => {
       return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
     };
