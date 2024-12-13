@@ -1,0 +1,200 @@
+.flash-sale {
+  padding: 20px;
+  background-color: #F5F1EB;
+  max-width: 100%;
+
+  // dieu huong 
+  .breadcrumb {
+    font-size: 24px;
+    margin-bottom: 20px;
+    margin: 0 100px;//ne
+
+
+    .breadcrumb-link {
+        color: #000000; // Default link color
+        text-decoration: none; // Remove underline
+        transition: color 0.3s;
+
+        &:hover {
+            color: #FFE0B2; // Change color on hover
+        }
+    }
+
+    .arrow {
+        margin: 0 5px;
+    }
+
+    .current {
+        font-weight: bold; // Make current page bold
+        color: #000; // Different color for the current page
+    }
+
+    .divider {
+        border: 0;
+        border-top: 1px solid #ccc;
+        margin: 10px -40px; //ne
+    }
+}
+
+// title
+.product-title {
+  font-size: 80px; // Adjust size as needed
+  font-weight: bold;
+  color: #3E2723; // Dark color
+  text-align: center; // Center the title
+  margin: 0; // Space above and below the title
+
+  // Optional: Add a text-shadow for a subtle effect
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+
+  .product-title-1 {
+    color: #3E2723;
+    margin: 0;
+    vertical-align: text-top;
+    font-size: 55px;
+  }
+  
+  .icon {
+    color: #3E2723; // Change the color of the icon
+    font-size: 100px; // Adjust the size of the icon
+    margin: 0 10px; // Space around the icon
+    
+    vertical-align: text-top; // Align icon with text vertically
+  }
+  
+}
+
+// time countdown
+.countdown {
+    margin: 0 10px;
+}
+
+
+//poster flashsale
+  .poster-flashsale {
+    display: block;
+    max-width: 100%;
+    margin: 0 auto 50px auto;
+    width: 70%;
+
+    border: 3px solid #D4A373;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s, box-shadow 0.3s; /* Hiệu ứng chuyển đổi */
+  }
+
+  .poster-flashsale:hover {
+    transform: scale(1.05); /* Phóng to hình ảnh khi hover */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5); /* Tăng bóng đổ khi hover */
+  }
+
+
+  // list san pham discount
+  .product-grid {
+      display: grid;
+      margin: 0 300px;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 4fr));
+      gap: 30px;
+  }
+
+  .product-card {
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+      transition: box-shadow 0.3s;
+      background-color: #fff;
+      border: none;
+
+      &:hover {
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .image-container {
+        position: relative; // Allows absolute positioning of child elements
+    }
+
+      .product-image {
+          width: 100%;
+          height: auto;
+          border-radius: 4px;
+          margin-bottom: 10px;
+      }
+
+      .product-name {
+          font-size: 26px;
+          font-weight: lighter;
+          margin: 10px 0 7px 0;
+          color: #7b1616;
+      }
+
+
+      .old-price {
+        text-decoration: line-through;
+        color: #727272;
+        margin: 0 5px;
+        font-size: 20px;
+        font-weight: lighter;
+    }
+    
+    .new-price {
+        font-weight: lighter;
+        color: #E00000; // New price highlighted
+        font-size: 26px;
+    }
+
+      .discount-tag {
+        position: absolute; // Positioning relative to the image container
+        top: -10px; // Adjust top position as needed
+        right: -10px; // Adjust right position as needed
+        width: 50px; // Set a fixed width for your discount image
+        height: auto; // Maintain aspect ratio
+        z-index: 10; // Ensure it appears above the product image
+    }
+
+    .quantity-sold {
+        width: 100%;
+        background-color: #f0f0f0; // Background of the bar
+        border-radius: 5px;
+        margin-top: 5px;
+    }
+    
+    .sold-bar {
+        height: 10px; // Height of the sold bar
+        background-color: pink; // Color of the sold bar
+        border-radius: 5px;
+    }
+    
+    .quantity-text {
+        margin-top: 5px;
+        font-size: 20px; // Font size for quantity text
+    }
+  }
+
+  .pagination {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      button {
+          font-size: 24px;
+          background-color: #fff;
+          border: 1px solid #ddd;
+          border-radius: 10px;
+          padding: 8px 17px;
+          margin: 10px 10px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+
+          &.active {
+              background-color: #D4A373;
+              color: white;
+              border-color: #D4A373;
+          }
+
+          &:hover:not(.active) {
+              background-color: #e0e0e0;
+          }
+
+          
+      }
+  }
+}
