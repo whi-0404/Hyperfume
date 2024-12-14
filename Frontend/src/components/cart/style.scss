@@ -2,75 +2,173 @@
 @import "../../styles/style.scss";
 
 .cart-container {
-    padding-top: 40px;
-    padding-bottom: 40px;
-    width: 60%;
-    margin: 0 auto;
-}
+    padding: 20px;
+    background-color: #F5F1EB;
+    max-width: 100%;
 
-.cart-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    border-bottom: 1px solid #ddd;
+    .breadcrumb {
+        font-size: 24px;
+        margin-bottom: 20px;
+        margin: 0 100px; //ne
 
-    .product-image {
-        width: 110px;
-        height: 110px;
-        object-fit: cover;
-        border-radius: 8px;
-    }
+        .breadcrumb-link {
+            color: #000000; // Default link color
+            text-decoration: none; // Remove underline
+            transition: color 0.3s;
 
-    p {
-        font-size: 25px;
-        margin: 5px 0;
-    }
-
-    .total-cost {
-        margin-right: 30px;
-    }
-
-    .product-details {
-        flex: 1;
-        margin-left: 15px;
-        font-size: 25px;
-
-        h4 {
-            margin: 0;
+            &:hover {
+                color: #FFE0B2; // Change color on hover
+            }
         }
 
-        .quantity-controls {
-            display: flex;
-            align-items: center;
+        .arrow {
+            margin: 0 5px;
+        }
 
-            button {
-                background-color: #D4A373;
-                color: #fff;
-                border: none;
-                padding: 5px 10px;
-                cursor: pointer;
-                border-radius: 4px;
-                font-size: 25px;
+        .current {
+            font-weight: bold; // Make current page bold
+            color: #000; // Different color for the current page
+        }
 
-                &:hover {
-                    background-color: darken(#D4A373, 10%);
+        .divider {
+            border: 0;
+            border-top: 1px solid #ccc;
+            margin: 10px 0;
+        }
+    }
+
+    .cart-items-container {
+        padding-top: 40px;
+        padding-bottom: 40px;
+        width: 60%;
+        margin: 0 auto;
+    }
+
+    .cart-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        border-bottom: 1px solid #ddd;
+
+        .product-image {
+            width: 110px;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        p {
+            font-size: 25px;
+            margin: 5px 0;
+        }
+
+        .total-cost {
+            margin-right: 30px;
+        }
+
+        .product-details {
+            flex: 1;
+            margin-left: 15px;
+            font-size: 25px;
+
+            h4 {
+                margin: 0;
+            }
+
+            .quantity-controls {
+                display: flex;
+                align-items: center;
+
+                button {
+                    background-color: #D4A373;
+                    color: #fff;
+                    border: none;
+                    padding: 5px 10px;
+                    cursor: pointer;
+                    border-radius: 4px;
+                    font-size: 25px;
+
+                    &:hover {
+                        background-color: darken(#D4A373, 10%);
+                    }
+                }
+
+                span {
+                    margin: 0 10px;
                 }
             }
+        }
 
-            span {
-                margin: 0 10px;
+        .checkbox-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 20px;
+            background-color: #f9f7f1;
+            margin-right: 20px;
+
+            .custom-checkbox {
+                position: relative;
+                width: 30px;
+                height: 30px;
+                cursor: pointer;
+
+                input {
+                    display: none;
+                }
+
+                .checkbox-box {
+                    width: 100%;
+                    height: 100%;
+                    background-color: wheat;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 4px;
+                    transition: all 0.3s ease;
+
+                    svg {
+                        display: none;
+                        width: 20px;
+                        height: 20px;
+                        fill: wheat;
+                    }
+                }
+
+                input:checked+.checkbox-box {
+                    background-color: #4e3b28;
+
+                    svg {
+                        display: block;
+                    }
+                }
+            }
+        }
+
+        .remove-btn {
+            font-size: 20px;
+            background-color: #FFE0B2;
+            color: #8D6E63;
+            border: 1px solid #8D6E63;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+
+            &:hover {
+                background-color: darken(#FFE0B2, 10%);
             }
         }
     }
 
-    .checkbox-container {
+    .total-checkbox-container {
         display: flex;
-        justify-content: center;
         align-items: center;
-        height: 20px;
-        background-color: #f9f7f1;
-        margin-right: 20px;
+        height: 30px;
+        margin-top: 20px;
+        font-size: 20px;
+        position: relative;
+        left: 15px;
 
         .custom-checkbox {
             position: relative;
@@ -108,111 +206,52 @@
                 }
             }
         }
-    }
 
-    .remove-btn {
-        font-size: 20px;
-        background-color: #FFE0B2;
-        color: #8D6E63;
-        border: 1px solid #8D6E63;
-        padding: 5px 10px;
-        cursor: pointer;
-        border-radius: 4px;
-
-        &:hover {
-            background-color: darken(#FFE0B2, 10%);
-        }
-    }
-}
-
-.total-checkbox-container {
-    display: flex;
-    align-items: center;
-    height: 30px;
-    margin-top: 20px;
-    font-size: 20px;
-    position: relative;
-    left: 15px;
-
-    .custom-checkbox {
-        position: relative;
-        width: 30px;
-        height: 30px;
-        cursor: pointer;
-
-        input {
-            display: none;
-        }
-
-        .checkbox-box {
-            width: 100%;
-            height: 100%;
-            background-color: wheat;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-
-            svg {
-                display: none;
-                width: 20px;
-                height: 20px;
-                fill: wheat;
-            }
-        }
-
-        input:checked+.checkbox-box {
-            background-color: #4e3b28;
-
-            svg {
-                display: block;
-            }
+        span {
+            font-size: 18px;
+            color: black;
         }
     }
 
-    span {
-        font-size: 18px;
-        color: black;
-    }
-}
-
-.cart-summary {
-    text-align: right;
-    margin-top: 20px;
-    font-size: 25px;
-
-    h3 {
-        font-weight: lighter;
-    }
-
-    .checkout-btn {
-        background-color: #D4A373;
-        border: none;
-        padding: 10px 20px;
+    .cart-summary {
+        text-align: right;
+        margin-top: 20px;
         font-size: 25px;
-        cursor: pointer;
-        border-radius: 4px;
 
-        &:hover {
-            background-color: darken(#D4A373, 10%);
+        h3 {
+            font-weight: lighter;
         }
 
-        a {
-            text-decoration: none;
-            color: #fff;
+        .checkout-btn {
+            background-color: #D4A373;
+            border: none;
+            padding: 10px 20px;
+            font-size: 25px;
+            cursor: pointer;
+            border-radius: 4px;
+
+            &:hover {
+                background-color: darken(#D4A373, 10%);
+            }
+
+            a {
+                text-decoration: none;
+                color: #fff;
+            }
+        }
+
+        .total {
+            margin-top: 30px;
+            color: #EF3E3E;
+            font-weight: bold;
         }
     }
 
-    .total {
-        margin-top: 30px;
+    .total-cost-item {
+        font-size: 25px;
+        position: relative;
+        text-align: right;
+        right: 85px;
+        font-weight: 600;
     }
-}
-
-.total-cost-item {
-    font-size: 25px;
-    position: relative;
-    text-align: right;
-    right: 85px;
-    font-weight: 600;
 }
