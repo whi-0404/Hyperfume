@@ -1,9 +1,15 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import ProductRating from "../../components/rating";
 import ProductActions from "../../components/productActions";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import "./style.scss";
 
 const ProductDetail = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <div className="container">
       <div className="body-sides">
@@ -204,8 +210,76 @@ const ProductDetail = () => {
         <hr></hr>
 
         <section className="sec-4">
-          
+          <div className="review-header">
+            <h2 className="review-title">Đánh giá và nhận xét</h2>
+            <button className="review-button">Viết đánh giá</button>
+          </div>
+          <hr></hr>
+          <div className="review-body">
+            <div className="review-article">
+              <div className="review-user-account">
+                <div className="avatar">
+                  <img
+                    src={require("../../assets/image/UsersImages/henryle.jpg")}
+                    alt="avatar"
+                  />
+                </div>
+                <div className="user-name">Henry Le</div>
+              </div>
+              <div className="review-star">
+                {Array.from({ length: 5 }, (_, index) =>
+                  index < 5 ? (
+                    <AiFillStar key={index} className="star filled" />
+                  ) : (
+                    <AiOutlineStar key={index} className="star" />
+                  )
+                )}
+              </div>
+              <div className="review-time">4 tháng trước</div>
+              <div className="review-text">Mùi này thơm, mọi người nên thử</div>
+            </div>
+            <hr></hr>
+            <div className="review-article">
+              <div className="review-user-account">
+                <div className="avatar">
+                  <img
+                    src={require("../../assets/image/UsersImages/madeline.jpg")}
+                    alt="avatar"
+                  />
+                </div>
+                <div className="user-name">Madelyne Kim</div>
+              </div>
+              <div className="review-star">
+                {Array.from({ length: 5 }, (_, index) =>
+                  index < 5 ? (
+                    <AiFillStar key={index} className="star filled" />
+                  ) : (
+                    <AiOutlineStar key={index} className="star" />
+                  )
+                )}
+              </div>
+              <div className="review-time">7 tháng trước</div>
+              <div className="review-text">
+                Mùi này oke, mua liền đi mọi người ơi
+              </div>
+            </div>
+          </div>
+          <hr></hr>
+          <div className="review-pagination">
+            {Array.from({ length: 2 }, (_, index) => (
+              <button
+                key={index}
+                onClick={() => handlePageChange(index + 1)}
+                disabled={currentPage === index + 1}
+                className={currentPage === index + 1 ? "active" : ""}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
         </section>
+
+        <hr></hr>
       </div>
     </div>
   );
