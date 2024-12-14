@@ -12,7 +12,7 @@ const intruct = () => {
                     <a href="/Instruction" className="breadcrumb-link">
                         <span className="current">Hướng dẫn</span>
                     </a>
-                    <hr />
+                    <hr className="divider" />
                 </div>
 
                 <div className='intruct'>
