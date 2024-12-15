@@ -10,6 +10,37 @@ const ProductDetail = () => {
     setCurrentPage(pageNumber);
   };
 
+  const products = [
+    {
+      id: 1,
+      name: "Armaf Club De Nuit Intense Man Limited Edition Parfum",
+      price: "300,000đ - 2,150,000đ",
+      image: require("../../assets/productImages/armaf/armaf-club-de-nuit.jpg"),
+      url: "#",
+    },
+    {
+      id: 2,
+      name: "Creed Green Irish Tweed EDP",
+      price: "650,000đ - 6,100,000đ",
+      image: require("../../assets/productImages/creed/green-irish-tweed.png"),
+      url: "#",
+    },
+    {
+      id: 3,
+      name: "Roja Elysium Pour Homme Parfum",
+      price: "900,000đ - 7,600,000đ",
+      image: require("../../assets/productImages/roja-dove/roja-elysium.png"),
+      url: "#",
+    },
+    {
+      id: 4,
+      name: "Diesel Fuel for Life Homme EDP",
+      price: "250,000đ - 1,900,000đ",
+      image: require("../../assets/productImages/diesel/diesel-fuel.png"),
+      url: "#",
+    },
+  ];
+
   return (
     <div className="container">
       <div className="body-sides">
@@ -280,6 +311,29 @@ const ProductDetail = () => {
         </section>
 
         <hr></hr>
+
+        <section className="sec-5 related-products">
+          <h2 className="title">SẢN PHẨM LIÊN QUAN</h2>
+          <div className="products-container">
+            {products.map((product) => (
+              <a
+                href={product.url}
+                key={product.id}
+                className="product-card"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div className="image-container">
+                  <img src={product.image} alt={product.name} />
+                </div>
+                <div className="product-info">
+                  <h3 className="product-name">{product.name}</h3>
+                  <p className="product-price">{product.price}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   );
