@@ -1,53 +1,90 @@
 package com.Hyperfume.Backend.controller;
 
-import com.Hyperfume.Backend.dto.request.ApiResponse;
 import com.Hyperfume.Backend.dto.request.UserCreationRequest;
 import com.Hyperfume.Backend.dto.request.UserUpdateRequest;
+import com.Hyperfume.Backend.dto.response.ApiResponse;
+import com.Hyperfume.Backend.dto.response.PerfumeResponse;
 import com.Hyperfume.Backend.dto.response.UserResponse;
-import com.Hyperfume.Backend.entity.User;
 import com.Hyperfume.Backend.service.UserService;
 import jakarta.validation.Valid;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/users")
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor(onConstructor_ = @__(@Autowired))
+@Slf4j
 public class UserController {
-    UserService userService;
+
+    private final UserService userService;
 
     @PostMapping
-    ApiResponse<User> createUser(@RequestBody @Valid UserCreationRequest request)
+    ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request)
     {
-        ApiResponse<User> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(userService.createUser(request));
-        return apiResponse;
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.createUser(request))
+                .build();
     }
+
     @GetMapping
-    List<UserResponse> getUsers()
+    ApiResponse<List<UserResponse>> getUsers()
     {
 
-        return userService.getUsers();
+        return ApiResponse.<List<UserResponse>>builder()
+                .result(userService.getUsers())
+                .build();
     }
+
     @GetMapping("/{userId}")
-    UserResponse getUser(@PathVariable("userId") Integer userId)
+    ApiResponse<UserResponse> getUser(@PathVariable("userId") Integer userId)
     {
-        return userService.getUser(userId);
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.getUser(userId))
+                .build();
     }
+
+    @GetMapping(value = "/my-info")
+    ApiResponse<UserResponse> getMyInfo()
+    {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.getMyInfo())
+                .build();
+    }
+
     @PutMapping("/{userId}")
-    UserResponse updateUser(@PathVariable("userId") Integer userId, @RequestBody UserUpdateRequest request)
+    ApiResponse<UserResponse> updateUser(@PathVariable("userId") Integer userId, @RequestBody UserUpdateRequest request)
     {
-        return userService.updateUser(userId, request);
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.updateUser(userId, request))
+                .build();
     }
+
     @DeleteMapping("/{userId}")
-    String deleteUser(@PathVariable Integer userId){
-        userService.deleteUser(userId);
-        return "User has been deleted";
+    ApiResponse<String> deleteUser(@PathVariable Integer userId){
+        userService.deactivateUser(userId);
+        return ApiResponse.<String>builder()
+                .result("User has been deactivated successfully.")
+                .build();
+    }
+
+    @PostMapping("/{userId}/favorites/{perfumeId}")
+    ApiResponse<String> addPerfumeToFavorites(@PathVariable("userId") Integer userId, @PathVariable("perfumeId") Integer perfumeId) {
+        userService.addPerfumeToFavorites(userId, perfumeId);
+
+        return ApiResponse.<String>builder()
+                .result("Successfully")
+                .build();
+    }
+
+    @GetMapping("/{userId}/favorites")
+    ApiResponse<Set<PerfumeResponse>> getFavoritesPerfumes(@PathVariable("userId") Integer userId){
+        return ApiResponse.<Set<PerfumeResponse>>builder()
+                .result(userService.getFavoritePerfumes(userId))
+                .build();
     }
 }

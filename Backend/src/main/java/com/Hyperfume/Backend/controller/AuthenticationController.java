@@ -1,7 +1,9 @@
 package com.Hyperfume.Backend.controller;
 
+import com.Hyperfume.Backend.dto.request.LogoutRequest;
+import com.Hyperfume.Backend.dto.request.RefreshRequest;
 import com.nimbusds.jose.JOSEException;
-import com.Hyperfume.Backend.dto.request.ApiResponse;
+import com.Hyperfume.Backend.dto.response.ApiResponse;
 import com.Hyperfume.Backend.dto.request.AuthenticationRequest;
 import com.Hyperfume.Backend.dto.request.IntrospectRequest;
 import com.Hyperfume.Backend.dto.response.AuthenticationResponse;
@@ -40,6 +42,25 @@ public class AuthenticationController {
 
         return ApiResponse.<IntrospectResponse>builder()
                 .result(result)
+                .build();
+    }
+
+    @PostMapping("/refresh")
+    ApiResponse<AuthenticationResponse> refresh(@RequestBody RefreshRequest request)
+            throws ParseException, JOSEException {
+        var result=authenticationService.refreshToken(request);
+
+        return ApiResponse.<AuthenticationResponse>builder()
+                .result(result)
+                .build();
+    }
+
+    @PostMapping("/logout")
+    ApiResponse<Void> logout(@RequestBody LogoutRequest request)
+            throws ParseException, JOSEException {
+        authenticationService.logout(request);
+
+        return ApiResponse.<Void>builder()
                 .build();
     }
 }

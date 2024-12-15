@@ -1,5 +1,6 @@
 package com.Hyperfume.Backend.dto.request;
 
+import com.Hyperfume.Backend.dto.response.RoleResponse;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
