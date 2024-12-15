@@ -73,7 +73,7 @@ const product = productData.map((item) => <ProductCard
 const CardSlider = () => {
     return (
         <>
-            <div className="femaleCardSlider-container">
+            <div className="unisexCardSlider-container">
                 <Swiper
                     modules={[Navigation, Pagination, A11y, Autoplay]}
                     spaceBetween={35}
