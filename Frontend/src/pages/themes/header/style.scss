@@ -249,12 +249,31 @@ nav li i {
     padding: 0;
     margin: 0;
     list-style-type: none;
+
 }
 
 nav li:hover .dropdown {
     display: grid;
     /* Hiển thị menu sổ xuống khi hover */
 }
+
+
+.dropdown-sub {
+    display: none; /* Ẩn menu con mặc định */
+    z-index: 1; /* Đảm bảo menu con hiển thị trên các phần tử khác */
+    background-color: #fff; /* Màu nền cho menu con */
+    padding: 0; /* Không có padding cho menu con */
+    margin: 0; /* Không có margin cho menu con */
+}
+
+nav li:hover > .dropdown-sub {
+    display: grid; /* Hiển thị menu con khi hover vào menu cha */
+    left: 100px;
+    padding: 0; /* Không có padding cho menu con */
+    margin: 0; /* Không có margin cho menu con */
+}
+
+
 
 .dropdown li {
     margin: 0;
@@ -273,3 +292,6 @@ nav li:hover .dropdown {
     /* Thay đổi màu nền khi hover trong menu sổ xuống */
     transition: 0.4s;
 }
+
+
+

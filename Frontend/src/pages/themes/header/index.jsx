@@ -58,17 +58,41 @@ const Header = () => {
                         <li>
                             <NavLink to="/" exact activeClassName="active">Trang chủ</NavLink>
                         </li>
+
+
                         <li>
-                            <a href="#news">Sản phẩm <i className="fa-solid fa-angle-down"><RiArrowDownWideFill /></i></a>
+                            <a href="#products">Sản phẩm <RiArrowDownWideFill /></a>
                             <ul className="dropdown">
-                                <li><NavLink to="/nuoc-hoa-nam" activeClassName="active">Nước hoa Nam</NavLink></li>
-                                <li><NavLink to="/nuoc-hoa-nu" activeClassName="active">Nước hoa Nữ</NavLink></li>
-                                <li><NavLink to="/nuoc-hoa-unisex" activeClassName="active">Nước hoa Unisex</NavLink></li>
+                                <li>
+                                    <a href="#gioi-tinh">Giới Tính <RiArrowDownWideFill /></a>
+                                    <ul className="dropdown-sub">
+                                        <li><NavLink to="/nuoc-hoa-nam" activeClassName="active">Nam</NavLink></li>
+                                        <li><NavLink to="/nuoc-hoa-nu" activeClassName="active">Nữ</NavLink></li>
+                                        <li><NavLink to="/nuoc-hoa-unisex" activeClassName="active">Unisex</NavLink></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#nhom-huong">Nhóm Hương <RiArrowDownWideFill /></a>
+                                    <ul className="dropdown-sub">
+                                        <li><a href="/">Nhóm Hương 1</a></li>
+                                        <li><a href="/">Nhóm Hương 2</a></li>
+                                        <li><a href="/">Nhóm Hương 3</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#quoc-gia">Quốc Gia <RiArrowDownWideFill /></a>
+                                    <ul className="dropdown-sub">
+                                        <li><a href="/">Việt Nam</a></li>
+                                        <li><a href="/">Pháp</a></li>
+                                        <li><a href="/">Ý</a></li>
+                                    </ul>
+                                </li>
                             </ul>
                         </li>
+
                         <li><NavLink to="/flash-sale" activeClassName="active">Flashsale</NavLink></li>
                         <li><a href="#about">Tư vấn</a></li>
-                        <li><a href="">Blog</a></li>
+                        <li><a href="/">Blog</a></li>
                         <li><a href="#contact">Cẩm nang Nước Hoa</a></li>
                         <li>
                             <a href="#about">Hướng dẫn <i className="fa-solid fa-angle-down"><RiArrowDownWideFill /></i></a>
