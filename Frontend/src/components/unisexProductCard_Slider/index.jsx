@@ -26,7 +26,7 @@ const productData = [
         price: "650,000đ - 6,100,000đ"
     },
     {
-        img: require("../../assets/productImages/green-irish-tweed.png"),
+        img: require("../../assets/productImages/Kilian-Angels-Share.png"),
         name: "Angel's Share",
         brandName: "By Kilian",
         price: "900,000đ - 4,100,000đ"
@@ -49,6 +49,18 @@ const productData = [
         brandName: "By Kilian",
         price: "900,000đ - 4,100,000đ"
     },
+    {
+        img: require("../../assets/productImages/green-irish-tweed.png"),
+        name: "Apple Brandy On the Rock",
+        brandName: "By Kilian",
+        price: "900,000đ - 4,100,000đ"
+    },
+    {
+        img: require("../../assets/productImages/green-irish-tweed.png"),
+        name: "Apple Brandy On the Rock",
+        brandName: "By Kilian",
+        price: "900,000đ - 4,100,000đ"
+    },
 ];
 
 const product = productData.map((item) => <ProductCard
@@ -61,11 +73,11 @@ const product = productData.map((item) => <ProductCard
 const CardSlider = () => {
     return (
         <>
-            <div className="cardSlider-container">
+            <div className="femaleCardSlider-container">
                 <Swiper
                     modules={[Navigation, Pagination, A11y, Autoplay]}
-                    spaceBetween={40}
-                    slidesPerView={5}
+                    spaceBetween={35}
+                    slidesPerView={7}
                     autoplay={{
                         delay: 2500,
                         disableOnInteraction: false,
