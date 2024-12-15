@@ -11,7 +11,7 @@ const signIn = () => {
         <>
             <div className="login">
                 <div className="login-form">
-                    <h2>Đăng nhập</h2>
+                    <h2 style={{ fontSize: "40px" }}>Đăng nhập</h2>
                     <form>
                         <label htmlFor="username">
                             Tên tài khoản hoặc địa chỉ email <span>*</span>
@@ -40,10 +40,10 @@ const signIn = () => {
 
                         <div className="social-signIn">
                             <button className="facebook-button">
-                                <FontAwesomeIcon icon={faFacebook} /> Facebook
+                                <FontAwesomeIcon icon={faFacebook} style={{ marginRight: '5px' }} /> Facebook
                             </button>
                             <button className="google-button">
-                                <FontAwesomeIcon icon={faGoogle} /> Google
+                                <FontAwesomeIcon icon={faGoogle} style={{ marginRight: '5px' }} /> Google
                             </button>
                         </div>
 

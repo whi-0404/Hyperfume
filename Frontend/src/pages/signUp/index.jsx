@@ -46,10 +46,10 @@ const signIn = () => {
 
                         <div className="social-signUp">
                             <button className="facebook-button">
-                                <FontAwesomeIcon icon={faFacebook} /> Facebook
+                                <FontAwesomeIcon icon={faFacebook} style={{ marginRight: '5px' }} /> Facebook
                             </button>
                             <button className="google-button">
-                                <FontAwesomeIcon icon={faGoogle} /> Google
+                                <FontAwesomeIcon icon={faGoogle} style={{ marginRight: '5px' }} /> Google
                             </button>
                         </div>
 
