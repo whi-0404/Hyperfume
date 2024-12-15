@@ -8,11 +8,11 @@ spring:
     url: "jdbc:mysql://localhost:3306/hyperfume"
     username: root
     password: root
-
-jpa:
-  hibernate:
-    ddl-auto: update
-  show-sql: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 
 jwt:
   signerKey: "LXbqpSHL9CSY0epG+n6yIIjJAaXDQmw1ojp3N8z1Tdf2X/UBjBFe8qTwF+lWAAxe"
+

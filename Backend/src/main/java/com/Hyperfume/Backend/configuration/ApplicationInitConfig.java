@@ -1,18 +1,18 @@
 package com.Hyperfume.Backend.configuration;
 
 import com.Hyperfume.Backend.entity.User;
-import com.Hyperfume.Backend.enums.Role;
+import com.Hyperfume.Backend.exception.AppException;
+import com.Hyperfume.Backend.exception.ErrorCode;
+import com.Hyperfume.Backend.repository.RoleRepository;
 import com.Hyperfume.Backend.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.HashSet;
 
 @Configuration
 @RequiredArgsConstructor
@@ -22,17 +22,20 @@ public class ApplicationInitConfig {
 
     PasswordEncoder passwordEncoder;
 
-    ApplicationRunner applicationRunner(UserRepository userRepository){
+    @Bean
+    ApplicationRunner applicationRunner(UserRepository userRepository, RoleRepository roleRepository){
         return args ->
         {
           if(userRepository.findByUsername("admin").isEmpty()){
-              var roles = new HashSet<String>();
-              roles.add(Role.ADMIN.name());
 
+              com.Hyperfume.Backend.entity.Role adminrole = roleRepository.findByName("ADMIN")
+                      .orElseThrow(()->new AppException(ErrorCode.ROLE_NOT_EXISTED));
               User user=User.builder()
                       .username("admin")
-                      .password(passwordEncoder.encode("admin"))
-                      .roles(roles)
+                      .password(passwordEncoder.encode("admin12345"))
+                      .email("admin@gmail.com")
+                      .phone("010101")
+                      .role(adminrole)
                       .build();
 
               userRepository.save(user);

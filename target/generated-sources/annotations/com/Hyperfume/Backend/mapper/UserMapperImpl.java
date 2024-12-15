@@ -2,10 +2,10 @@ package com.Hyperfume.Backend.mapper;
 
 import com.Hyperfume.Backend.dto.request.UserCreationRequest;
 import com.Hyperfume.Backend.dto.request.UserUpdateRequest;
+import com.Hyperfume.Backend.dto.response.RoleResponse;
 import com.Hyperfume.Backend.dto.response.UserResponse;
+import com.Hyperfume.Backend.entity.Role;
 import com.Hyperfume.Backend.entity.User;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
@@ -49,10 +49,7 @@ public class UserMapperImpl implements UserMapper {
         userResponse.phone( user.getPhone() );
         userResponse.address( user.getAddress() );
         userResponse.dob( user.getDob() );
-        Set<String> set = user.getRoles();
-        if ( set != null ) {
-            userResponse.roles( new LinkedHashSet<String>( set ) );
-        }
+        userResponse.role( roleToRoleResponse( user.getRole() ) );
 
         return userResponse.build();
     }
@@ -63,11 +60,35 @@ public class UserMapperImpl implements UserMapper {
             return;
         }
 
-        user.setPassword( request.getPassword() );
-        user.setEmail( request.getEmail() );
-        user.setFullname( request.getFullname() );
-        user.setPhone( request.getPhone() );
-        user.setAddress( request.getAddress() );
-        user.setDob( request.getDob() );
+        if ( request.getPassword() != null ) {
+            user.setPassword( request.getPassword() );
+        }
+        if ( request.getEmail() != null ) {
+            user.setEmail( request.getEmail() );
+        }
+        if ( request.getFullname() != null ) {
+            user.setFullname( request.getFullname() );
+        }
+        if ( request.getPhone() != null ) {
+            user.setPhone( request.getPhone() );
+        }
+        if ( request.getAddress() != null ) {
+            user.setAddress( request.getAddress() );
+        }
+        if ( request.getDob() != null ) {
+            user.setDob( request.getDob() );
+        }
+    }
+
+    protected RoleResponse roleToRoleResponse(Role role) {
+        if ( role == null ) {
+            return null;
+        }
+
+        RoleResponse.RoleResponseBuilder roleResponse = RoleResponse.builder();
+
+        roleResponse.name( role.getName() );
+
+        return roleResponse.build();
     }
 }

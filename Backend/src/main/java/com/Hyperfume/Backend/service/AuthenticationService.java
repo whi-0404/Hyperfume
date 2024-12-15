@@ -1,36 +1,36 @@
 package com.Hyperfume.Backend.service;
 
+import com.Hyperfume.Backend.dto.request.AuthenticationRequest;
+import com.Hyperfume.Backend.dto.request.IntrospectRequest;
+import com.Hyperfume.Backend.dto.request.LogoutRequest;
+import com.Hyperfume.Backend.dto.request.RefreshRequest;
+import com.Hyperfume.Backend.dto.response.AuthenticationResponse;
+import com.Hyperfume.Backend.dto.response.IntrospectResponse;
+import com.Hyperfume.Backend.entity.InvalidatedToken;
 import com.Hyperfume.Backend.entity.User;
+import com.Hyperfume.Backend.exception.AppException;
+import com.Hyperfume.Backend.exception.ErrorCode;
+import com.Hyperfume.Backend.repository.InvalidatedTokenRepository;
+import com.Hyperfume.Backend.repository.UserRepository;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import com.Hyperfume.Backend.dto.request.AuthenticationRequest;
-import com.Hyperfume.Backend.dto.request.IntrospectRequest;
-import com.Hyperfume.Backend.dto.response.AuthenticationResponse;
-import com.Hyperfume.Backend.dto.response.IntrospectResponse;
-import com.Hyperfume.Backend.exception.AppException;
-import com.Hyperfume.Backend.exception.ErrorCode;
-import com.Hyperfume.Backend.mapper.UserMapper;
-import com.Hyperfume.Backend.repository.UserRepository;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Collection;
 import java.util.Date;
 import java.util.StringJoiner;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = @__(@Autowired))
@@ -38,6 +38,7 @@ import java.util.StringJoiner;
 public class AuthenticationService {
 
     private final UserRepository userRepository;
+    private final InvalidatedTokenRepository invalidatedTokenRepository;
 
     @Value("${jwt.signerKey}")
     private String SIGNER_KEY;
@@ -65,7 +66,32 @@ public class AuthenticationService {
     public IntrospectResponse introspect(IntrospectRequest request)
             throws JOSEException, ParseException {
         var token=request.getToken();
+        boolean isvalid = true;
+        try {
+            verifyToken(token);
+        } catch (AppException e) {
+            isvalid = false;
+        }
 
+        return IntrospectResponse.builder()
+                .valid(isvalid)
+                .build();
+    }
+    public void logout(LogoutRequest request) throws ParseException, JOSEException {
+        var signToken = verifyToken(request.getToken());
+
+        String jit = signToken.getJWTClaimsSet().getJWTID();
+        Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
+
+        InvalidatedToken invalidatedToken = InvalidatedToken.builder()
+                .id(jit)
+                .expiryTime(expiryTime)
+                .build();
+
+        invalidatedTokenRepository.save(invalidatedToken);
+    }
+
+    private SignedJWT verifyToken(String token) throws JOSEException, ParseException {
         //Get SIGNER_KEY
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
 
@@ -76,12 +102,41 @@ public class AuthenticationService {
 
         //Check SIGNER_KEY
         var verified =signedJWT.verify(verifier);
+        if(!(verified&&expiryTime.after(new Date())))
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
 
+        //Check logout
+        if (invalidatedTokenRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
 
-        return IntrospectResponse.builder()
-                .valid(verified&&expiryTime.after(new Date()))
+        return signedJWT;
+    }
+
+    public AuthenticationResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException {
+        var signedJWT = verifyToken(request.getToken());
+
+        var jit = signedJWT.getJWTClaimsSet().getJWTID();
+        var expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+
+        InvalidatedToken invalidatedToken = InvalidatedToken.builder()
+                .id(jit)
+                .expiryTime(expiryTime)
                 .build();
 
+        invalidatedTokenRepository.save(invalidatedToken);
+
+        var username = signedJWT.getJWTClaimsSet().getSubject();
+
+        var user = userRepository.findByUsername(username).orElseThrow(
+                () -> new AppException(ErrorCode.UNAUTHENTICATED)
+        );
+
+        var token=generateToken(user);
+
+        return AuthenticationResponse.builder()
+                .token(token)
+                .authenticated(true)
+                .build();
     }
 
     private String generateToken(User user)
@@ -96,6 +151,7 @@ public class AuthenticationService {
                 .expirationTime(new Date(
                         Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
                 ))
+                .jwtID(UUID.randomUUID().toString())
                 .claim("scope",buildScope(user))
                 .build();
 
@@ -113,9 +169,11 @@ public class AuthenticationService {
 
     private String buildScope(User user){
         StringJoiner stringJoiner= new StringJoiner(" ");
-        if(!CollectionUtils.isEmpty(user.getRoles())){
-            user.getRoles().forEach(stringJoiner::add);
+
+        if(user.getRole() != null){
+                stringJoiner.add(user.getRole().getName());
         }
         return stringJoiner.toString();
     }
+
 }
