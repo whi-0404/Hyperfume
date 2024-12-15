@@ -1,10 +1,15 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { Link } from "react-router-dom";
 import './style.scss';
+
 import ImageSlider from '../../components/imageSlider';
 import ProductCardSlider from '../../components/productCard_Slider';
+import MaleProductCard_Slider from '../../components/maleProductCard_Slider';
+import FemaleProductCard_Slider from '../../components/femaleProductCard_Slider';
+import UnisexProductCard_Slider from '../../components/unisexProductCard_Slider';
 
-function homePage() {
+function HomePage() {
+    const [selectedProductType, setSelectedProductType] = useState('male');
 
     return (
         <>
@@ -44,6 +49,43 @@ function homePage() {
 
                     <div className="famous-product">
                         <h1>Sản phẩm nổi bật</h1>
+
+                        <div className="famous-product-type">
+                            <button
+                                onClick={() => setSelectedProductType('male')}
+                                className={selectedProductType === 'male' ? 'active' : ''}>
+                                Nước hoa nam
+                            </button>
+
+                            <button
+                                onClick={() => setSelectedProductType('female')}
+                                className={selectedProductType === 'female' ? 'active' : ''}>
+                                Nước hoa nữ
+                            </button>
+
+                            <button
+                                onClick={() => setSelectedProductType('unisex')}
+                                className={selectedProductType === 'unisex' ? 'active' : ''}>
+                                Unisex
+                            </button>
+                        </div>
+
+                        {/* Điều kiện render dựa trên state */}
+                        {selectedProductType === 'male' && (
+                            <div>
+                                <MaleProductCard_Slider />
+                            </div>
+                        )}
+                        {selectedProductType === 'female' && (
+                            <div>
+                                <FemaleProductCard_Slider />
+                            </div>
+                        )}
+                        {selectedProductType === 'unisex' && (
+                            <div>
+                                <UnisexProductCard_Slider />
+                            </div>
+                        )}
                     </div>
 
                 </main>
@@ -52,4 +94,4 @@ function homePage() {
     );
 }
 
-export default memo(homePage);
+export default memo(HomePage);
