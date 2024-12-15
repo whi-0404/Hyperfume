@@ -1,6 +1,6 @@
 package com.Hyperfume.Backend.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -9,9 +9,6 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class ApiResponse <T> {
-    private int code=1000;
-    private String message;
-    private T result;
+public class LogoutRequest {
+    String token;
 }
