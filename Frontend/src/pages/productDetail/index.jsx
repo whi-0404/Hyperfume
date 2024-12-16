@@ -59,7 +59,7 @@ const ProductDetail = () => {
               </div>
               <ProductRating rating={4} totalReviews={4} />
               <ul className="product-highlight-info">
-                <li>Thương hiệu: Christian Dior</li>
+                <li>Thương hiệu: Christian Dior</li>
                 <li>Parfum 100ml</li>
                 <li>Standard Size</li>
               </ul>
@@ -204,7 +204,7 @@ const ProductDetail = () => {
         <hr></hr>
 
         <section className="sec-4">
-          
+
         </section>
       </div>
     </div>

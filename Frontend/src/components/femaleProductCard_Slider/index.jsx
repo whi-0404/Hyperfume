@@ -8,10 +8,10 @@ import ProductCard from '../productCard';
 
 const productData = [
     {
-        img: require("../../assets/productImages/green-irish-tweed.png"),
-        name: "Green Irish Tweed",
-        brandName: "Creed",
-        price: "650,000đ - 6,100,000đ"
+        img: require("../../assets/productImages/Nassomatto-Narcotic-V.png"),
+        name: "Narcotic V",
+        brandName: "Nas",
+        price: "1,100,000đ - 3,000,000đ"
     },
     {
         img: require("../../assets/productImages/creed-aventus.png"),

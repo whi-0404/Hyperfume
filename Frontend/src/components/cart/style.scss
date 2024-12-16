@@ -68,7 +68,7 @@
         }
 
         .total-cost {
-            margin-right: 30px;
+            margin-right: 50px;
         }
 
         .product-details {
@@ -252,10 +252,13 @@
     }
 
     .total-cost-item {
-        font-size: 25px;
+        p {
+            font-size: 25px;
+        }
+
         position: relative;
         text-align: right;
-        right: 85px;
+        right: 105px;
         font-weight: 600;
     }
 }

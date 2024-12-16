@@ -41,7 +41,7 @@ function HomePage() {
 
                     <div className="Sale-Container">
                         <div className="Flash-Sale">
-                            <span><Link to="/">Flash Sale</Link></span>
+                            <span><Link to="/flash-sale">Flash Sale</Link></span>
                         </div>
 
                         <ProductCardSlider />
