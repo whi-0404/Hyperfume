@@ -14,6 +14,7 @@ import NuochoaNu from "./pages/nuochoaNu";
 import NuochoaUnisex from "./pages/nuochoaUnisex";
 import FlashSale from "./pages/flash_Sale";
 import ThanhToan from "./pages/thanhToan";
+import ProductConsult from "./pages/productConsult";
 
 const renderUserRouter = () => {
     const userRouters = [
@@ -68,6 +69,10 @@ const renderUserRouter = () => {
         {
             path: ROUTERS.USER.PRODUCT_DETAIL,
             component: <ProductDetail></ProductDetail>
+        },
+        {
+            path: ROUTERS.USER.CONSULT,
+            component: <ProductConsult></ProductConsult>
         }
     ]
 

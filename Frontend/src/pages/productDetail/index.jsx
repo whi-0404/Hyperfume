@@ -44,16 +44,21 @@ const ProductDetail = () => {
   return (
     <div className="container">
       <div className="body-sides">
-        <section id="breadcrumb" class="bread-product">
-          <ul class="row nav">
-            <li>
-              <a href="#">Trang chủ</a>
-            </li>
-            <li>
-              <a href="#">Sản phẩm</a>
-            </li>
-            <li>Dior Sauvage Parfum</li>
-          </ul>
+        <section className="sec-1 breadcrumb">
+          <a href="/" className="breadcrumb-link">
+            Trang chủ
+          </a>
+          <span className="arrow"> &gt; </span>
+          <a href="/nuoc-hoa-nu" className="breadcrumb-link">
+            Sản phẩm
+          </a>
+          <span className="arrow"> &gt; </span>
+          <a href="/nuoc-hoa-nam" className="breadcrumb-link">
+            Nước hoa nam
+          </a>
+          <span className="arrow"> &gt; </span>
+          <span className="current">Dior Sauvage Parfum</span>
+          <hr className="divider" />
         </section>
 
         <section className="sec-2">
