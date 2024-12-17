@@ -31,19 +31,6 @@ const signIn = () => {
 
                         <button type="submit" className="ResetPass-button">Đặt lại mật khẩu</button>
 
-                        <div className="divider">
-                            <span>HOẶC</span>
-                        </div>
-
-                        <div className="social-signUp">
-                            <button className="facebook-button">
-                                <FontAwesomeIcon icon={faFacebook} /> Facebook
-                            </button>
-                            <button className="google-button">
-                                <FontAwesomeIcon icon={faGoogle} /> Google
-                            </button>
-                        </div>
-
                         <div className='signIn-text'>
                             Bạn đã có tài khoản? <Link to="/Sign-In">Đăng nhập</Link>
                         </div>

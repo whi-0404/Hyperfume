@@ -51,14 +51,6 @@ const productData = [
   },
 ];
 
-const product = productData.map((item) => (
-  <ProductCard
-    srcImg={item.img}
-    name={item.name}
-    brandName={item.brandName}
-    price={item.price}
-  />
-));
 
 const CardSlider = () => {
   return (

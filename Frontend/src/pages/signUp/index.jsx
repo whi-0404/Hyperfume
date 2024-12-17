@@ -14,7 +14,7 @@ const signIn = () => {
                     <h2>Đăng ký</h2>
                     <form>
                         <label htmlFor="username">
-                            Tên tài khoản hoặc địa chỉ email <span>*</span>
+                            Địa chỉ email <span>*</span>
                         </label>
                         <input type="text" id="email" placeholder="Email " />
 
@@ -46,10 +46,10 @@ const signIn = () => {
 
                         <div className="social-signUp">
                             <button className="facebook-button">
-                                <FontAwesomeIcon icon={faFacebook} /> Facebook
+                                <FontAwesomeIcon icon={faFacebook} style={{ marginRight: '5px' }} /> Facebook
                             </button>
                             <button className="google-button">
-                                <FontAwesomeIcon icon={faGoogle} /> Google
+                                <FontAwesomeIcon icon={faGoogle} style={{ marginRight: '5px' }} /> Google
                             </button>
                         </div>
 
