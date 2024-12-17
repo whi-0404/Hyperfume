@@ -103,7 +103,7 @@ const Cart = ({ initialCartItems }) => {
                         ))}
                     </div>
 
-                    <p>(*) Phụ thu 30.000 vnđ phí giao hàng đối với đơn hàng {"<"}= 600.000đ.</p>
+                    <p style={{ marginTop: "10px" }}>(*) Phụ thu 30.000 vnđ phí giao hàng đối với đơn hàng {"<"}= 600.000đ.</p>
 
                     <div className="cart-summary">
                         <h3>Tổng số lượng: <CartQuantityCount items={cartItems} /></h3>
