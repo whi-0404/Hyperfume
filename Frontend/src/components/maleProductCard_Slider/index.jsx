@@ -8,13 +8,13 @@ import ProductCard from '../productCard';
 
 const productData = [
     {
-        img: require("../../assets/productImages/green-irish-tweed.png"),
+        img: require("../../assets/productImages/creed/green-irish-tweed.png"),
         name: "Green Irish Tweed",
         brandName: "Creed",
         price: "650,000đ - 6,100,000đ"
     },
     {
-        img: require("../../assets/productImages/creed-aventus.png"),
+        img: require("../../assets/productImages/creed/creed-aventus.png"),
         name: "Aventus",
         brandName: "Creed",
         price: "650,000đ - 6,100,000đ"
@@ -44,19 +44,19 @@ const productData = [
         price: "350,000đ - 2,700,000đ"
     },
     {
-        img: require("../../assets/productImages/green-irish-tweed.png"),
+        img: require("../../assets/productImages/creed/green-irish-tweed.png"),
         name: "Ombre Leather",
         brandName: "Tom Ford",
         price: "400,000đ - 3,500,000đ"
     },
     {
-        img: require("../../assets/productImages/green-irish-tweed.png"),
+        img: require("../../assets/productImages/creed/green-irish-tweed.png"),
         name: "Apple Brandy On the Rock",
         brandName: "By Kilian",
         price: "900,000đ - 4,100,000đ"
     },
     {
-        img: require("../../assets/productImages/green-irish-tweed.png"),
+        img: require("../../assets/productImages/creed/green-irish-tweed.png"),
         name: "Apple Brandy On the Rock",
         brandName: "By Kilian",
         price: "900,000đ - 4,100,000đ"
