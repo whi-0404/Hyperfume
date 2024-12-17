@@ -28,7 +28,6 @@ const Cart = ({ initialCartItems }) => {
         .reduce((total, item) => total + item.price * item.quantity, 0); // Tính tổng giá trị
 
     const shippingCost = (totalPrice <= 600000) ? 30000 : 0;
-    const sale = totalPrice * 10 / 100;
 
     // Xử lý khi checkbox của từng item thay đổi, để thành selected all
     const handleSelectAll = (checked) => {
@@ -110,9 +109,8 @@ const Cart = ({ initialCartItems }) => {
                         <h3>Tổng số lượng: <CartQuantityCount items={cartItems} /></h3>
                         <h3>Tạm tính (Tổng giá sản phẩm): {(totalPrice).toLocaleString("vi-VN")} đồng</h3>
                         <h3>Phí vận chuyển: {(shippingCost).toLocaleString("vi-VN")} đồng</h3>
-                        <h3>Giảm giá: {(sale).toLocaleString("vi-VN")} đồng</h3>
                         <hr />
-                        <h3 className="total">Tổng thanh toán: {(totalPrice - sale + shippingCost).toLocaleString("vi-VN")} đồng</h3>
+                        <h3 className="total">Tổng thanh toán: {(totalPrice + shippingCost).toLocaleString("vi-VN")} đồng</h3>
                         <button className="checkout-btn"><NavLink to="/thanh-toan" activeClassName="active">Tiến hành thanh toán</NavLink></button>
                     </div>
                 </div>

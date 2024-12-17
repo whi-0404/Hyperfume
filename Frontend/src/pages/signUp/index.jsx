@@ -14,7 +14,7 @@ const signIn = () => {
                     <h2>Đăng ký</h2>
                     <form>
                         <label htmlFor="username">
-                            Tên tài khoản hoặc địa chỉ email <span>*</span>
+                            Địa chỉ email <span>*</span>
                         </label>
                         <input type="text" id="email" placeholder="Email " />
 
