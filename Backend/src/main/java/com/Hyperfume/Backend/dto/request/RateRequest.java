@@ -16,9 +16,6 @@ public class RateRequest {
     Integer userId;
 
     @NotNull
-    Integer perfumeId;
-
-    @NotNull
     @Min(value = 0, message = "STAR_RATE_INVALID")
     @Max(value = 5, message = "STAR_RATE_INVALID")
     Integer rateStar;

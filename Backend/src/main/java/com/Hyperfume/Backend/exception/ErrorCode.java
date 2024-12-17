@@ -54,7 +54,9 @@ public enum ErrorCode {
     SHIPPING_EXISTED(1033, "shipping method existed", HttpStatus.BAD_REQUEST),
     SHIPPING_NOT_EXISTED(1034,"shipping method not existed", HttpStatus.BAD_REQUEST),
 
-    SHIPPING_ADDRESS_NOT_EXISTED(1035,"shipping address not existed", HttpStatus.BAD_REQUEST)
+    SHIPPING_ADDRESS_NOT_EXISTED(1035,"shipping address not existed", HttpStatus.BAD_REQUEST),
+
+    NO_FOUND_BY_SEARCH_NAME(1036, "don't find anything", HttpStatus.BAD_REQUEST)
     ;
     ErrorCode(int code, String message, HttpStatusCode statusCode)
     {

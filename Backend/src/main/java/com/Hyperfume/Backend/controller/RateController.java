@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/rates")
+@RequestMapping("/perfumes/{perfumeId}/rates")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
@@ -24,14 +24,15 @@ public class RateController {
     RateService rateService;
 
     @PostMapping
-    public ApiResponse<RateResponse> addRate(@Valid @RequestBody RateRequest request){
+    public ApiResponse<RateResponse> addRate(@PathVariable Integer perfumeId,
+                                             @Valid @RequestBody RateRequest request){
 
         return ApiResponse.<RateResponse>builder()
-                .result(rateService.addRate(request))
+                .result(rateService.addRate(perfumeId, request))
                 .build();
     }
 
-    @GetMapping("/{perfumeId}")
+    @GetMapping
     public ApiResponse<List<RateResponse>> getRatesByPerfumeId(@PathVariable Integer perfumeId) {
 
         return ApiResponse.<List<RateResponse>>builder()

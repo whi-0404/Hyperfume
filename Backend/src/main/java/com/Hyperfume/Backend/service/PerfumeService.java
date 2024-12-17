@@ -75,13 +75,21 @@ public class PerfumeService {
         Perfume perfume = perfumeRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.PERFUME_NOT_EXISTED));
 
-        Brand brand = brandRepository.findById(request.getBrandId())
-                .orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_EXISTED));
-        ScrentFamily screntFamily = screntFamilyRepository.findById(request.getScrentFamilyId())
-                .orElseThrow(() -> new AppException(ErrorCode.SCRENT_FAMILY_NOT_EXISTED));
-        Country country = countryRepository.findById(request.getCountryId())
-                .orElseThrow(() -> new AppException(ErrorCode.COUNTRY_NOT_EXISTED));
-
+        Brand brand = null;
+        if(request.getBrandId()!=null) {
+            brand = brandRepository.findById(request.getBrandId())
+                    .orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_EXISTED));
+        }
+        ScrentFamily screntFamily = null;
+        if(request.getScrentFamilyId()!=null) {
+            screntFamily = screntFamilyRepository.findById(request.getScrentFamilyId())
+                    .orElseThrow(() -> new AppException(ErrorCode.SCRENT_FAMILY_NOT_EXISTED));
+        }
+        Country country = null;
+        if(request.getCountryId()!=null) {
+            country = countryRepository.findById(request.getCountryId())
+                    .orElseThrow(() -> new AppException(ErrorCode.COUNTRY_NOT_EXISTED));
+        }
         perfumeMapper.updateEntity(perfume, request, brand, screntFamily, country);
         perfume = perfumeRepository.save(perfume);
         return perfumeMapper.toResponse(perfume);
@@ -111,6 +119,29 @@ public class PerfumeService {
     public List<PerfumeResponse> getFlashSalePerfumes(){
 
         return perfumeRepository.findAllFlashSaleProducts().stream()
+                .map(perfumeMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<PerfumeResponse> getTypePerfume(String typeName){
+         return perfumeRepository.findByTypeName(typeName).stream()
+                 .map(perfumeMapper::toResponse)
+                 .collect(Collectors.toList());
+    }
+    public List<PerfumeResponse> getGenderPerfume(String gender){
+        return perfumeRepository.findByGender(gender).stream()
+                .map(perfumeMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<PerfumeResponse> searchPerfumesByName(String name){
+        List<Perfume> perfumes = perfumeRepository.searchByName(name);
+
+        if(perfumes.isEmpty()){
+            throw new AppException(ErrorCode.NO_FOUND_BY_SEARCH_NAME);
+        }
+
+        return perfumes.stream()
                 .map(perfumeMapper::toResponse)
                 .collect(Collectors.toList());
     }

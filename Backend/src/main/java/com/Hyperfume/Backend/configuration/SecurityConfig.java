@@ -19,7 +19,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity   //Phân quyền cho method
 public class SecurityConfig {
 //    các endpoints mà ai cũng có thể truy cập được
-    private final String[] PUBLIC_ENDPOINTS={"/users",
+    private final String[] PUBLIC_ENDPOINTS={"/users/**",
             "auth/token", "auth/introspect", "/auth/logout", "/perfumes/**",
     };
 

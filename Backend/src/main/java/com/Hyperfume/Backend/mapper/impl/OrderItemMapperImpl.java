@@ -10,28 +10,31 @@ import com.Hyperfume.Backend.mapper.impl.utils.CartUtil;
 import com.Hyperfume.Backend.mapper.impl.utils.PerfumeImageUtil;
 import com.Hyperfume.Backend.mapper.impl.utils.PerfumeVariantUtil;
 import com.Hyperfume.Backend.repository.PerfumeImageRepository;
+import com.Hyperfume.Backend.repository.PerfumeVariantRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class OrderItemMapperImpl implements OrderItemMapper {
     private final PerfumeImageRepository perfumeImageRepository;
     private final PerfumeImageUtil perfumeImageUtil;
     private final PerfumeVariantUtil perfumeVariantUtil;
+    private final PerfumeVariantRepository perfumeVariantRepository;
 
     public OrderItem toEntity(OrderItemRequest request) {
         if (request == null) {
             return null;
         } else {
-
-            PerfumeVariant perfumeVariant = this.orderItemRequestToPerfumeVariant(request);
+            int variantId= request.getPerfumeVariantId();
+            PerfumeVariant perfumeVariant = perfumeVariantRepository.findById(variantId)
+                    .orElseThrow(() ->new AppException(ErrorCode.VARIANT_NOT_FOUND));
             Integer quantity = request.getQuantity();
 
             OrderItem.OrderItemBuilder orderItem = OrderItem.builder();
-            orderItem.order(this.orderItemRequestToOrder(request));
             orderItem.perfumeVariant(perfumeVariant);
             orderItem.totalPrice(perfumeVariantUtil.calculateDiscountedPrice(perfumeVariant)
                     .multiply(BigDecimal.valueOf(quantity)));
@@ -53,19 +56,6 @@ public class OrderItemMapperImpl implements OrderItemMapper {
             orderItemResponse.variantDiscountPrice(orderItemVariantDiscountPrice(orderItem));
             orderItemResponse.totalPrice(orderItem.getTotalPrice());
             return orderItemResponse.build();
-        }
-    }
-
-    protected Order orderItemRequestToOrder(OrderItemRequest orderItemRequest) {
-        if (orderItemRequest == null) {
-            return null;
-        } else {
-            Order.OrderBuilder order = Order.builder();
-            if (orderItemRequest.getOrderId() != null) {
-                order.id(orderItemRequest.getOrderId());
-            }
-
-            return order.build();
         }
     }
 
