@@ -1,10 +1,11 @@
-import React, { memo } from "react";
+import React, { memo, useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, A11y, Autoplay } from "swiper/modules";
 import "./style.scss";
 import "swiper/css";
 import "swiper/css/bundle";
 import ProductCard from "../productCard";
+import { listProducts } from "../../services/ProductService";
 
 const productData = [
   {
@@ -53,6 +54,16 @@ const productData = [
 
 
 const CardSlider = () => {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    listProducts().then((respone) => {
+      setProducts(respone.data);
+    }).catch(error => {
+      console.error(error);
+    })
+  },)
+
   return (
     <>
       <div className="cardSlider-container">
