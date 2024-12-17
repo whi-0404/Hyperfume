@@ -1,22 +1,64 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import ProductRating from "../../components/rating";
 import ProductActions from "../../components/productActions";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import "./style.scss";
 
 const ProductDetail = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const products = [
+    {
+      id: 1,
+      name: "Armaf Club De Nuit Intense Man Limited Edition Parfum",
+      price: "300,000đ - 2,150,000đ",
+      image: require("../../assets/productImages/armaf/armaf-club-de-nuit.jpg"),
+      url: "#",
+    },
+    {
+      id: 2,
+      name: "Creed Green Irish Tweed EDP",
+      price: "650,000đ - 6,100,000đ",
+      image: require("../../assets/productImages/creed/green-irish-tweed.png"),
+      url: "#",
+    },
+    {
+      id: 3,
+      name: "Roja Elysium Pour Homme Parfum",
+      price: "900,000đ - 7,600,000đ",
+      image: require("../../assets/productImages/roja-dove/roja-elysium.png"),
+      url: "#",
+    },
+    {
+      id: 4,
+      name: "Diesel Fuel for Life Homme EDP",
+      price: "250,000đ - 1,900,000đ",
+      image: require("../../assets/productImages/diesel/diesel-fuel.png"),
+      url: "#",
+    },
+  ];
+
   return (
     <div className="container">
       <div className="body-sides">
-        <section id="breadcrumb" class="bread-product">
-          <ul class="row nav">
-            <li>
-              <a href="#">Trang chủ</a>
-            </li>
-            <li>
-              <a href="#">Sản phẩm</a>
-            </li>
-            <li>Dior Sauvage Parfum</li>
-          </ul>
+        <section className="sec-1 breadcrumb">
+          <a href="/" className="breadcrumb-link">
+            Trang chủ
+          </a>
+          <span className="arrow"> &gt; </span>
+          <a href="/nuoc-hoa-nu" className="breadcrumb-link">
+            Sản phẩm
+          </a>
+          <span className="arrow"> &gt; </span>
+          <a href="/nuoc-hoa-nam" className="breadcrumb-link">
+            Nước hoa nam
+          </a>
+          <span className="arrow"> &gt; </span>
+          <span className="current">Dior Sauvage Parfum</span>
+          <hr className="divider" />
         </section>
 
         <section className="sec-2">
@@ -204,7 +246,98 @@ const ProductDetail = () => {
         <hr></hr>
 
         <section className="sec-4">
+          <div className="review-header">
+            <h2 className="review-title">Đánh giá và nhận xét</h2>
+            <button className="review-button">Viết đánh giá</button>
+          </div>
+          <hr></hr>
+          <div className="review-body">
+            <div className="review-article">
+              <div className="review-user-account">
+                <div className="avatar">
+                  <img
+                    src={require("../../assets/image/UsersImages/henryle.jpg")}
+                    alt="avatar"
+                  />
+                </div>
+                <div className="user-name">Henry Le</div>
+              </div>
+              <div className="review-star">
+                {Array.from({ length: 5 }, (_, index) =>
+                  index < 5 ? (
+                    <AiFillStar key={index} className="star filled" />
+                  ) : (
+                    <AiOutlineStar key={index} className="star" />
+                  )
+                )}
+              </div>
+              <div className="review-time">4 tháng trước</div>
+              <div className="review-text">Mùi này thơm, mọi người nên thử</div>
+            </div>
+            <hr></hr>
+            <div className="review-article">
+              <div className="review-user-account">
+                <div className="avatar">
+                  <img
+                    src={require("../../assets/image/UsersImages/madeline.jpg")}
+                    alt="avatar"
+                  />
+                </div>
+                <div className="user-name">Madelyne Kim</div>
+              </div>
+              <div className="review-star">
+                {Array.from({ length: 5 }, (_, index) =>
+                  index < 5 ? (
+                    <AiFillStar key={index} className="star filled" />
+                  ) : (
+                    <AiOutlineStar key={index} className="star" />
+                  )
+                )}
+              </div>
+              <div className="review-time">7 tháng trước</div>
+              <div className="review-text">
+                Mùi này oke, mua liền đi mọi người ơi
+              </div>
+            </div>
+          </div>
+          <hr></hr>
+          <div className="review-pagination">
+            {Array.from({ length: 2 }, (_, index) => (
+              <button
+                key={index}
+                onClick={() => handlePageChange(index + 1)}
+                disabled={currentPage === index + 1}
+                className={currentPage === index + 1 ? "active" : ""}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
+        </section>
 
+        <hr></hr>
+
+        <section className="sec-5 related-products">
+          <h2 className="title">SẢN PHẨM LIÊN QUAN</h2>
+          <div className="products-container">
+            {products.map((product) => (
+              <a
+                href={product.url}
+                key={product.id}
+                className="product-card"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div className="image-container">
+                  <img src={product.image} alt={product.name} />
+                </div>
+                <div className="product-info">
+                  <h3 className="product-name">{product.name}</h3>
+                  <p className="product-price">{product.price}</p>
+                </div>
+              </a>
+            ))}
+          </div>
         </section>
       </div>
     </div>

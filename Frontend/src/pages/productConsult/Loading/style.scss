@@ -1,0 +1,39 @@
+$spinner-color: #3b82f6; // Màu xanh dương
+$spinner-size: 30px; // Kích thước spinner
+
+// Container loading
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+// Spinner
+.spinner {
+  width: $spinner-size;
+  height: $spinner-size;
+  border: 4px solid rgba($spinner-color, 0.2); // Viền mờ
+  border-top-color: $spinner-color; // Viền xoay màu xanh
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+
+  // Ẩn văn bản "Loading..."
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+}
+
+// Animation xoay vòng
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

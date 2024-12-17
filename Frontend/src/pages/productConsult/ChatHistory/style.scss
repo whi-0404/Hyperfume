@@ -1,0 +1,45 @@
+$user-bg-color: #f3f4f6; // Nền cho user message (xám nhạt)
+$user-text-color: #1f2937; // Màu chữ user (xám đậm)
+$bot-bg-color: #dbeafe; // Nền cho bot message (xanh nhạt)
+$bot-text-color: #1e40af; // Màu chữ bot (xanh đậm)
+$label-color: #4b5563; // Màu chữ của label "You:"
+
+// Kiểu tin nhắn chung
+.chat-message {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+
+  ul,
+  ol {
+    list-style-position: inside; /* Dấu chấm nằm bên trong nội dung */
+    margin: 0; /* Xóa margin mặc định */
+    padding-left: 0; /* Xóa padding thụt đầu dòng */
+  }
+
+  .sender-label {
+    font-weight: bold;
+    margin-right: 8px;
+    color: $label-color;
+    font-size: 32px;
+  }
+
+  .message-content {
+    font-size: 32px;
+    line-height: 1.5;
+  }
+}
+
+// Tin nhắn từ người dùng
+.user-message {
+  background-color: $user-bg-color;
+  color: $user-text-color;
+}
+
+// Tin nhắn từ chatbot
+.bot-message {
+  background-color: $bot-bg-color;
+  color: $bot-text-color;
+}
