@@ -17,28 +17,37 @@ function HomePage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // useEffect(() => {
-    //     // Gọi API khi component được render
-    //     listProducts()
-    //         .then((response) => {
-    //             setProducts(response.data); // Lưu dữ liệu vào state
-    //             setLoading(false); // Kết thúc loading
-    //         })
-    //         .catch((error) => {
-    //             console.error(error);
-    //             setError('Failed to fetch products'); // Lưu lỗi vào state
-    //             setLoading(false);
-    //         });
-    // }, []);
+    useEffect(() => {
+        // Gọi API khi component được render
+        listProducts()
+            .then((response) => {
+                setProducts(response.data); // Lưu dữ liệu vào state
+                setLoading(false); // Kết thúc loading
+            })
+            .catch((error) => {
+                console.error(error);
+                setError('Failed to fetch products'); // Lưu lỗi vào state
+                setLoading(false);
+            });
+    }, []);
 
-    // if (loading) return <div>Loading...</div>;
+    if (loading) return <div>Loading...</div>;
 
-    // // Hiển thị lỗi nếu có
-    // if (error) return <div>Error: {error}</div>;
+    // Hiển thị lỗi nếu có
+    if (error) return <div>Error: {error}</div>;
 
-    // for (let index in products) {
-    //     console.log(products[index]); // In ra từng đối tượng sản phẩm
-    // }
+    for (let index in products) {
+        console.log(products[index]); // In ra từng đối tượng sản phẩm
+    }
+
+    if (Array.isArray(products)) {
+        console.log("Data là array");
+    } else if (typeof products === "object") {
+        console.log("Data là object");
+    } else {
+        console.log("Data là kiểu khác");
+    }
+
 
     return (
         <>

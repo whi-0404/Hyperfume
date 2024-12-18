@@ -1,5 +1,5 @@
-import axios from 'axios';
+import api from './perfumeVarient';
 
 export const listProducts = () => {
-    return axios.get('http://localhost:8080/hyperfume/perfumes');
+    return api.get('/perfumes');
 }
