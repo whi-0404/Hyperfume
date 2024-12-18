@@ -72,7 +72,7 @@ const Cart = ({ initialCartItems }) => {
 
                     <div className="total-checkbox-container">
                         <label className="custom-checkbox">
-                            <input
+                            <input id="checkbox-1"
                                 type="checkbox"
                                 checked={isAllChecked}
                                 onChange={(e) => handleSelectAll(e.target.checked)}
@@ -82,8 +82,8 @@ const Cart = ({ initialCartItems }) => {
                                     <path d="M9 16.2l-3.5-3.5L4 14l5 5L20 8l-1.4-1.4L9 16.2z" />
                                 </svg>
                             </span>
-                            Select All
                         </label>
+                        <label htmlFor="checkbox-1" style={{ marginLeft: "20px", fontSize: "25px", fontWeight: "600" }}>Select All</label>
                     </div>
 
                     <div className="total-cost-item">

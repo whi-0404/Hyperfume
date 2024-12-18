@@ -5,7 +5,6 @@ import "./style.scss";
 import "swiper/css";
 import "swiper/css/bundle";
 import ProductCard from "../productCard";
-import { listProducts } from "../../services/ProductService";
 
 const productData = [
   {
@@ -54,15 +53,6 @@ const productData = [
 
 
 const CardSlider = () => {
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    listProducts().then((respone) => {
-      setProducts(respone.data);
-    }).catch(error => {
-      console.error(error);
-    })
-  },)
 
   return (
     <>
