@@ -2,22 +2,24 @@ package com.Hyperfume.Backend.mapper.impl;
 
 import com.Hyperfume.Backend.dto.request.CartRequest;
 import com.Hyperfume.Backend.dto.response.CartResponse;
-import com.Hyperfume.Backend.entity.Cart;
-import com.Hyperfume.Backend.entity.PerfumeVariant;
-import com.Hyperfume.Backend.entity.User;
+import com.Hyperfume.Backend.entity.*;
+import com.Hyperfume.Backend.exception.AppException;
+import com.Hyperfume.Backend.exception.ErrorCode;
 import com.Hyperfume.Backend.mapper.CartMapper;
 import com.Hyperfume.Backend.mapper.impl.utils.CartUtil;
+import com.Hyperfume.Backend.mapper.impl.utils.PerfumeImageUtil;
+import com.Hyperfume.Backend.repository.PerfumeImageRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
 @Component
+@RequiredArgsConstructor
 public class CartMapperImpl implements CartMapper {
     private final CartUtil cartUtil;
-
-    public CartMapperImpl(CartUtil cartUtil) {
-        this.cartUtil=cartUtil;
-    }
+    private final PerfumeImageUtil perfumeImageUtil;
+    private final PerfumeImageRepository perfumeImageRepository;
 
     @Override
     public Cart toEntity(CartRequest request) {
@@ -46,6 +48,7 @@ public class CartMapperImpl implements CartMapper {
             cartResponse.discount(this.cartPerfumeVariantDiscount(cart));
             cartResponse.quantity(cart.getQuantity());
             cartResponse.totalPrice(cartUtil.calculateTotalPrice(cart));
+            cartResponse.imageData(this.CartImageData(cart));
             return cartResponse.build();
         }
     }
@@ -142,6 +145,27 @@ public class CartMapperImpl implements CartMapper {
             } else {
                 double discount = perfumeVariant.getDiscount();
                 return discount;
+            }
+        }
+    }
+
+    private String CartImageData(Cart cart){
+        if (cart == null) {
+            return null;
+        } else {
+            PerfumeVariant perfumeVariant = cart.getPerfumeVariant();
+            if (perfumeVariant == null) {
+                return null;
+            } else {
+                Perfume perfume = perfumeVariant.getPerfume();
+                if (perfume == null) {
+                    return null;
+                } else {
+                    PerfumeImage perfumeImage = perfumeImageRepository.findByPerfumeIdAndIsThumbnailTrue(perfume.getId())
+                            .orElseThrow(() -> new AppException(ErrorCode.IMAGE_NOT_FOUND));
+
+                    return perfumeImageUtil.encodeImageData(perfumeImage.getImage_data());
+                }
             }
         }
     }

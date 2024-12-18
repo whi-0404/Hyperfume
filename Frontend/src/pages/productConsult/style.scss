@@ -1,0 +1,69 @@
+$primary-color: #3b82f6; // Màu xanh cho nút send
+$hover-color: #2563eb; // Màu xanh đậm khi hover
+$border-color: #e5e7eb; // Màu viền input và container
+$gray-color: #9ca3af; // Màu cho nút clear chat
+$hover-gray: #6b7280; // Màu xám đậm khi hover
+
+.chat-container {
+  max-width: 1200px;
+  margin: 0px auto 0px;
+  padding: 20px;
+  background-color: #FBFAFA;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+
+  .chat-header {
+    font-size: 40px;
+  }
+
+  .chat-input-container {
+    display: flex;
+    align-items: center;
+
+    .chat-input {
+      flex-grow: 1;
+      padding: 10px 12px;
+      border: 1px solid $border-color;
+      border-radius: 8px;
+      font-size: 32px;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+      }
+    }
+
+    .send-button {
+      margin-left: 8px;
+      padding: 10px 16px;
+      background-color: $primary-color;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 32px;
+
+      &:hover {
+        background-color: $hover-color;
+      }
+    }
+  }
+
+  // Nút clear chat
+  .clear-button {
+    display: block;
+    margin: 10px auto 0;
+    padding: 10px 16px;
+    background-color: $gray-color;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 32px;
+
+    &:hover {
+      background-color: $hover-gray;
+    }
+  }
+}

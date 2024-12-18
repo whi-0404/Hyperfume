@@ -16,12 +16,12 @@ const NuocHoaNam = () => {
 
     // tien viet dung dau phay , ,
     const formatCurrency = (amount) => {
-      return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+        return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
     };
 
 
     const perfumes = [
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
         { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
         { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
         { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
@@ -48,7 +48,7 @@ const NuocHoaNam = () => {
         { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
         { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
 
-        
+
         // Add more products as needed to test pagination
     ];
 
@@ -103,12 +103,12 @@ const NuocHoaNam = () => {
     return (
         <div className="nuoc-hoa-nam">
             <div className="breadcrumb">
-              <a href="/" className="breadcrumb-link">Trang chủ</a>
-              <span className="arrow"> &gt; </span>
-              <a href="/nuoc-hoa-nu" className="breadcrumb-link">Sản phẩm</a>
-              <span className="arrow"> &gt; </span>
-              <span className="current">Nước hoa Nam</span>
-              <hr className="divider" />
+                <a href="/" className="breadcrumb-link">Trang chủ</a>
+                <span className="arrow"> &gt; </span>
+                <a href="/nuoc-hoa-nu" className="breadcrumb-link">Sản phẩm</a>
+                <span className="arrow"> &gt; </span>
+                <span className="current">Nước hoa Nam</span>
+                <hr className="divider" />
             </div>
 
             <h1 className="product-title">Nước hoa nam</h1>
@@ -181,7 +181,6 @@ const NuocHoaNam = () => {
                         <option value="5000000">Dưới 5 triệu</option>
                         <option value="10000000">Dưới 10 triệu</option>
                         <option value="20000000">Dưới 20 triệu</option>
-
                     </select>
                 </div>
             </div>
@@ -211,9 +210,9 @@ const NuocHoaNam = () => {
             {totalPages > 1 && (
                 <div className="pagination">
                     {Array.from({ length: totalPages }, (_, index) => (
-                        <button 
-                            key={index} 
-                            onClick={() => handlePageChange(index + 1)} 
+                        <button
+                            key={index}
+                            onClick={() => handlePageChange(index + 1)}
                             disabled={currentPage === index + 1}
                             className={currentPage === index + 1 ? 'active' : ''}
                         >

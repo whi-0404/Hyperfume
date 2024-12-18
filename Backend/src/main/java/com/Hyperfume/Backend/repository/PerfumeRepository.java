@@ -21,4 +21,13 @@ public interface PerfumeRepository extends JpaRepository<Perfume, Integer> {
 
     @Query("SELECT p FROM Perfume p WHERE p.flash_sale = true")
     List<Perfume> findAllFlashSaleProducts();
+
+    @Query("SELECT p FROM Perfume p WHERE p.type = :typeName")
+    List<Perfume> findByTypeName(@Param("typeName") String typeName);
+
+    @Query("SELECT p FROM Perfume p WHERE p.perfume_gender = :perfume_gender")
+    List<Perfume> findByGender(@Param("perfume_gender") String perfume_gender);
+
+    @Query("SELECT p FROM Perfume p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%'))")
+    List<Perfume> searchByName(@Param("name") String name);
 }

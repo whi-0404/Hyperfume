@@ -16,6 +16,6 @@ public class PerfumeVariantResponse {
     int perfumeId;
     BigDecimal price;
     double discount;
-    BigDecimal discountedPrice ;
+    BigDecimal discountedPrice;
     int perfume_stock_quantity;
 }

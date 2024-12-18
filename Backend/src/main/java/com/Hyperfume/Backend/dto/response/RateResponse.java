@@ -16,7 +16,7 @@ public class RateResponse {
 
     Integer userId;
 
-    Integer perfumeId;
+    String userName;
 
     Integer rateStar;
 

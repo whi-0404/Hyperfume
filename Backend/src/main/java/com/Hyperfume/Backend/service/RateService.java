@@ -33,14 +33,16 @@ public class RateService {
     PerfumeRepository perfumeRepository;
 
     @Transactional
-    public RateResponse addRate(RateRequest request){
+    public RateResponse addRate(Integer perfumeId, RateRequest request){
         User user = userRepository.findById(request.getUserId())
             .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        Perfume perfume = perfumeRepository.findById(request.getPerfumeId())
-            .orElseThrow(() -> new AppException(ErrorCode.PERFUME_NOT_EXISTED));
 
         Rate rate = rateMapper.toEntity(request);
+
+        rate.setPerfume(perfumeRepository.findById(perfumeId)
+                .orElseThrow(() ->new AppException(ErrorCode.PERFUME_NOT_EXISTED)));
+
         rateRepository.save(rateRepository.save(rate));
 
         return rateMapper.toResponse(rate);

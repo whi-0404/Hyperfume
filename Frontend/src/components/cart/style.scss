@@ -6,6 +6,10 @@
     background-color: #F5F1EB;
     max-width: 100%;
 
+    p {
+        font-size: 20px;
+    }
+
     .breadcrumb {
         font-size: 24px;
         margin-bottom: 20px;
@@ -64,7 +68,7 @@
         }
 
         .total-cost {
-            margin-right: 30px;
+            margin-right: 50px;
         }
 
         .product-details {
@@ -248,10 +252,13 @@
     }
 
     .total-cost-item {
-        font-size: 25px;
+        p {
+            font-size: 25px;
+        }
+
         position: relative;
         text-align: right;
-        right: 85px;
+        right: 105px;
         font-weight: 600;
     }
 }

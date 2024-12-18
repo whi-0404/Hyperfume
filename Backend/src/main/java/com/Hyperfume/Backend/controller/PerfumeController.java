@@ -23,6 +23,26 @@ import java.util.List;
 public class PerfumeController {
 
     PerfumeService perfumeService;
+    @GetMapping("/collections/type/{typeName}")
+    public ApiResponse<List<PerfumeResponse>> getTypePerfume(@PathVariable String typeName){
+        return  ApiResponse.<List<PerfumeResponse>>builder()
+                .result(perfumeService.getTypePerfume(typeName))
+                .build();
+    }
+
+    @GetMapping("/collections/")
+    public ApiResponse<List<PerfumeResponse>> getGenderPerfume(@RequestParam("gender") String gender){
+        return  ApiResponse.<List<PerfumeResponse>>builder()
+                .result(perfumeService.getGenderPerfume(gender))
+                .build();
+    }
+
+    @GetMapping("/search")
+    public ApiResponse<List<PerfumeResponse>> searchPerfumes(@RequestParam("name") String name){
+        return  ApiResponse.<List<PerfumeResponse>>builder()
+                .result(perfumeService.searchPerfumesByName(name))
+                .build();
+    }
 
     // Lấy danh sách nước hoa
     @GetMapping
@@ -51,7 +71,7 @@ public class PerfumeController {
     // Cập nhật nước hoa
     @PutMapping("/{perfumeId}")
     public ApiResponse<PerfumeResponse> updatePerfume(@PathVariable int perfumeId,
-                                                      @RequestBody @Valid PerfumeRequest request) {
+                                                      @RequestBody PerfumeRequest request) {
         return ApiResponse.<PerfumeResponse>builder()
                 .result(perfumeService.updatePerfume(perfumeId, request))
                 .build();
