@@ -1,12 +1,16 @@
 import React from "react";
 import "./BlogCard.css";
 
-const BlogCard = ({ title, description, image }) => {
+const BlogCard = ({ post }) => {
   return (
     <div className="blog-card">
-      <img src={image} alt={title} className="blog-card-image" />
-      <h2 className="blog-card-title">{title}</h2>
-      <p className="blog-card-description">{description}</p>
+      <img src={post.image} alt={post.title} className="blog-card-image" />
+      <div className="blog-card-content">
+        <h2 className="blog-card-title">{post.title}</h2>
+        <p className="blog-card-meta">
+          {post.date} | {post.category}
+        </p>
+      </div>
     </div>
   );
 };

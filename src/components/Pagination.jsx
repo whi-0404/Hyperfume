@@ -1,22 +1,22 @@
-import React from 'react';  
-import './Pagination.css';  
+import React from "react";
+import "./Pagination.css";
 
-const Pagination = ({ currentPage, totalPages, onPageChange }) => {  
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);  
+const Pagination = ({ totalPages, currentPage, onPageChange }) => {
+  return (
+    <div className="pagination">
+      {Array.from({ length: totalPages }, (_, index) => (
+        <button
+          key={index + 1}
+          onClick={() => onPageChange(index + 1)}
+          className={`pagination-button ${
+            currentPage === index + 1 ? "active" : ""
+          }`}
+        >
+          {index + 1}
+        </button>
+      ))}
+    </div>
+  );
+};
 
-  return (  
-    <div className="pagination">  
-      {pages.map((page) => (  
-        <button  
-          key={page}  
-          className={page === currentPage ? 'active' : ''}  
-          onClick={() => onPageChange(page)}  
-        >  
-          {page}  
-        </button>  
-      ))}  
-    </div>  
-  );  
-};  
-
-export default Pagination;  
+export default Pagination;
