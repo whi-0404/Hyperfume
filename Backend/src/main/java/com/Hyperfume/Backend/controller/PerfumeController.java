@@ -30,7 +30,7 @@ public class PerfumeController {
                 .build();
     }
 
-    @GetMapping("/collections/")
+    @GetMapping("/collections")
     public ApiResponse<List<PerfumeResponse>> getGenderPerfume(@RequestParam("gender") String gender){
         return  ApiResponse.<List<PerfumeResponse>>builder()
                 .result(perfumeService.getGenderPerfume(gender))

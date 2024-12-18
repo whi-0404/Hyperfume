@@ -7,6 +7,7 @@ import ProductCardSlider from '../../components/productCard_Slider';
 import MaleProductCard_Slider from '../../components/maleProductCard_Slider';
 import FemaleProductCard_Slider from '../../components/femaleProductCard_Slider';
 import UnisexProductCard_Slider from '../../components/unisexProductCard_Slider';
+import ProductCard from "../../components/productCard";
 
 import { listProducts } from "../../services/ProductService";
 
@@ -18,10 +19,9 @@ function HomePage() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Gọi API khi component được render
         listProducts()
             .then((response) => {
-                setProducts(response.data); // Lưu dữ liệu vào state
+                setProducts(response.data);
                 setLoading(false); // Kết thúc loading
             })
             .catch((error) => {
@@ -31,13 +31,14 @@ function HomePage() {
             });
     }, []);
 
+
     if (loading) return <div>Loading...</div>;
 
     // Hiển thị lỗi nếu có
     if (error) return <div>Error: {error}</div>;
 
-    for (let index in products) {
-        console.log(products[index]); // In ra từng đối tượng sản phẩm
+    for (let index in products.result) {
+        console.log(products.result[index].name); // In ra từng đối tượng sản phẩm
     }
 
     if (Array.isArray(products)) {
@@ -77,11 +78,18 @@ function HomePage() {
 
                     <hr />
 
+
                     {/* <div className="test">
-                        {products.map(product => (
-                            <h1>{product.name}</h1> // Hiển thị tên sản phẩm
+                        {products.result.map(product => (
+                            <ProductCard
+                                img={require("../../assets/image/Dior.png")}
+                                name={product.name}
+                                brandName={product.brandName}
+                                price={product.price}
+                            ></ProductCard> // Hiển thị tên sản phẩm
                         ))}
                     </div> */}
+
 
                     <div className="Sale-Container">
                         <div className="Flash-Sale">

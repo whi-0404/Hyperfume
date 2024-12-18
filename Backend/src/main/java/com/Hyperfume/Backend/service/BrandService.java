@@ -42,7 +42,6 @@ public class BrandService {
         return brandMapper.toBrandResponse(brandRepository.save(brand));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     public List<BrandResponse> getBrands()
     {
 
@@ -51,7 +50,6 @@ public class BrandService {
                 .collect(Collectors.toList());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     public BrandResponse getBrand(Integer brandId)
     {
         return brandMapper.toBrandResponse(brandRepository.findById(brandId)

@@ -27,7 +27,7 @@ public class SecurityConfig {
     // Các endpoints mà ai cũng có thể truy cập được
     private final String[] PUBLIC_ENDPOINTS = {
             "/users/**",
-            "/auth/token", "/auth/introspect", "/auth/logout", "/perfumes/**",
+            "/auth/token", "/auth/introspect", "/auth/logout", "/perfumes/**", "/brands/**"
     };
 
     @Bean
