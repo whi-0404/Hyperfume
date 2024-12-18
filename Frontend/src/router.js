@@ -15,6 +15,7 @@ import NuochoaUnisex from "./pages/nuochoaUnisex";
 import FlashSale from "./pages/flash_Sale";
 import ThanhToan from "./pages/thanhToan";
 import ProductConsult from "./pages/productConsult";
+import AboutUs from "./pages/aboutUs";
 
 const renderUserRouter = () => {
     const userRouters = [
@@ -73,6 +74,10 @@ const renderUserRouter = () => {
         {
             path: ROUTERS.USER.CONSULT,
             component: <ProductConsult></ProductConsult>
+        },
+        {
+            path: ROUTERS.USER.ABOUT,
+            component: <AboutUs></AboutUs>
         }
     ]
 

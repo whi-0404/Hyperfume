@@ -105,9 +105,6 @@ const Header = () => {
               <a href="">Blog</a>
             </li>
             <li>
-              <a href="#contact">Cẩm nang Nước Hoa</a>
-            </li>
-            <li>
               <a href="#about">
                 Hướng dẫn{" "}
                 <i className="fa-solid fa-angle-down">
