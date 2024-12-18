@@ -1,5 +1,5 @@
-import api from './axiosConfig';
+import axios from 'axios';
 
 export const listProducts = () => {
-    return api.get('/products');
+    return axios.get('http://localhost:8080/hyperfume/perfumes');
 }

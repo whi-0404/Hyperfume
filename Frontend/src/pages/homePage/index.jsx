@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import React, { memo, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import './style.scss';
 
@@ -8,8 +8,37 @@ import MaleProductCard_Slider from '../../components/maleProductCard_Slider';
 import FemaleProductCard_Slider from '../../components/femaleProductCard_Slider';
 import UnisexProductCard_Slider from '../../components/unisexProductCard_Slider';
 
+import { listProducts } from "../../services/ProductService";
+
 function HomePage() {
     const [selectedProductType, setSelectedProductType] = useState('male');
+
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    // useEffect(() => {
+    //     // Gọi API khi component được render
+    //     listProducts()
+    //         .then((response) => {
+    //             setProducts(response.data); // Lưu dữ liệu vào state
+    //             setLoading(false); // Kết thúc loading
+    //         })
+    //         .catch((error) => {
+    //             console.error(error);
+    //             setError('Failed to fetch products'); // Lưu lỗi vào state
+    //             setLoading(false);
+    //         });
+    // }, []);
+
+    // if (loading) return <div>Loading...</div>;
+
+    // // Hiển thị lỗi nếu có
+    // if (error) return <div>Error: {error}</div>;
+
+    // for (let index in products) {
+    //     console.log(products[index]); // In ra từng đối tượng sản phẩm
+    // }
 
     return (
         <>
@@ -38,6 +67,12 @@ function HomePage() {
                     </div>
 
                     <hr />
+
+                    {/* <div className="test">
+                        {products.map(product => (
+                            <h1>{product.name}</h1> // Hiển thị tên sản phẩm
+                        ))}
+                    </div> */}
 
                     <div className="Sale-Container">
                         <div className="Flash-Sale">
