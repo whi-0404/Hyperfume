@@ -4,16 +4,17 @@
   margin-top: 20px;
 }
 
-.pagination-button {
-  padding: 8px 16px;
-  margin: 0 4px;
+.page-number {
   border: none;
-  border-radius: 4px;
-  background: #f0f0f0;
+  background-color: #eee;
+  margin: 0 5px;
+  padding: 10px;
+  border-radius: 5px;
   cursor: pointer;
+  transition: background 0.3s;
 }
 
-.pagination-button.active {
-  background: #007bff;
-  color: white;
+.page-number.active {
+  background-color: #333;
+  color: #fff;
 }

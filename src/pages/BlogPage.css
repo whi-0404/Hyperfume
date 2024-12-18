@@ -1,27 +1,30 @@
-.blog-card {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+.blog-page {
+  text-align: center;
+  padding: 20px;
 }
 
-.blog-card-image {
+.blog-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.banner {
   width: 100%;
-  height: 200px;
-  object-fit: cover;
+  height: 300px; /* Chiều cao banner */
+  background-image: url("../assets/01.jpg"); /* Đường dẫn hình ảnh */
+  background-size: cover; /* Hình ảnh bao phủ toàn bộ div */
+  background-position: center; /* Căn giữa hình ảnh */
+  display: flex;
+  justify-content: center; /* Căn giữa nội dung ngang */
+  align-items: center; /* Căn giữa nội dung dọc */
+  position: relative;
+  margin-bottom: 30px;
 }
 
-.blog-card-content {
-  padding: 16px;
-}
-
-.blog-card-title {
-  font-size: 18px;
+.banner-title {
+  font-size: 48px;
+  color: #fff; /* Màu chữ trắng */
   font-weight: bold;
-  margin-bottom: 8px;
-}
-
-.blog-card-meta {
-  font-size: 14px;
-  color: gray;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Tạo đổ bóng */
 }
