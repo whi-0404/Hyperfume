@@ -7,9 +7,9 @@ import ProductCardSlider from '../../components/productCard_Slider';
 import MaleProductCard_Slider from '../../components/maleProductCard_Slider';
 import FemaleProductCard_Slider from '../../components/femaleProductCard_Slider';
 import UnisexProductCard_Slider from '../../components/unisexProductCard_Slider';
-import ProductCard from "../../components/productCard";
 
 import { listProducts } from "../../services/ProductService";
+import { maleProducts } from "../../services/maleProducts";
 
 function HomePage() {
     const [selectedProductType, setSelectedProductType] = useState('male');
@@ -19,7 +19,7 @@ function HomePage() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        listProducts()
+        maleProducts()
             .then((response) => {
                 setProducts(response.data);
                 setLoading(false); // Kết thúc loading

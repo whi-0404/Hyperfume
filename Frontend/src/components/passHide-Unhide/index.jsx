@@ -13,9 +13,9 @@ const PasswordToggle = ({ placeholder = "Nhập mật khẩu" }) => {
     return (
         <div className="password-toggle">
             <input
+                className="password-toggle__input"
                 type={passwordVisible ? "text" : "password"}
                 placeholder={placeholder}
-                className="password-toggle__input"
             />
             <span
                 className="eyeIcon"
