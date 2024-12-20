@@ -6,7 +6,7 @@ import { faFacebook } from "@fortawesome/free-brands-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import PasswordToggle from '../../components/passHide-Unhide';
 
-import SignUpService from "../../services/signUpService";
+import SignUpService from "../../services/signInService";
 
 const signUp = () => {
     // Hàm xử lý gửi form
