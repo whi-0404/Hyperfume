@@ -14,40 +14,40 @@ import { maleProducts } from "../../services/maleProducts";
 function HomePage() {
     const [selectedProductType, setSelectedProductType] = useState('male');
 
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    // const [products, setProducts] = useState([]);
+    // const [loading, setLoading] = useState(true);
+    // const [error, setError] = useState(null);
 
-    useEffect(() => {
-        maleProducts()
-            .then((response) => {
-                setProducts(response.data);
-                setLoading(false); // Kết thúc loading
-            })
-            .catch((error) => {
-                console.error(error);
-                setError('Failed to fetch products'); // Lưu lỗi vào state
-                setLoading(false);
-            });
-    }, []);
+    // useEffect(() => {
+    //     maleProducts()
+    //         .then((response) => {
+    //             setProducts(response.data);
+    //             setLoading(false); // Kết thúc loading
+    //         })
+    //         .catch((error) => {
+    //             console.error(error);
+    //             setError('Failed to fetch products'); // Lưu lỗi vào state
+    //             setLoading(false);
+    //         });
+    // }, []);
 
 
-    if (loading) return <div>Loading...</div>;
+    // if (loading) return <div>Loading...</div>;
 
-    // Hiển thị lỗi nếu có
-    if (error) return <div>Error: {error}</div>;
+    // // Hiển thị lỗi nếu có
+    // if (error) return <div>Error: {error}</div>;
 
-    for (let index in products.result) {
-        console.log(products.result[index].name); // In ra từng đối tượng sản phẩm
-    }
+    // for (let index in products.result) {
+    //     console.log(products.result[index].name); // In ra từng đối tượng sản phẩm
+    // }
 
-    if (Array.isArray(products)) {
-        console.log("Data là array");
-    } else if (typeof products === "object") {
-        console.log("Data là object");
-    } else {
-        console.log("Data là kiểu khác");
-    }
+    // if (Array.isArray(products)) {
+    //     console.log("Data là array");
+    // } else if (typeof products === "object") {
+    //     console.log("Data là object");
+    // } else {
+    //     console.log("Data là kiểu khác");
+    // }
 
 
     return (

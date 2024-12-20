@@ -6,7 +6,7 @@ import { faFacebook } from "@fortawesome/free-brands-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import PasswordToggle from '../../components/passHide-Unhide';
 
-import signUpService from "../../services/signUp_service";
+import SignUpService from "../../services/signUpService";
 
 const signUp = () => {
     // Hàm xử lý gửi form
@@ -26,7 +26,6 @@ const signUp = () => {
             alert('Vui lòng nhập đầy đủ thông tin!');
             return;
         }
-
         if (password.length < 8) {
             alert('Mật khẩu phải có 8 ký tự trở lên.')
             return;
@@ -44,7 +43,7 @@ const signUp = () => {
         };
 
         try {
-            const result = await signUpService.signUpRequest(userData);
+            const result = await SignUpService.signUpRequest(userData);
             alert('Đăng ký thành công!');
             console.log(result);
         } catch (error) {
@@ -89,24 +88,24 @@ const signUp = () => {
                     <PasswordToggle placeholder='Nhập lại mật khẩu' />
 
                     <button type="submit" className="signUp-button">Đăng ký</button>
-
-                    <div className="divider">
-                        <span>HOẶC</span>
-                    </div>
-
-                    <div className="social-signUp">
-                        <button className="facebook-button">
-                            <FontAwesomeIcon icon={faFacebook} style={{ marginRight: '5px' }} /> Facebook
-                        </button>
-                        <button className="google-button">
-                            <FontAwesomeIcon icon={faGoogle} style={{ marginRight: '5px' }} /> Google
-                        </button>
-                    </div>
-
-                    <div className='signIn-text'>
-                        Bạn đã có tài khoản? <Link to="/Sign-In">Đăng nhập</Link>
-                    </div>
                 </form>
+
+                <div className="divider">
+                    <span>HOẶC</span>
+                </div>
+
+                <div className="social-signUp">
+                    <button className="facebook-button">
+                        <FontAwesomeIcon icon={faFacebook} style={{ marginRight: '5px' }} /> Facebook
+                    </button>
+                    <button className="google-button">
+                        <FontAwesomeIcon icon={faGoogle} style={{ marginRight: '5px' }} /> Google
+                    </button>
+                </div>
+
+                <div className='signIn-text'>
+                    Bạn đã có tài khoản? <Link to="/Sign-In">Đăng nhập</Link>
+                </div>
             </div>
         </div>
     );

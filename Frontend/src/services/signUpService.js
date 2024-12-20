@@ -1,7 +1,6 @@
 import api from './axiosConfig';
 
 const signUpService = {
-    // Gửi yêu cầu đăng ký
     signUpRequest: async (userData) => {
         try {
             const response = await api.post('/users', {

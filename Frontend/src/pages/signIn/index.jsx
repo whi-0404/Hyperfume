@@ -23,11 +23,6 @@ const signIn = () => {
                         </label>
                         <PasswordToggle></PasswordToggle>
 
-                        <div className="remember-me">
-                            <input type="checkbox" id="remember" />
-                            <label htmlFor="remember">Ghi nhớ mật khẩu</label>
-                        </div>
-
                         <button type="submit" className="login-button">Đăng nhập</button>
 
                         <p className="forgot-password">
