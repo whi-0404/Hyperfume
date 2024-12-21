@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
@@ -42,4 +43,7 @@ public class PerfumeResponse {
 
     LocalDate createdAt;
     LocalDate updatedAt;
+
+    List<PerfumeVariantResponse> perfumeVariantResponseList;
+    List<PerfumeImageResponse> perfumeImageResponseList;
 }
