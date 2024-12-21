@@ -10,14 +10,29 @@ import UnisexProductCard_Slider from '../../components/unisexProductCard_Slider'
 
 import { listProducts } from "../../services/ProductService";
 import { maleProducts } from "../../services/maleProducts";
+import getCart from "../../services/handleGetCartItem";
 import { getToken } from "../../services/authToken";
 
 function HomePage() {
     const [selectedProductType, setSelectedProductType] = useState('male');
+    const token = getToken();
 
-    // const [products, setProducts] = useState([]);
+    const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    useEffect(() => {
+        getCart(token)
+            .then((response) => {
+                setProducts(response.data);
+                setLoading(false); // Kết thúc loading
+            })
+            .catch((error) => {
+                console.error(error);
+                setError('Failed to fetch products'); // Lưu lỗi vào state
+                setLoading(false);
+            });
+    }, []);
 
     // useEffect(() => {
     //     maleProducts()

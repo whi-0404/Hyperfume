@@ -1,6 +1,6 @@
 import api from "./axiosConfig";
 
-const getProductDetail = () => {
+const getProductDetail = (id) => {
 
 }
 
