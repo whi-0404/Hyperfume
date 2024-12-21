@@ -10,13 +10,14 @@ import UnisexProductCard_Slider from '../../components/unisexProductCard_Slider'
 
 import { listProducts } from "../../services/ProductService";
 import { maleProducts } from "../../services/maleProducts";
+import { getToken } from "../../services/authToken";
 
 function HomePage() {
     const [selectedProductType, setSelectedProductType] = useState('male');
 
     // const [products, setProducts] = useState([]);
-    // const [loading, setLoading] = useState(true);
-    // const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     // useEffect(() => {
     //     maleProducts()
@@ -36,18 +37,6 @@ function HomePage() {
 
     // // Hiển thị lỗi nếu có
     // if (error) return <div>Error: {error}</div>;
-
-    // for (let index in products.result) {
-    //     console.log(products.result[index].name); // In ra từng đối tượng sản phẩm
-    // }
-
-    // if (Array.isArray(products)) {
-    //     console.log("Data là array");
-    // } else if (typeof products === "object") {
-    //     console.log("Data là object");
-    // } else {
-    //     console.log("Data là kiểu khác");
-    // }
 
 
     return (

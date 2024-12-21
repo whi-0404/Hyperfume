@@ -15,10 +15,6 @@ const App = () => {
   const [cartItems, setCartItems] = useState([cartData]);
   const [loading, setLoading] = useState(true);
 
-  if (cartItems.length === 0) {
-    return <p>Giỏ hàng của bạn đang trống</p>
-  }
-
   return <Cart initialCartItems={cartData} />;
 };
 

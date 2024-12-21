@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './style.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,34 +6,45 @@ import { faFacebook } from "@fortawesome/free-brands-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import PasswordToggle from '../../components/passHide-Unhide';
 
-import SignInService from '../../services/signInService';
+import SignInService from '../../services/handleSignIn';
+import { setToken, removeToken } from '../../services/authToken';
+import { UserInfo } from '../../services/handleUserInfo';
 
+const SignIn = () => {
+    const navigate = useNavigate();
 
-const HandleSubmit = async (e) => {
-    e.preventDefault();
+    const HandleSubmit = async (e) => {
+        e.preventDefault();
 
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value.trim();
+        let username = document.getElementById('username').value.trim();
+        let password = document.getElementById('password').value.trim();
 
-    if (!username || !password) {
-        alert('Vui lòng nhập đầy đủ thông tin!');
-        return;
-    }
+        if (!username || !password) {
+            alert('Vui lòng nhập đầy đủ thông tin!');
+            return;
+        }
 
-    console.log(username, password)
+        try {
+            removeToken()
+            const signInResult = await SignInService(username, password);
+            const token = signInResult.result.token;
+            setToken(token); // Lưu token vào sessionStorage
+            alert('Đăng nhập thành công!');
 
-    try {
-        const result = await SignInService(username, password);
-        alert('Đăng nhập thành công!');
-        console.log(result);
-    } catch (error) {
-        alert('Sai mật khẩu hoặc tên người dùng!');
-        console.error(error);
-    }
-}
+            const userInfo = await UserInfo(token);
+            console.log(userInfo);
 
-const signIn = () => {
+            if (userInfo.result.role.name === "USER") {
+                navigate('/'); // Chuyển hướng đến trang chủ
+            } else if (userInfo.result.role.name === "ADMIN") {
+                navigate('/admin'); // Chuyển hướng đến trang admin
+            }
 
+        } catch (error) {
+            alert('Sai mật khẩu hoặc tên người dùng!');
+            console.error(error);
+        }
+    };
 
     return (
         <>
@@ -44,12 +55,16 @@ const signIn = () => {
                         <label htmlFor="username">
                             Tên tài khoản <span>*</span>
                         </label>
-                        <input type="text" id="username" placeholder="Tên tài khoản" />
+                        <input
+                            type="text"
+                            id="username"
+                            placeholder="Tên tài khoản"
+                        />
 
                         <label htmlFor="password">
                             Mật khẩu <span>*</span>
                         </label>
-                        <PasswordToggle></PasswordToggle>
+                        <PasswordToggle />
 
                         <button type="submit" className="login-button">Đăng nhập</button>
 
@@ -80,4 +95,4 @@ const signIn = () => {
     );
 };
 
-export default memo(signIn);
+export default memo(SignIn);
