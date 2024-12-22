@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useState, useEffect } from "react";
 import "./style.scss";
 import logo from "../../../assets/logo.png";
 import slogan from "../../../assets/slogan.png";
@@ -6,9 +6,35 @@ import { CiSearch } from "react-icons/ci";
 import { FiSmartphone } from "react-icons/fi";
 import { BsCart2 } from "react-icons/bs";
 import { RiArrowDownWideFill } from "react-icons/ri";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { searchProducts } from "../../../services/handleSearchPerfume"
 
 const Header = () => {
+  const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+
+  const HandleSubmit = async (e) => {
+    e.preventDefault();
+    const searchText = document.getElementById("searchText").value;
+
+    // if (!searchText) {
+    //   alert("Vui lòng nhập đầy đủ thông tin!");
+    //   return;
+    // }
+
+    try {
+      const response = await searchProducts(searchText); // Gọi API tìm kiếm
+      setProducts(response.data)
+
+      // Chuyển hướng sang trang kết quả tìm kiếm và truyền data qua state
+      // navigate("/search-results", { state: { products } });
+    } catch (error) {
+      console.error("Error while searching for products:", error);
+    }
+  };
+
+  console.log(products);
+
   return (
     <div className="header">
       <div className="row">
@@ -50,9 +76,9 @@ const Header = () => {
                 </div>
               </div>
 
-              <form action="">
+              <form onSubmit={HandleSubmit}>
                 <div className="search-bar">
-                  <input type="text" placeholder="Tìm kiếm ..." />
+                  <input type="text" placeholder="Tìm kiếm ..." id="searchText" required />
                   <button type="submit" className="search-button">
                     <i className="fa-solid fa-magnifying-glass">
                       <CiSearch />
@@ -109,7 +135,9 @@ const Header = () => {
               </NavLink>
             </li>
             <li>
-              <a href="">Blog</a>
+              <NavLink to="/Blog" activeClassName="active">
+                Blog
+              </NavLink>
             </li>
             <li>
               <a href="#about">
