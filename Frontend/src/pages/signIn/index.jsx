@@ -60,14 +60,11 @@ const SignIn = () => {
                             id="username"
                             placeholder="Tên tài khoản"
                         />
-
                         <label htmlFor="password">
                             Mật khẩu <span>*</span>
                         </label>
                         <PasswordToggle />
-
                         <button type="submit" className="login-button">Đăng nhập</button>
-
                         <p className="forgot-password">
                             <Link to="/Forgot-Password">Quên mật khẩu</Link>
                         </p>

@@ -1,6 +1,7 @@
 export const ROUTERS = {
     USER: {
         HOME: "",
+        NUOCHOA: "nuoc-hoa",
         NUOCHOANAM: "nuoc-hoa-nam",
         NUOCHOANU: "nuoc-hoa-nu",
         NUOCHOAUNISEX: "nuoc-hoa-unisex",
@@ -14,6 +15,7 @@ export const ROUTERS = {
         RESETPASS: "Reset-Password",
         PRODUCT_DETAIL: "Product-detail",
         CONSULT: "consult",
-        ABOUT: "aboutUs"
+        ABOUT: "AboutUs",
+        BLOG: "Blog"
     }
 }

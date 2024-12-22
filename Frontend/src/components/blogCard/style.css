@@ -1,0 +1,38 @@
+.blog-card {
+  height: 400px;
+  background: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.blog-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.blog-content {
+  padding: 10px;
+}
+
+.blog-content h3 {
+  font-size: 25px;
+  margin: 0 0 5px;
+  color: #333;
+}
+
+.blog-content p {
+  font-size: 20px;
+  color: #777;
+}
+
+.blog-card-link {
+  text-decoration: none;
+  /* Xóa gạch chân mặc định */
+  color: inherit;
+  /* Giữ màu chữ nguyên bản */
+  display: block;
+  /* Đảm bảo cả card là vùng click */
+}

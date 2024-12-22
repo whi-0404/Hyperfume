@@ -15,8 +15,8 @@ const Footer = () => {
                     <div class="Thong-tin">
                         <p>Thông tin thêm</p>
                         <ul>
-                            <li><a href="">Giới thiệu về Hyperfume</a></li>
-                            <li><a href="">Blog</a></li>
+                            <li><Link to="/AboutUs">Giới thiệu về Hyperfume</Link></li>
+                            <li><Link to="/Blog">Blog</Link></li>
                             <li><a href="">Trả góp qua thẻ tín dụng</a></li>
                             <li><Link to="/Instruction">Chính sách bảo hành/đổi trả</Link></li>
                             <li><Link to="/Instruction">Chính sách thanh toán</Link></li>
