@@ -6,16 +6,19 @@ import com.Hyperfume.Backend.dto.response.CartResponse;
 import com.Hyperfume.Backend.dto.response.PerfumeVariantResponse;
 import com.Hyperfume.Backend.entity.Cart;
 import com.Hyperfume.Backend.entity.PerfumeVariant;
+import com.Hyperfume.Backend.entity.User;
 import com.Hyperfume.Backend.exception.AppException;
 import com.Hyperfume.Backend.exception.ErrorCode;
 import com.Hyperfume.Backend.mapper.CartMapper;
 import com.Hyperfume.Backend.repository.CartRepository;
 import com.Hyperfume.Backend.repository.PerfumeRepository;
 import com.Hyperfume.Backend.repository.PerfumeVariantRepository;
+import com.Hyperfume.Backend.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -30,6 +33,7 @@ public class CartService {
     CartRepository cartRepository;
     CartMapper cartMapper;
     PerfumeVariantRepository variantRepository;
+    UserRepository userRepository;
 
     public void addToCart(CartRequest request){
         PerfumeVariant variant = variantRepository.findById(request.getVariantId())
@@ -41,11 +45,25 @@ public class CartService {
 
         Cart cart = cartMapper.toEntity(request);
 
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        User user = userRepository.findByUsername(name)
+                .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        cart.setUser(user);
+
         cartRepository.save(cart);
     }
 
-    public List<CartResponse> getCart(Integer userId){
-        List<Cart> cart = cartRepository.findByUserId(userId);
+    public List<CartResponse> getCart(){
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        User user = userRepository.findByUsername(name)
+                .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        List<Cart> cart = cartRepository.findByUserId(user.getId());
 
         return cart.stream()
                 .map(cartMapper::toResponse)

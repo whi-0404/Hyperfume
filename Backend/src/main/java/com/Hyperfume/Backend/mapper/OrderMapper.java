@@ -9,7 +9,6 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface OrderMapper {
-    @Mapping(target = "user.id", source = "userId")
     @Mapping(target = "shippingAddress.id", source = "shippingAddressId")
     @Mapping(target = "shippingMethod.id", source = "shippingMethodId")
     @Mapping(target = "paymentMethod.id", source = "paymentMethodId")

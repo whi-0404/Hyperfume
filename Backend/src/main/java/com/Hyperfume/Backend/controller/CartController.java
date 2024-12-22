@@ -29,10 +29,10 @@ public class CartController {
                 .build();
     }
 
-    @GetMapping("/{userId}")
-    public ApiResponse<List<CartResponse>> getCart(@PathVariable("userId") Integer userId){
+    @GetMapping
+    public ApiResponse<List<CartResponse>> getCart(){
         return ApiResponse.<List<CartResponse>>builder()
-                .result(cartService.getCart(userId))
+                .result(cartService.getCart())
                 .build();
     }
 
