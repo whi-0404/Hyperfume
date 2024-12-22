@@ -1,8 +1,35 @@
-import { memo, useState } from "react";
+import { memo, useState, useEffect } from "react";
+import { toByteArray } from 'base64-js';
 import './style.scss';
 import DiorSavage from "../../assets/product_img/dior_sauvage.png";
+import { maleProducts } from "../../services/maleProducts";
+import ProductCard from "../../components/productCard";
+
+const handleBase64Decode = (base64String) => {
+    try {
+        // Loại bỏ tiền tố nếu có
+        const base64 = base64String.split(',')[1] || base64String;
+
+        // Decode Base64 thành Uint8Array
+        const byteArray = toByteArray(base64);
+
+        // Tạo Blob từ Uint8Array
+        const blob = new Blob([byteArray], { type: 'image/png' });
+
+        // Tạo URL từ Blob
+        const imageUrl = URL.createObjectURL(blob);
+
+        return imageUrl;
+    } catch (error) {
+        console.error('Error decoding Base64:', error.message);
+    }
+};
 
 const NuocHoaNam = () => {
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
     const [sortOption, setSortOption] = useState("latest");
     const [filters, setFilters] = useState({
         fragrance: '',
@@ -14,43 +41,55 @@ const NuocHoaNam = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const productsPerPage = 12; // Show 12 products per page
 
-    // tien viet dung dau phay , ,
-    const formatCurrency = (amount) => {
-        return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
-    };
+    useEffect(() => {
+        maleProducts()
+            .then((response) => {
+                setProducts(response.data);
+                setLoading(false); // Kết thúc loading
+            })
+            .catch((error) => {
+                console.error(error);
+                setError('Failed to fetch products'); // Lưu lỗi vào state
+                setLoading(false);
+            });
+    }, []);
+
+    if (loading) return <div>Loading...</div>;
+
+    // Hiển thị lỗi nếu có
+    if (error) return <div>Error: {error}</div>;
+
+    // const perfumes = [
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
+    //     { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
 
 
-    const perfumes = [
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-
-
-        // Add more products as needed to test pagination
-    ];
+    //     // Add more products as needed to test pagination
+    // ];
 
     const handleFilterChange = (e) => {
         setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -58,13 +97,13 @@ const NuocHoaNam = () => {
     };
 
     // Filtering function
-    const filteredPerfumes = perfumes.filter(perfume => {
+    const filteredPerfumes = products.result.filter(perfume => {
         return (
             (filters.fragrance ? perfume.fragrance === filters.fragrance : true) &&
-            (filters.brand ? perfume.brand === filters.brand : true) &&
+            (filters.brand ? perfume.brandName === filters.brand : true) &&
             (filters.concentration ? perfume.concentration === filters.concentration : true) &&
-            (filters.fragranceGroup ? perfume.group === filters.fragranceGroup : true) &&
-            (filters.maxPrice ? perfume.price <= parseFloat(filters.maxPrice) : true) // Price filter
+            (filters.fragranceGroup ? perfume.screntFamilyName === filters.fragranceGroup : true) &&
+            (filters.maxPrice ? perfume.perfumeVariantResponseList[1].price <= parseFloat(filters.maxPrice) : true) // Price filter
         );
     });
 
@@ -146,11 +185,9 @@ const NuocHoaNam = () => {
                         <option value="Yves">Yves</option>
                         <option value="YSL">YSL</option>
                         <option value="Jean Paul">Jean Paul</option>
-
-
-
                     </select>
                 </div>
+
                 <div className="filter-group">
                     <label>Nồng độ</label>
                     <select name="concentration" onChange={handleFilterChange}>
@@ -160,6 +197,7 @@ const NuocHoaNam = () => {
                         <option value="Parfum">Parfum</option>
                     </select>
                 </div>
+
                 <div className="filter-group">
                     <label>Nhóm hương</label>
                     <select name="fragranceGroup" onChange={handleFilterChange}>
@@ -170,6 +208,7 @@ const NuocHoaNam = () => {
                         <option value="Hương thơm mát">Hương thơm mát</option>
                     </select>
                 </div>
+
                 <div className="filter-group">
                     <label>Khoảng giá</label>
                     <select name="maxPrice" onChange={handleFilterChange}>
@@ -196,14 +235,15 @@ const NuocHoaNam = () => {
             </div>
 
             <div className="product-grid">
-                {displayedProducts.map((perfume, index) => (
-                    <div className="product-card" key={index}>
-                        <a href={perfume.link}>
-                            <img src={perfume.image} alt={perfume.name} className="product-image" />
-                        </a>
-                        <h2 className="product-name">{perfume.name}</h2>
-                        <p className="product-price">{formatCurrency(perfume.price)}</p>
-                    </div>
+                {products.result.map((product) => (
+
+                    <ProductCard
+                        img={handleBase64Decode(product.thumbnailImageData)}
+                        name={product.name}
+                        brandName={product.brandName}
+                        price1={product.perfumeVariantResponseList[0].price}
+                        price2={product.perfumeVariantResponseList[1].price}
+                    />
                 ))}
             </div>
 

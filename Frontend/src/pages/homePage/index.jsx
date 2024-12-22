@@ -8,34 +8,14 @@ import MaleProductCard_Slider from '../../components/maleProductCard_Slider';
 import FemaleProductCard_Slider from '../../components/femaleProductCard_Slider';
 import UnisexProductCard_Slider from '../../components/unisexProductCard_Slider';
 
-import { listProducts } from "../../services/ProductService";
-import { maleProducts } from "../../services/maleProducts";
 import getCart from "../../services/handleGetCartItem";
 import { getToken } from "../../services/authToken";
 
 function HomePage() {
     const [selectedProductType, setSelectedProductType] = useState('male');
-    const token = getToken();
-
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        getCart(token)
-            .then((response) => {
-                setProducts(response.data);
-                setLoading(false); // Kết thúc loading
-            })
-            .catch((error) => {
-                console.error(error);
-                setError('Failed to fetch products'); // Lưu lỗi vào state
-                setLoading(false);
-            });
-    }, []);
 
     // useEffect(() => {
-    //     maleProducts()
+    //     getCart(token)
     //         .then((response) => {
     //             setProducts(response.data);
     //             setLoading(false); // Kết thúc loading
@@ -46,13 +26,6 @@ function HomePage() {
     //             setLoading(false);
     //         });
     // }, []);
-
-
-    // if (loading) return <div>Loading...</div>;
-
-    // // Hiển thị lỗi nếu có
-    // if (error) return <div>Error: {error}</div>;
-
 
     return (
         <>
@@ -81,19 +54,6 @@ function HomePage() {
                     </div>
 
                     <hr />
-
-
-                    {/* <div className="test">
-                        {products.result.map(product => (
-                            <ProductCard
-                                img={require("../../assets/image/Dior.png")}
-                                name={product.name}
-                                brandName={product.brandName}
-                                price={product.price}
-                            ></ProductCard> // Hiển thị tên sản phẩm
-                        ))}
-                    </div> */}
-
 
                     <div className="Sale-Container">
                         <div className="Flash-Sale">
@@ -144,8 +104,8 @@ function HomePage() {
                         )}
                     </div>
 
-                </main>
-            </div>
+                </main >
+            </div >
         </>
     );
 }
