@@ -1,28 +1,8 @@
 import { memo, useState, useEffect } from "react";
-import { toByteArray } from 'base64-js';
+import handleBase64Decode from "../../components/covertBase64ToImg"
 import './style.scss';
 import { femaleProducts } from "../../services/femaleProducts";
 import ProductCard from "../../components/productCard";
-
-const handleBase64Decode = (base64String) => {
-    try {
-        // Loại bỏ tiền tố nếu có
-        const base64 = base64String.split(',')[1] || base64String;
-
-        // Decode Base64 thành Uint8Array
-        const byteArray = toByteArray(base64);
-
-        // Tạo Blob từ Uint8Array
-        const blob = new Blob([byteArray], { type: 'image/png' });
-
-        // Tạo URL từ Blob
-        const imageUrl = URL.createObjectURL(blob);
-
-        return imageUrl;
-    } catch (error) {
-        console.error('Error decoding Base64:', error.message);
-    }
-};
 
 const NuocHoaNu = () => {
     const [products, setProducts] = useState([]);
@@ -66,7 +46,7 @@ const NuocHoaNu = () => {
     // Filtering function
     const filteredPerfumes = products.result.filter(perfume => {
         return (
-            (filters.fragrance ? perfume.fragrance === filters.fragrance : true) &&
+            (filters.longevity ? perfume.longevity === filters.longevity : true) &&
             (filters.brand ? perfume.brandName === filters.brand : true) &&
             (filters.concentration ? perfume.concentration === filters.concentration : true) &&
             (filters.fragranceGroup ? perfume.screntFamilyName === filters.fragranceGroup : true) &&
@@ -124,13 +104,14 @@ const NuocHoaNu = () => {
             <div className="filter-section">
                 <div className="filter-group">
                     <label>Độ lưu hương</label>
-                    <select name="fragrance" onChange={handleFilterChange}>
+                    <select name="longevity" onChange={handleFilterChange}>
                         <option value="">All</option>
                         <option value="Trung bình - 4h đến 7h">Trung bình 4 - 7 giờ</option>
                         <option value="Lâu - 7h đến 12h">Lâu 7 - 12 giờ</option>
                         <option value="Rất lâu - Trên 12h">Rất lâu &gt; 12 giờ</option>
                     </select>
                 </div>
+
                 <div className="filter-group">
                     <label>Thương hiệu</label>
                     <select name="brand" onChange={handleFilterChange}>
@@ -177,6 +158,7 @@ const NuocHoaNu = () => {
                         <option value="Hương ngọt">Hương ngọt</option>
                         <option value="Hương thơm mát">Hương thơm mát</option>
                         <option value="Hương hoa cỏ">Hương hoa cỏ</option>
+                        <option value="Hương cam chanh">Hương cam chanh</option>
                     </select>
                 </div>
 
