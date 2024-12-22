@@ -65,14 +65,16 @@ const NuocHoaNam = () => {
 
     // Filtering function
     const filteredPerfumes = products.result.filter(perfume => {
+        let price = Math.max(
+            ...perfume.perfumeVariantResponseList.map(variant => variant.price)
+        )
+        console.log(price)
         return (
             (filters.fragrance ? perfume.fragrance === filters.fragrance : true) &&
             (filters.brand ? perfume.brandName === filters.brand : true) &&
             (filters.concentration ? perfume.concentration === filters.concentration : true) &&
             (filters.fragranceGroup ? perfume.screntFamilyName === filters.fragranceGroup : true) &&
-            (filters.maxPrice ? Math.max(
-                ...perfume.perfumeVariantResponseList.map(variant => variant.price)
-            ) <= parseFloat(filters.maxPrice) : true) // Price filter
+            (filters.maxPrice ? price <= parseFloat(filters.maxPrice) : true) // Price filter
         );
     });
 

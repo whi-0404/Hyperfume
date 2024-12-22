@@ -24,7 +24,7 @@ const handleBase64Decode = (base64String) => {
     }
 };
 
-const NuocHoaNam = () => {
+const NuocHoaUnisex = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -70,7 +70,9 @@ const NuocHoaNam = () => {
             (filters.brand ? perfume.brandName === filters.brand : true) &&
             (filters.concentration ? perfume.concentration === filters.concentration : true) &&
             (filters.fragranceGroup ? perfume.screntFamilyName === filters.fragranceGroup : true) &&
-            (filters.maxPrice ? perfume.perfumeVariantResponseList[1].price <= parseFloat(filters.maxPrice) : true) // Price filter
+            (filters.maxPrice ? Math.max(
+                ...perfume.perfumeVariantResponseList.map(variant => variant.price)
+            ) <= parseFloat(filters.maxPrice) : true) // Price filter
         );
     });
 
@@ -113,11 +115,11 @@ const NuocHoaNam = () => {
                 <span className="arrow"> &gt; </span>
                 <a href="/nuoc-hoa-nu" className="breadcrumb-link">Sản phẩm</a>
                 <span className="arrow"> &gt; </span>
-                <span className="current">Nước hoa Nam</span>
+                <span className="current">Nước hoa Unisex</span>
                 <hr className="divider" />
             </div>
 
-            <h1 className="product-title">Nước hoa Unisex</h1>
+            <h1 className="product-title">Nước hoa unisex</h1>
 
             <div className="filter-section">
                 <div className="filter-group">
@@ -152,6 +154,7 @@ const NuocHoaNam = () => {
                         <option value="Yves">Yves</option>
                         <option value="YSL">YSL</option>
                         <option value="Jean Paul">Jean Paul</option>
+                        <option value="Versace">Versace</option>
                     </select>
                 </div>
 
@@ -169,10 +172,11 @@ const NuocHoaNam = () => {
                     <label>Nhóm hương</label>
                     <select name="fragranceGroup" onChange={handleFilterChange}>
                         <option value="">All</option>
-                        <option value="Hương phương đông">Hương phương đông</option>
+                        <option value="Hương phương đông">Hương Phương Đông</option>
                         <option value="Hương gỗ">Hương gỗ</option>
                         <option value="Hương ngọt">Hương ngọt</option>
                         <option value="Hương thơm mát">Hương thơm mát</option>
+                        <option value="Hương hoa cỏ">Hương hoa cỏ</option>
                     </select>
                 </div>
 
@@ -202,16 +206,16 @@ const NuocHoaNam = () => {
             </div>
 
             <div className="product-grid">
-                {products.result.map((product) => (
-
+                {displayedProducts.map((products, index) => (
                     <ProductCard
-                        img={handleBase64Decode(product.thumbnailImageData)}
-                        name={product.name}
-                        brandName={product.brandName}
-                        price1={product.perfumeVariantResponseList[0].price}
-                        price2={product.perfumeVariantResponseList[1].price}
+                        img={handleBase64Decode(products.thumbnailImageData)}
+                        name={products.name}
+                        brandName={products.brandName}
+                        price1={products.perfumeVariantResponseList[0].price}
+                        price2={products.perfumeVariantResponseList[1].price}
                     />
                 ))}
+
             </div>
 
             {totalPages > 1 && (
@@ -232,4 +236,4 @@ const NuocHoaNam = () => {
     );
 };
 
-export default memo(NuocHoaNam);
+export default memo(NuocHoaUnisex);
