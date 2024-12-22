@@ -2,6 +2,7 @@ package com.Hyperfume.Backend.controller;
 
 import com.Hyperfume.Backend.dto.request.PerfumeRequest;
 import com.Hyperfume.Backend.dto.response.ApiResponse;
+import com.Hyperfume.Backend.dto.response.PerfumeGetAllResponse;
 import com.Hyperfume.Backend.dto.response.PerfumeResponse;
 import com.Hyperfume.Backend.service.PerfumeService;
 import jakarta.validation.Valid;
@@ -24,30 +25,30 @@ public class PerfumeController {
 
     PerfumeService perfumeService;
     @GetMapping("/collections/type/{typeName}")
-    public ApiResponse<List<PerfumeResponse>> getTypePerfume(@PathVariable String typeName){
-        return  ApiResponse.<List<PerfumeResponse>>builder()
+    public ApiResponse<List<PerfumeGetAllResponse>> getTypePerfume(@PathVariable String typeName){
+        return  ApiResponse.<List<PerfumeGetAllResponse>>builder()
                 .result(perfumeService.getTypePerfume(typeName))
                 .build();
     }
 
     @GetMapping("/collections")
-    public ApiResponse<List<PerfumeResponse>> getGenderPerfume(@RequestParam("gender") String gender){
-        return  ApiResponse.<List<PerfumeResponse>>builder()
+    public ApiResponse<List<PerfumeGetAllResponse>> getGenderPerfume(@RequestParam("gender") String gender){
+        return  ApiResponse.<List<PerfumeGetAllResponse>>builder()
                 .result(perfumeService.getGenderPerfume(gender))
                 .build();
     }
 
     @GetMapping("/search")
-    public ApiResponse<List<PerfumeResponse>> searchPerfumes(@RequestParam("name") String name){
-        return  ApiResponse.<List<PerfumeResponse>>builder()
+    public ApiResponse<List<PerfumeGetAllResponse>> searchPerfumes(@RequestParam("name") String name){
+        return  ApiResponse.<List<PerfumeGetAllResponse>>builder()
                 .result(perfumeService.searchPerfumesByName(name))
                 .build();
     }
 
     // Lấy danh sách nước hoa
     @GetMapping
-    public ApiResponse<List<PerfumeResponse>> getAllPerfumes() {
-        return ApiResponse.<List<PerfumeResponse>>builder()
+    public ApiResponse<List<PerfumeGetAllResponse>> getAllPerfumes() {
+        return ApiResponse.<List<PerfumeGetAllResponse>>builder()
                 .result(perfumeService.getAllPerfumes())
                 .build();
     }
@@ -95,8 +96,8 @@ public class PerfumeController {
     }
 
     @GetMapping("/flash-sale")
-    public ApiResponse<List<PerfumeResponse>> getFlashSalePerfumes(){
-        return ApiResponse.<List<PerfumeResponse>>builder()
+    public ApiResponse<List<PerfumeGetAllResponse>> getFlashSalePerfumes(){
+        return ApiResponse.<List<PerfumeGetAllResponse>>builder()
                 .result(perfumeService.getFlashSalePerfumes())
                 .build();
     }

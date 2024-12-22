@@ -1,12 +1,18 @@
 package com.Hyperfume.Backend.mapper.impl;
 
 import com.Hyperfume.Backend.dto.request.PerfumeRequest;
+import com.Hyperfume.Backend.dto.response.PerfumeGetAllResponse;
 import com.Hyperfume.Backend.dto.response.PerfumeImageResponse;
 import com.Hyperfume.Backend.dto.response.PerfumeResponse;
 import com.Hyperfume.Backend.dto.response.PerfumeVariantResponse;
 import com.Hyperfume.Backend.entity.*;
+import com.Hyperfume.Backend.exception.AppException;
+import com.Hyperfume.Backend.exception.ErrorCode;
 import com.Hyperfume.Backend.mapper.PerfumeMapper;
+import com.Hyperfume.Backend.mapper.impl.utils.PerfumeImageUtil;
+import com.Hyperfume.Backend.repository.PerfumeImageRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,9 +20,12 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class PerfumeMapperImpl implements PerfumeMapper {
-    PerfumeVariantMapperImpl perfumeVariantMapper;
-    PerfumeImageMapperImpl perfumeImageMapper;
+    private final PerfumeVariantMapperImpl perfumeVariantMapper;
+    private final PerfumeImageMapperImpl perfumeImageMapper;
+    private final PerfumeImageRepository perfumeImageRepository;
+    private final PerfumeImageUtil perfumeImageUtil;
 
     public PerfumeResponse toResponse(Perfume perfume) {
         if (perfume == null) {
@@ -46,9 +55,33 @@ public class PerfumeMapperImpl implements PerfumeMapper {
             perfumeResponse.base_notes(perfume.getBase_notes());
             perfumeResponse.sale(perfume.isSale());
             perfumeResponse.flash_sale(perfume.isFlash_sale());
-            perfumeResponse.perfumeVariantResponseList(perfumeVariantResponses(perfume));
-            perfumeResponse.perfumeImageResponseList(perfumeImageResponses(perfume));
+            perfumeResponse.perfumeVariantResponseList(mapVariantsToResponses(perfume.getVariants()));
+            perfumeResponse.perfumeImageResponseList(mapImagesToResponses(perfume.getImages()));
             return perfumeResponse.build();
+        }
+    }
+
+    public PerfumeGetAllResponse toGetAllPerfumeResponse(Perfume perfume) {
+        if (perfume == null) {
+            return null;
+        } else {
+            PerfumeGetAllResponse.PerfumeGetAllResponseBuilder perfumeGetAllResponse = PerfumeGetAllResponse.builder();
+            perfumeGetAllResponse.brandName(this.perfumeBrandName(perfume));
+            perfumeGetAllResponse.screntFamilyName(this.perfumeScrentFamilyName(perfume));
+            perfumeGetAllResponse.countryName(this.perfumeCountryName(perfume));
+            perfumeGetAllResponse.id(perfume.getId());
+            perfumeGetAllResponse.name(perfume.getName());
+            perfumeGetAllResponse.sold(perfume.getSold());
+            perfumeGetAllResponse.createdAt(perfume.getCreatedAt());
+            perfumeGetAllResponse.updatedAt(perfume.getUpdatedAt());
+            perfumeGetAllResponse.type(perfume.getType());
+            perfumeGetAllResponse.perfume_gender(perfume.getPerfume_gender());
+            perfumeGetAllResponse.sale(perfume.isSale());
+            perfumeGetAllResponse.flash_sale(perfume.isFlash_sale());
+            perfumeGetAllResponse.perfumeVariantResponseList(mapVariantsToResponses(perfume.getVariants()));
+            perfumeGetAllResponse.ThumbnailImageData(perfumeImageUtil.encodeImageData(perfumeImageRepository.findByPerfumeIdAndIsThumbnailTrue(perfume.getId())
+                    .orElseThrow(()->new AppException(ErrorCode.THUMBNAIL_NOT_FOUND)).getImage_data()));
+            return perfumeGetAllResponse.build();
         }
     }
 
@@ -201,23 +234,21 @@ public class PerfumeMapperImpl implements PerfumeMapper {
         }
     }
 
-    private List<PerfumeVariantResponse> perfumeVariantResponses(Perfume perfume){
-        if (perfume == null) {
+    private List<PerfumeVariantResponse> mapVariantsToResponses(List<PerfumeVariant> variants) {
+        if (variants == null) {
             return null;
-        } else {
-            return perfume.getVariants().stream()
-                    .map(perfumeVariantMapper::toResponse)
-                    .collect(Collectors.toList());
         }
+        return variants.stream()
+                .map(perfumeVariantMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
-    private List<PerfumeImageResponse> perfumeImageResponses(Perfume perfume){
-        if (perfume == null) {
+    private List<PerfumeImageResponse> mapImagesToResponses(List<PerfumeImage> images) {
+        if (images == null) {
             return null;
-        } else {
-            return perfume.getImages().stream()
-                    .map(perfumeImageMapper::toResponse)
-                    .collect(Collectors.toList());
         }
+        return images.stream()
+                .map(perfumeImageMapper::toResponse)
+                .collect(Collectors.toList());
     }
 }
