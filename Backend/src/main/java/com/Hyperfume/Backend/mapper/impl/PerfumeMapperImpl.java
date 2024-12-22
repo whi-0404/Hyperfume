@@ -76,6 +76,7 @@ public class PerfumeMapperImpl implements PerfumeMapper {
             perfumeGetAllResponse.updatedAt(perfume.getUpdatedAt());
             perfumeGetAllResponse.type(perfume.getType());
             perfumeGetAllResponse.perfume_gender(perfume.getPerfume_gender());
+            perfumeGetAllResponse.perfume_gender(perfume.getConcentration());
             perfumeGetAllResponse.sale(perfume.isSale());
             perfumeGetAllResponse.flash_sale(perfume.isFlash_sale());
             perfumeGetAllResponse.perfumeVariantResponseList(mapVariantsToResponses(perfume.getVariants()));
