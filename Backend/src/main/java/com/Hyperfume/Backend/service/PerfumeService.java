@@ -1,6 +1,7 @@
 package com.Hyperfume.Backend.service;
 
 import com.Hyperfume.Backend.dto.request.PerfumeRequest;
+import com.Hyperfume.Backend.dto.response.PerfumeGetAllResponse;
 import com.Hyperfume.Backend.dto.response.PerfumeResponse;
 import com.Hyperfume.Backend.entity.Brand;
 import com.Hyperfume.Backend.entity.Country;
@@ -38,10 +39,10 @@ public class PerfumeService {
     PerfumeMapper perfumeMapper;
 
     // Lấy danh sách nước hoa
-    public List<PerfumeResponse> getAllPerfumes() {
+    public List<PerfumeGetAllResponse> getAllPerfumes() {
         List<Perfume> perfumes = perfumeRepository.findAll();
         return perfumes.stream()
-                .map(perfumeMapper::toResponse)
+                .map(perfumeMapper::toGetAllPerfumeResponse)
                 .collect(Collectors.toList());
     }
 
@@ -116,25 +117,25 @@ public class PerfumeService {
         perfumeRepository.updateFlashSaleStatus(perfumeId, isFlashSale);
     }
 
-    public List<PerfumeResponse> getFlashSalePerfumes(){
+    public List<PerfumeGetAllResponse> getFlashSalePerfumes(){
 
         return perfumeRepository.findAllFlashSaleProducts().stream()
-                .map(perfumeMapper::toResponse)
+                .map(perfumeMapper::toGetAllPerfumeResponse)
                 .collect(Collectors.toList());
     }
 
-    public List<PerfumeResponse> getTypePerfume(String typeName){
+    public List<PerfumeGetAllResponse> getTypePerfume(String typeName){
          return perfumeRepository.findByTypeName(typeName).stream()
-                 .map(perfumeMapper::toResponse)
+                 .map(perfumeMapper::toGetAllPerfumeResponse)
                  .collect(Collectors.toList());
     }
-    public List<PerfumeResponse> getGenderPerfume(String gender){
+    public List<PerfumeGetAllResponse> getGenderPerfume(String gender){
         return perfumeRepository.findByGender(gender).stream()
-                .map(perfumeMapper::toResponse)
+                .map(perfumeMapper::toGetAllPerfumeResponse)
                 .collect(Collectors.toList());
     }
 
-    public List<PerfumeResponse> searchPerfumesByName(String name){
+    public List<PerfumeGetAllResponse> searchPerfumesByName(String name){
         List<Perfume> perfumes = perfumeRepository.searchByName(name);
 
         if(perfumes.isEmpty()){
@@ -142,7 +143,7 @@ public class PerfumeService {
         }
 
         return perfumes.stream()
-                .map(perfumeMapper::toResponse)
+                .map(perfumeMapper::toGetAllPerfumeResponse)
                 .collect(Collectors.toList());
     }
 }
