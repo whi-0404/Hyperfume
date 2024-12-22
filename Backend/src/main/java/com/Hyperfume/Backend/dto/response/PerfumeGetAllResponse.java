@@ -19,6 +19,7 @@ public class PerfumeGetAllResponse {
     String type;
     String perfume_gender;
     String concentration;
+    String longevity;
 
     String screntFamilyName;
 
