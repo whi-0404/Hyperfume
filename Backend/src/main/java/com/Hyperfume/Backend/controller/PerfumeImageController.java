@@ -40,6 +40,15 @@ public class PerfumeImageController {
                 .build();
     }
 
+    @PutMapping("/thumbnail")
+    public ApiResponse<PerfumeImageResponse> updateImageThumbnail(@PathVariable Integer perfumeId,
+                                                               @ModelAttribute @Valid PerfumeImageRequest request)
+    {
+        return ApiResponse.<PerfumeImageResponse>builder()
+                .result(perfumeImageService.updateThumbnailByPerfumeId(perfumeId,request))
+                .build();
+    }
+
     @PostMapping("/multiple")
     public ApiResponse<List<PerfumeImageResponse>> addMultipleImages(
             @PathVariable Integer perfumeId,

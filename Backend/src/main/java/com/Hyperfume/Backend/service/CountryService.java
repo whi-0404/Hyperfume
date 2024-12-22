@@ -34,7 +34,6 @@ public class CountryService {
         return countryMapper.toCountryResponse(countryRepository.save(country));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     public List<CountryResponse> getCountries()
     {
 
@@ -42,8 +41,7 @@ public class CountryService {
                 .map(countryMapper::toCountryResponse)
                 .collect(Collectors.toList());
     }
-
-    @PreAuthorize("hasRole('ADMIN')")
+    
     public CountryResponse getCountry(Integer countryId)
     {
         return countryMapper.toCountryResponse(countryRepository.findById(countryId)

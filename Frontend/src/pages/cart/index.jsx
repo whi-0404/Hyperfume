@@ -3,6 +3,8 @@ import Cart from "../../components/cart/cart";
 
 import greenIrishTweed from "../../assets/productImages/creed/green-irish-tweed.png";
 import diorHommeSport from "../../assets/productImages/dior-homme-sport.png";
+import getCart from "../../services/handleGetCartItem";
+import handleBase64Decode from "../../components/covertBase64ToImg"
 
 const cartData = [
   { id: 1, name: "Creed Green Irish Tweed", price: 7000000, size: "100ml", quantity: 1, sale: 10, image: greenIrishTweed },
@@ -12,12 +14,29 @@ const cartData = [
 ];
 
 const App = () => {
-  const [cartItems, setCartItems] = useState([cartData]);
-  const [loading, setLoading] = useState(true);
+  // const [products, setProducts] = useState([]);
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState(null);
 
-  if (cartItems.length === 0) {
-    return <p>Giỏ hàng của bạn đang trống</p>
-  }
+  // useEffect(() => {
+  //   getCart()
+  //     .then((response) => {
+  //       setProducts(response.data);
+  //       setLoading(false); // Kết thúc loading
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //       setError('Failed to fetch products'); // Lưu lỗi vào state
+  //       setLoading(false);
+  //     });
+  // }, []);
+
+  // if (loading) return <div>Loading...</div>;
+
+  // // Hiển thị lỗi nếu có
+  // if (error) return <div>Error: {error}</div>;
+
+  // console.log(products.result)
 
   return <Cart initialCartItems={cartData} />;
 };

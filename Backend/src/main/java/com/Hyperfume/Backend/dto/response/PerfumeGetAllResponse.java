@@ -5,37 +5,25 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level= AccessLevel.PRIVATE)
-public class PerfumeResponse {
+public class PerfumeGetAllResponse {
     int id;
     String name;
 
     String brandName;
 
     String type;
-    String perfume_description;
     String perfume_gender;
     String concentration;
+    String longevity;
 
     String screntFamilyName;
 
-    String main_notes;
-    String longevity;
-    String sillage;
-    String style;
-    String season_usage;
-    int release_year;
-
     String countryName;
-
-    String top_notes;
-    String middle_notes;
-    String base_notes;
 
     boolean sale;
     boolean flash_sale;
@@ -45,5 +33,5 @@ public class PerfumeResponse {
     LocalDate updatedAt;
 
     List<PerfumeVariantResponse> perfumeVariantResponseList;
-    List<PerfumeImageResponse> perfumeImageResponseList;
+    String ThumbnailImageData;
 }

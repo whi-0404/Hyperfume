@@ -49,12 +49,17 @@ const Header = () => {
                   <span className="hotline-text">Hotline bán hàng</span>
                 </div>
               </div>
-              <div className="search-bar">
-                <input type="text" placeholder="Tìm kiếm ..." />
-                <i className="fa-solid fa-magnifying-glass">
-                  <CiSearch />
-                </i>
-              </div>
+
+              <form action="">
+                <div className="search-bar">
+                  <input type="text" placeholder="Tìm kiếm ..." />
+                  <button type="submit" className="search-button">
+                    <i className="fa-solid fa-magnifying-glass">
+                      <CiSearch />
+                    </i>
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
@@ -99,7 +104,9 @@ const Header = () => {
               </NavLink>
             </li>
             <li>
-              <a href="/consult">Tư vấn</a>
+              <NavLink to="/consult" activeClassName="active">
+                Tư vấn
+              </NavLink>
             </li>
             <li>
               <a href="">Blog</a>

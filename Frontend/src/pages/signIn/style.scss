@@ -45,30 +45,6 @@
             font-size: 20px;
         }
 
-        .remember-me {
-            display: flex;
-            align-items: center;
-            color: #3E2723;
-            margin-bottom: 15px;
-
-            label {
-                font-weight: bolder;
-                font-size: 20px;
-                margin: 0;
-            }
-
-            input[type="checkbox"] {
-                width: 20px;
-                height: 20px;
-                margin: 0;
-                margin-right: 8px;
-                accent-color: blue;
-                border-radius: 10px;
-                cursor: pointer;
-            }
-
-        }
-
         .login-button {
             width: 100%;
             padding: 10px;

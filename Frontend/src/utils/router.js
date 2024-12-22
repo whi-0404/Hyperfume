@@ -12,7 +12,7 @@ export const ROUTERS = {
         INSTRUCTION: "Instruction",
         FORGOTPASS: "Forgot-Password",
         RESETPASS: "Reset-Password",
-        PRODUCT_DETAIL: "Dior",
+        PRODUCT_DETAIL: "Product-detail",
         CONSULT: "consult",
         ABOUT: "aboutUs"
     }
