@@ -98,6 +98,16 @@ public class PerfumeImageService {
         return perfumeImageMapper.toResponse(thumbnail);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    public PerfumeImageResponse updateThumbnailByPerfumeId(Integer perfumeId, PerfumeImageRequest request){
+        PerfumeImage thumbnail = perfumeImageRepository.findByPerfumeIdAndIsThumbnailTrue(perfumeId)
+                .orElseThrow(() -> new AppException(ErrorCode.THUMBNAIL_NOT_FOUND));
+
+        thumbnail.setImage_data(extractImageData(request.getImageFile()));
+
+        return perfumeImageMapper.toResponse(perfumeImageRepository.save(thumbnail));
+    }
+
 
     private void validateImageSize(MultipartFile file) {
         if (file.getSize() > MAX_IMAGE_SIZE) {
