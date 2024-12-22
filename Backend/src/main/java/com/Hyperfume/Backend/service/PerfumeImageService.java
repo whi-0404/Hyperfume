@@ -98,6 +98,7 @@ public class PerfumeImageService {
         return perfumeImageMapper.toResponse(thumbnail);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public PerfumeImageResponse updateThumbnailByPerfumeId(Integer perfumeId, PerfumeImageRequest request){
         PerfumeImage thumbnail = perfumeImageRepository.findByPerfumeIdAndIsThumbnailTrue(perfumeId)
                 .orElseThrow(() -> new AppException(ErrorCode.THUMBNAIL_NOT_FOUND));
