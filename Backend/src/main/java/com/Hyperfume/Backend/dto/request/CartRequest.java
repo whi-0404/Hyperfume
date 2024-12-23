@@ -12,9 +12,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CartRequest {
     @NotNull
-    Integer userId;
-
-    @NotNull
     Integer variantId;
 
     @Min(value = 1, message = "QUANTITY_INVALID")

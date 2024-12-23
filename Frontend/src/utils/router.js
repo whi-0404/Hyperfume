@@ -16,6 +16,7 @@ export const ROUTERS = {
         PRODUCT_DETAIL: "Product-detail",
         CONSULT: "consult",
         ABOUT: "AboutUs",
-        BLOG: "Blog"
+        BLOG: "Blog",
+        SEARCH: "Search"
     }
 }

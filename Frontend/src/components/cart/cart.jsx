@@ -4,9 +4,9 @@ import CartItem from "./cartItem";
 import CartQuantityCount from "../cartQuantityCount";
 import "./style.scss";
 
+
 const Cart = ({ initialCartItems }) => {
     const [cartItems, setCartItems] = React.useState(initialCartItems);
-
     const [selectedItems, setSelectedItems] = useState([]);
     const [isAllChecked, setIsAllChecked] = useState(false);
 

@@ -18,6 +18,7 @@ import ThanhToan from "./pages/thanhToan";
 import ProductConsult from "./pages/productConsult";
 import AboutUs from "./pages/aboutUs";
 import BlogPage from "./pages/blog";
+import LoadSearchProduct from "./pages/loadSearchProduct";
 
 const renderUserRouter = () => {
     const userRouters = [
@@ -88,6 +89,10 @@ const renderUserRouter = () => {
         {
             path: ROUTERS.USER.BLOG,
             component: <BlogPage></BlogPage>
+        },
+        {
+            path: ROUTERS.USER.SEARCH,
+            component: <LoadSearchProduct></LoadSearchProduct>
         }
     ]
 

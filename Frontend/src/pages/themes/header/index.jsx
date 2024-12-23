@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from "react";
+import { memo, useEffect, useState } from "react";
 import "./style.scss";
 import logo from "../../../assets/logo.png";
 import slogan from "../../../assets/slogan.png";
@@ -7,33 +7,46 @@ import { FiSmartphone } from "react-icons/fi";
 import { BsCart2 } from "react-icons/bs";
 import { RiArrowDownWideFill } from "react-icons/ri";
 import { NavLink, useNavigate } from "react-router-dom";
-import { searchProducts } from "../../../services/handleSearchPerfume"
+import { searchProducts } from "../../../services/handleSearchPerfume";
+import getCart from "../../../services/handleGetCartItem";
+import { getToken } from "../../../services/authToken";
 
 const Header = () => {
-  const navigate = useNavigate();
+  const Token = getToken();
   const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    getCart()
+      .then((response) => {
+        setProducts(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
     const searchText = document.getElementById("searchText").value;
 
-    // if (!searchText) {
-    //   alert("Vui lòng nhập đầy đủ thông tin!");
-    //   return;
-    // }
-
+    if (!searchText) {
+      alert("Vui lòng nhập đầy đủ thông tin!");
+      return;
+    }
     try {
       const response = await searchProducts(searchText); // Gọi API tìm kiếm
-      setProducts(response.data)
-
-      // Chuyển hướng sang trang kết quả tìm kiếm và truyền data qua state
-      // navigate("/search-results", { state: { products } });
+      const products = response.data;
+      console.log(products);
+      navigate("/search", { state: { products } });
     } catch (error) {
       console.error("Error while searching for products:", error);
     }
   };
 
-  console.log(products);
+  let a = products.result
+  console.log(a)
+  // let cartCount = products.result.length;
 
   return (
     <div className="header">
@@ -56,7 +69,7 @@ const Header = () => {
                   <i className="fa-solid fa-cart-shopping">
                     <BsCart2 />
                   </i>
-                  <span className="cart-count">0</span>
+                  <span className="cart-count"></span>
                 </NavLink>
               </div>
 
@@ -100,12 +113,12 @@ const Header = () => {
               </NavLink>
             </li>
             <li>
-              <a href="#news">
+              <NavLink to="/nuoc-hoa" activeClassName="active">
                 Sản phẩm{" "}
                 <i className="fa-solid fa-angle-down">
                   <RiArrowDownWideFill />
                 </i>
-              </a>
+              </NavLink>
               <ul className="dropdown">
                 <li>
                   <NavLink to="/nuoc-hoa-nam" activeClassName="active">

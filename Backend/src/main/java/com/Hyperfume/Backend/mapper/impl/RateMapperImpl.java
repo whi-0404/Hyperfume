@@ -19,7 +19,6 @@ public class RateMapperImpl implements RateMapper {
             return null;
         } else {
             Rate.RateBuilder rate = Rate.builder();
-            rate.user(this.rateRequestToUser(request));
             rate.rateStar(request.getRateStar());
             rate.rateContext(request.getRateContext());
             return rate.build();
@@ -38,19 +37,6 @@ public class RateMapperImpl implements RateMapper {
             rateResponse.rateDatetime(rate.getRateDatetime());
             rateResponse.userName(rate.getUser().getUsername());
             return rateResponse.build();
-        }
-    }
-
-    protected User rateRequestToUser(RateRequest rateRequest) {
-        if (rateRequest == null) {
-            return null;
-        } else {
-            User.UserBuilder user = User.builder();
-            if (rateRequest.getUserId() != null) {
-                user.id(rateRequest.getUserId());
-            }
-
-            return user.build();
         }
     }
 
