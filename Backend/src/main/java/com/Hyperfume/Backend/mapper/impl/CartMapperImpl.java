@@ -28,7 +28,6 @@ public class CartMapperImpl implements CartMapper {
         } else {
             Cart.CartBuilder cart = Cart.builder();
             cart.perfumeVariant(this.cartRequestToPerfumeVariant(request));
-            cart.user(this.cartRequestToUser(request));
             cart.quantity(request.getQuantity());
             return cart.build();
         }
@@ -63,19 +62,6 @@ public class CartMapperImpl implements CartMapper {
             }
 
             return perfumeVariant.build();
-        }
-    }
-
-    protected User cartRequestToUser(CartRequest cartRequest) {
-        if (cartRequest == null) {
-            return null;
-        } else {
-            User.UserBuilder user = User.builder();
-            if (cartRequest.getUserId() != null) {
-                user.id(cartRequest.getUserId());
-            }
-
-            return user.build();
         }
     }
 
