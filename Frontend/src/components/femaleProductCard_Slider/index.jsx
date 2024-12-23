@@ -11,55 +11,64 @@ const productData = [
         img: require("../../assets/productImages/Nassomatto-Narcotic-V.png"),
         name: "Narcotic V",
         brandName: "Nas",
-        price: "1,100,000đ - 3,000,000đ"
+        price1: 1100000,
+        price2: 3000000
     },
     {
         img: require("../../assets/productImages/creed/creed-aventus.png"),
         name: "Aventus",
         brandName: "Creed",
-        price: "650,000đ - 6,100,000đ"
+        price1: 650000,
+        price2: 6100000
     },
     {
         img: require("../../assets/productImages/chanel-chance-eau-fraiche.png"),
         name: "Chanel Chance Eau Fraiche",
         brandName: "Chanel",
-        price: "350,000đ - 3,100,000đ"
+        price1: 350000,
+        price2: 3100000
     },
     {
         img: require("../../assets/productImages/creed/green-irish-tweed.png"),
         name: "Angel's Share",
         brandName: "By Kilian",
-        price: "900,000đ - 4,100,000đ"
+        price1: 900000,
+        price2: 4100000,
     },
     {
         img: require("../../assets/productImages/creed/green-irish-tweed.png"),
         name: "Replica Sailing Day",
         brandName: "Maison Margiela",
-        price: "350,000đ - 2,700,000đ"
+        price1: 350000,
+        price2: 2700000,
     },
     {
         img: require("../../assets/productImages/creed/green-irish-tweed.png"),
         name: "Replica ",
         brandName: "Maison Margiela",
-        price: "350,000đ - 2,700,000đ"
+        price1: 350000,
+        price2: 2700000,
     },
     {
         img: require("../../assets/productImages/creed/green-irish-tweed.png"),
         name: "Apple Brandy On the Rock",
         brandName: "By Kilian",
-        price: "900,000đ - 4,100,000đ"
+        price1: 900000,
+        price2: 4100000,
     },
     {
         img: require("../../assets/productImages/creed/green-irish-tweed.png"),
         name: "Apple Brandy On the Rock",
         brandName: "By Kilian",
-        price: "900,000đ - 4,100,000đ"
+        price1: 900000,
+        price2: 4100000,
     },
     {
         img: require("../../assets/productImages/creed/green-irish-tweed.png"),
         name: "Apple Brandy On the Rock",
         brandName: "By Kilian",
-        price: "900,000đ - 4,100,000đ"
+        price1: 900000,
+        price2: 4100000,
     },
 ];
 
@@ -89,7 +98,8 @@ const CardSlider = () => {
                                 img={product.img}
                                 name={product.name}
                                 brandName={product.brandName}
-                                price={product.price}
+                                price1={product.price1}
+                                price2={product.price2}
                             />
                         </SwiperSlide>
                     ))}

@@ -1,6 +1,30 @@
 @use "sass:map";
 @import "../../styles/style.scss";
 
+.alert {
+    background-color: #F5F1EB;
+
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    h1 {
+        margin-right: 10px;
+        font-size: 50px;
+    }
+
+    a {
+        text-decoration: none;
+        font-size: 50px;
+        color: #777CFE;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
 .cart-container {
     padding: 20px;
     background-color: #F5F1EB;
@@ -58,8 +82,9 @@
         .product-image {
             width: 110px;
             height: 110px;
-            object-fit: cover;
+            object-fit: fill;
             border-radius: 8px;
+            background-color: #F5F1EB;
         }
 
         p {

@@ -9,6 +9,7 @@ import Cart from "./pages/cart";
 import ForgotPass from "./pages/forgotPass";
 import ResetPass from "./pages/resetPass";
 import ProductDetail from "./pages/productDetail";
+import Nuochoa from "./pages/nuochoa";
 import NuochoaNam from "./pages/nuochoaNam";
 import NuochoaNu from "./pages/nuochoaNu";
 import NuochoaUnisex from "./pages/nuochoaUnisex";
@@ -16,12 +17,18 @@ import FlashSale from "./pages/flash_Sale";
 import ThanhToan from "./pages/thanhToan";
 import ProductConsult from "./pages/productConsult";
 import AboutUs from "./pages/aboutUs";
+import BlogPage from "./pages/blog";
+import LoadSearchProduct from "./pages/loadSearchProduct";
 
 const renderUserRouter = () => {
     const userRouters = [
         {
             path: ROUTERS.USER.HOME,
             component: <HomePage />
+        },
+        {
+            path: ROUTERS.USER.NUOCHOA,
+            component: <Nuochoa />
         },
         {
             path: ROUTERS.USER.NUOCHOANAM,
@@ -78,6 +85,14 @@ const renderUserRouter = () => {
         {
             path: ROUTERS.USER.ABOUT,
             component: <AboutUs></AboutUs>
+        },
+        {
+            path: ROUTERS.USER.BLOG,
+            component: <BlogPage></BlogPage>
+        },
+        {
+            path: ROUTERS.USER.SEARCH,
+            component: <LoadSearchProduct></LoadSearchProduct>
         }
     ]
 

@@ -1,8 +1,14 @@
-import { memo, useState } from "react";
+import { memo, useState, useEffect } from "react";
+import handleBase64Decode from "../../components/covertBase64ToImg"
 import './style.scss';
-import DiorSavage from "../../assets/product_img/dior_sauvage.png";
+import { maleProducts } from "../../services/maleProducts";
+import ProductCard from "../../components/productCard";
 
 const NuocHoaNam = () => {
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
     const [sortOption, setSortOption] = useState("latest");
     const [filters, setFilters] = useState({
         fragrance: '',
@@ -14,43 +20,23 @@ const NuocHoaNam = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const productsPerPage = 12; // Show 12 products per page
 
-    // tien viet dung dau phay , ,
-    const formatCurrency = (amount) => {
-        return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
-    };
+    useEffect(() => {
+        maleProducts()
+            .then((response) => {
+                setProducts(response.data);
+                setLoading(false); // Kết thúc loading
+            })
+            .catch((error) => {
+                console.error(error);
+                setError('Failed to fetch products'); // Lưu lỗi vào state
+                setLoading(false);
+            });
+    }, []);
 
+    if (loading) return <div>Loading...</div>;
 
-    const perfumes = [
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-        { name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000, image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông' },
-
-
-        // Add more products as needed to test pagination
-    ];
+    // Hiển thị lỗi nếu có
+    if (error) return <div>Error: {error}</div>;
 
     const handleFilterChange = (e) => {
         setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -58,13 +44,21 @@ const NuocHoaNam = () => {
     };
 
     // Filtering function
-    const filteredPerfumes = perfumes.filter(perfume => {
+    // let maxPrice = Math.max(
+    //     ...products.result.flatMap((perfume) =>
+    //         perfume.perfumeVariantResponseList.map((variant) => variant.price)
+    //     )
+    // );
+    // console.log(maxPrice)
+    const filteredPerfumes = products.result.filter(perfume => {
         return (
-            (filters.fragrance ? perfume.fragrance === filters.fragrance : true) &&
-            (filters.brand ? perfume.brand === filters.brand : true) &&
+            (filters.longevity ? perfume.longevity === filters.longevity : true) &&
+            (filters.brand ? perfume.brandName === filters.brand : true) &&
             (filters.concentration ? perfume.concentration === filters.concentration : true) &&
-            (filters.fragranceGroup ? perfume.group === filters.fragranceGroup : true) &&
-            (filters.maxPrice ? perfume.price <= parseFloat(filters.maxPrice) : true) // Price filter
+            (filters.fragranceGroup ? perfume.screntFamilyName === filters.fragranceGroup : true) &&
+            (filters.maxPrice ? Math.max(
+                ...perfume.perfumeVariantResponseList.map(variant => variant.price)
+            ) <= parseFloat(filters.maxPrice) : true) // Price filter
         );
     });
 
@@ -116,13 +110,14 @@ const NuocHoaNam = () => {
             <div className="filter-section">
                 <div className="filter-group">
                     <label>Độ lưu hương</label>
-                    <select name="fragrance" onChange={handleFilterChange}>
+                    <select name="longevity" onChange={handleFilterChange}>
                         <option value="">All</option>
-                        <option value="Tạm ổn 3 - 6 giờ">Tạm ổn 3 - 6 giờ</option>
-                        <option value="Lâu 7 - 12 giờ">Lâu 7 - 12 giờ</option>
-                        <option value="Rất lâu > 12 giờ">Rất lâu &gt; 12 giờ</option>
+                        <option value="Trung bình - 4h đến 7h">Trung bình 4 - 7 giờ</option>
+                        <option value="Lâu - 7h đến 12h">Lâu 7 - 12 giờ</option>
+                        <option value="Rất lâu - Trên 12h">Rất lâu &gt; 12 giờ</option>
                     </select>
                 </div>
+
                 <div className="filter-group">
                     <label>Thương hiệu</label>
                     <select name="brand" onChange={handleFilterChange}>
@@ -146,11 +141,10 @@ const NuocHoaNam = () => {
                         <option value="Yves">Yves</option>
                         <option value="YSL">YSL</option>
                         <option value="Jean Paul">Jean Paul</option>
-
-
-
+                        <option value="Versace">Versace</option>
                     </select>
                 </div>
+
                 <div className="filter-group">
                     <label>Nồng độ</label>
                     <select name="concentration" onChange={handleFilterChange}>
@@ -160,16 +154,20 @@ const NuocHoaNam = () => {
                         <option value="Parfum">Parfum</option>
                     </select>
                 </div>
+
                 <div className="filter-group">
                     <label>Nhóm hương</label>
                     <select name="fragranceGroup" onChange={handleFilterChange}>
                         <option value="">All</option>
-                        <option value="Hương phương đông">Hương phương đông</option>
+                        <option value="Hương phương đông">Hương Phương Đông</option>
                         <option value="Hương gỗ">Hương gỗ</option>
                         <option value="Hương ngọt">Hương ngọt</option>
                         <option value="Hương thơm mát">Hương thơm mát</option>
+                        <option value="Hương hoa cỏ">Hương hoa cỏ</option>
+                        <option value="Hương cam chanh">Hương cam chanh</option>
                     </select>
                 </div>
+
                 <div className="filter-group">
                     <label>Khoảng giá</label>
                     <select name="maxPrice" onChange={handleFilterChange}>
@@ -196,15 +194,16 @@ const NuocHoaNam = () => {
             </div>
 
             <div className="product-grid">
-                {displayedProducts.map((perfume, index) => (
-                    <div className="product-card" key={index}>
-                        <a href={perfume.link}>
-                            <img src={perfume.image} alt={perfume.name} className="product-image" />
-                        </a>
-                        <h2 className="product-name">{perfume.name}</h2>
-                        <p className="product-price">{formatCurrency(perfume.price)}</p>
-                    </div>
+                {displayedProducts.map((products, index) => (
+                    <ProductCard
+                        img={handleBase64Decode(products.thumbnailImageData)}
+                        name={products.name}
+                        brandName={products.brandName}
+                        price1={products.perfumeVariantResponseList[0].price}
+                        price2={products.perfumeVariantResponseList[1].price}
+                    />
                 ))}
+
             </div>
 
             {totalPages > 1 && (

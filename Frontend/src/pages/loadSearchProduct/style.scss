@@ -1,0 +1,179 @@
+.nuoc-hoa-nam {
+    padding: 20px;
+    background-color: #F5F1EB;
+    max-width: 100%;
+
+
+    // dieu huong 
+    .breadcrumb {
+        font-size: 24px;
+        margin-bottom: 20px;
+        margin: 0 100px; //ne
+
+        .breadcrumb-link {
+            color: #000000; // Default link color
+            text-decoration: none; // Remove underline
+            transition: color 0.3s;
+
+            &:hover {
+                color: #FFE0B2; // Change color on hover
+            }
+        }
+
+        .arrow {
+            margin: 0 5px;
+        }
+
+        .current {
+            font-weight: bold; // Make current page bold
+            color: #000; // Different color for the current page
+        }
+
+        .divider {
+            border: 0;
+            border-top: 1px solid #ccc;
+            margin: 10px -40px; //ne
+        }
+    }
+
+    // title
+    .product-title {
+        font-size: 80px; // Adjust size as needed
+        font-weight: bold;
+        color: #3E2723; // Dark color
+        text-align: center; // Center the title
+        margin: 20px 0; // Space above and below the title
+
+        // Optional: Add a text-shadow for a subtle effect
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    //filter 5 thuoc tinh
+    .filter-section {
+        margin: 10px 50px;
+        padding: 10px;
+        border-radius: 15px;
+        background-color: #FFE0B2;
+        border: 1px solid #3E2723;
+
+        .filter-group {
+            display: inline-block;
+            padding: 0 20px;
+            align-items: center;
+
+            label {
+                font-size: 32px;
+                color: #3E2723;
+                margin-right: 10px;
+            }
+
+            select {
+                border-radius: 15px;
+                border: 1px solid #3E2723;
+                cursor: pointer;
+                font-size: 32px;
+                text-align: center;
+                color: #3E2723;
+            }
+        }
+    }
+
+
+    // sort theo gia thap - cao
+    .sort-section {
+        display: flex;
+        gap: 10px;
+        text-align: center;
+        padding: 30px 250px 30px 30px;
+        justify-content: flex-end;
+
+        h3 {
+            font-size: 32px;
+            color: #3E2723;
+            font-weight: lighter;
+            text-align: center;
+        }
+
+        select {
+            padding: 0 15px;
+            text-align: center;
+            font-size: 32px;
+            background-color: #D4A373;
+            color: #fff;
+            border-radius: 15px;
+            cursor: pointer;
+            border: 1px solid #3E2723;
+        }
+    }
+
+    // list san pham
+    .product-grid {
+        display: grid;
+        margin: 0 300px;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 4fr));
+        gap: 30px;
+    }
+
+    .product-card {
+        border-radius: 15px;
+        padding: 30px;
+        text-align: center;
+        transition: box-shadow 0.3s;
+        background-color: #fff;
+        border: none;
+
+        &:hover {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-image {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .product-name {
+            font-size: 24px;
+            font-weight: lighter;
+            margin: 10px 0 7px 0;
+            color: #7b1616;
+        }
+
+
+        .product-price {
+            font-size: 24px;
+            color: #3E2723;
+            font-weight: lighter;
+        }
+    }
+
+    .pagination {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+
+        button {
+            font-size: 24px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 8px 17px;
+            margin: 10px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+
+            &.active {
+                background-color: #D4A373;
+                color: white;
+                border-color: #D4A373;
+            }
+
+            &:hover:not(.active) {
+                background-color: #e0e0e0;
+            }
+
+
+        }
+    }
+}

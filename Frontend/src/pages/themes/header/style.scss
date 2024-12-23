@@ -144,7 +144,6 @@
     padding: 3px 5px;
     border-radius: 20px;
     gap: 8px;
-
 }
 
 .search-bar input {
@@ -162,9 +161,9 @@
 }
 
 .search-button {
+    height: 25px;
     background: none;
     border: none;
-    font-size: 16px;
     color: #ffffff;
     cursor: pointer;
 }
@@ -172,7 +171,7 @@
 .search-bar i {
     color: #ffffff;
     font-size: 25px;
-    margin-top: 5px;
+
 }
 
 

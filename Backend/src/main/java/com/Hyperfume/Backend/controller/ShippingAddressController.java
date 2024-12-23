@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users/{user_id}/shipping_address")
+@RequestMapping("/users/shipping_address")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
@@ -25,20 +25,18 @@ public class ShippingAddressController {
     ShippingAddressService shippingAddressService;
 
     @PostMapping
-    ApiResponse<ShippingAddressResponse> createShippingAddress(@PathVariable("user_id") Integer userId,
-                                                               @RequestBody @Valid ShippingAddressRequest request)
+    ApiResponse<ShippingAddressResponse> createShippingAddress(@RequestBody @Valid ShippingAddressRequest request)
     {
-        request.setUserId(userId);
         return ApiResponse.<ShippingAddressResponse>builder()
                 .result(shippingAddressService.createShippingAddress(request))
                 .build();
     }
 
     @GetMapping
-    ApiResponse<List<ShippingAddressResponse>> getUserShippingAddress(@PathVariable("user_id") Integer userId)
+    ApiResponse<List<ShippingAddressResponse>> getUserShippingAddress()
     {
         return ApiResponse.<List<ShippingAddressResponse>>builder()
-                .result(shippingAddressService.getUserShippingAddress(userId))
+                .result(shippingAddressService.getUserShippingAddress())
                 .build();
     }
 
@@ -51,10 +49,9 @@ public class ShippingAddressController {
 //    }
 
     @PutMapping("/{shippingAddressId}")
-    ApiResponse<ShippingAddressResponse> updateShippingAddress(@PathVariable("user_id") Integer userId,
-                                                           @PathVariable("shippingAddressId") Integer shippingAddressId,
+    ApiResponse<ShippingAddressResponse> updateShippingAddress(@PathVariable("shippingAddressId") Integer shippingAddressId,
                                                            @RequestBody @Valid ShippingAddressRequest request)
-    {   request.setUserId(userId);
+    {
         return ApiResponse.<ShippingAddressResponse>builder()
                 .result(shippingAddressService.updateShippingAddress(shippingAddressId, request))
                 .build();

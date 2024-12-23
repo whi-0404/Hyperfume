@@ -13,7 +13,6 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface ShippingAddressMapper {
-    @Mapping(target = "user.id", source = "userId")
     ShippingAddress toEntity(ShippingAddressRequest request);
 
     ShippingAddressResponse toResponse(ShippingAddress shippingAddress);

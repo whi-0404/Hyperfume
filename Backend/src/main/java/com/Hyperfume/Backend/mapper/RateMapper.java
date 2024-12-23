@@ -8,7 +8,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 public interface RateMapper {
-    @Mapping(target = "user.id", source = "userId")
     Rate toEntity(RateRequest request);
 
     @Mapping(target = "userId", source = "user.id")

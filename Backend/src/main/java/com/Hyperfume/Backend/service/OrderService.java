@@ -7,6 +7,7 @@ import com.Hyperfume.Backend.dto.response.OrderResponse;
 import com.Hyperfume.Backend.entity.Order;
 import com.Hyperfume.Backend.entity.OrderItem;
 import com.Hyperfume.Backend.entity.PerfumeVariant;
+import com.Hyperfume.Backend.entity.User;
 import com.Hyperfume.Backend.exception.AppException;
 import com.Hyperfume.Backend.exception.ErrorCode;
 import com.Hyperfume.Backend.mapper.OrderItemMapper;
@@ -14,10 +15,12 @@ import com.Hyperfume.Backend.mapper.OrderMapper;
 import com.Hyperfume.Backend.repository.OrderItemRepository;
 import com.Hyperfume.Backend.repository.OrderRepository;
 import com.Hyperfume.Backend.repository.PerfumeVariantRepository;
+import com.Hyperfume.Backend.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -34,8 +37,15 @@ public class OrderService {
     OrderItemRepository orderItemRepository;
     OrderItemMapper orderItemMapper;
     PerfumeVariantRepository perfumeVariantRepository;
+    UserRepository userRepository;
 
     public OrderResponse createOrder(OrderRequest orderRequest, List<OrderItemRequest> orderItemRequests) {
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        User user = userRepository.findByUsername(name)
+                .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
+
         // Kiểm tra tồn kho
         for (OrderItemRequest itemRequest : orderItemRequests) {
             int stockQuantity = perfumeVariantRepository.findStockByPerfumeVariantId(itemRequest.getPerfumeVariantId());
@@ -46,6 +56,7 @@ public class OrderService {
 
         // Chuyển đổi OrderRequest thành Order entity
         Order order = orderMapper.toEntity(orderRequest);
+        order.setUser(user);
         Order orderSaved = orderRepository.save(order);
 
         // Chuyển đổi danh sách OrderItemRequest thành danh sách OrderItem

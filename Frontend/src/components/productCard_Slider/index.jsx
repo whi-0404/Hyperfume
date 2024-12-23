@@ -1,59 +1,35 @@
 import React, { memo, useState, useEffect } from "react";
+import handleBase64Decode from "../../components/covertBase64ToImg"
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, A11y, Autoplay } from "swiper/modules";
 import "./style.scss";
 import "swiper/css";
 import "swiper/css/bundle";
 import ProductCard from "../productCard";
-
-const productData = [
-  {
-    img: require("../../assets/productImages/creed/green-irish-tweed.png"),
-    name: "Green Irish Tweed",
-    brandName: "Creed",
-    price: "650,000đ - 6,100,000đ",
-  },
-  {
-    img: require("../../assets/productImages/creed/creed-aventus.png"),
-    name: "Aventus",
-    brandName: "Creed",
-    price: "650,000đ - 6,100,000đ",
-  },
-  {
-    img: require("../../assets/productImages/maison-crivelli-oud-maracuja.png"),
-    name: "Oud Maracuja",
-    brandName: "Maison Criveli",
-    price: "650,000đ - 6,100,000đ",
-  },
-  {
-    img: require("../../assets/productImages/creed/green-irish-tweed.png"),
-    name: "Angel's Share",
-    brandName: "By Kilian",
-    price: "900,000đ - 4,100,000đ",
-  },
-  {
-    img: require("../../assets/productImages/creed/green-irish-tweed.png"),
-    name: "Replica Sailing Day",
-    brandName: "Maison Margiela",
-    price: "350,000đ - 2,700,000đ",
-  },
-  {
-    img: require("../../assets/productImages/creed/green-irish-tweed.png"),
-    name: "Replica ",
-    brandName: "Maison Margiela",
-    price: "350,000đ - 2,700,000đ",
-  },
-  {
-    img: require("../../assets/productImages/creed/green-irish-tweed.png"),
-    name: "Apple Brandy On the Rock",
-    brandName: "By Kilian",
-    price: "900,000đ - 4,100,000đ",
-  },
-];
-
+import { listProducts } from "../../services/ProductService";
 
 const CardSlider = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  useEffect(() => {
+    listProducts()
+      .then((response) => {
+        setProducts(response.data);
+        setLoading(false); // Kết thúc loading
+      })
+      .catch((error) => {
+        console.error(error);
+        setError('Failed to fetch products'); // Lưu lỗi vào state
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+
+  // Hiển thị lỗi nếu có
+  if (error) return <div>Error: {error}</div>;
   return (
     <>
       <div className="cardSlider-container">
@@ -73,13 +49,14 @@ const CardSlider = () => {
           onSwiper={(swiper) => console.log(swiper)}
           onSlideChange={() => console.log("slide change")}
         >
-          {productData.map((product) => (
+          {products.result.map((product) => (
             <SwiperSlide>
               <ProductCard
-                img={product.img}
+                img={handleBase64Decode(product.thumbnailImageData)}
                 name={product.name}
                 brandName={product.brandName}
-                price={product.price}
+                price1={product.perfumeVariantResponseList[0].price}
+                price2={product.perfumeVariantResponseList[1].price}
               />
             </SwiperSlide>
           ))}

@@ -108,9 +108,7 @@ const ProductDetail = () => {
             </div>
             <div className="button-group">
               <button className="custom-button button1">Parfum 100ml</button>
-              <button className="custom-button button2">
-                Parfum 100ml Tester
-              </button>
+              <button className="custom-button button2">Parfum 100ml Tester</button>
               <button className="custom-button button3">Parfum 60ml</button>
             </div>
             <ProductActions />

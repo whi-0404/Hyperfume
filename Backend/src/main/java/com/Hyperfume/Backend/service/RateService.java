@@ -16,6 +16,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,11 +35,16 @@ public class RateService {
 
     @Transactional
     public RateResponse addRate(Integer perfumeId, RateRequest request){
-        User user = userRepository.findById(request.getUserId())
-            .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        User user = userRepository.findByUsername(name)
+                .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
 
 
         Rate rate = rateMapper.toEntity(request);
+
+        rate.setUser(user);
 
         rate.setPerfume(perfumeRepository.findById(perfumeId)
                 .orElseThrow(() ->new AppException(ErrorCode.PERFUME_NOT_EXISTED)));

@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import "./style.scss";
 import logo from "../../../assets/logo.png";
 import slogan from "../../../assets/slogan.png";
@@ -6,9 +6,48 @@ import { CiSearch } from "react-icons/ci";
 import { FiSmartphone } from "react-icons/fi";
 import { BsCart2 } from "react-icons/bs";
 import { RiArrowDownWideFill } from "react-icons/ri";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { searchProducts } from "../../../services/handleSearchPerfume";
+import getCart from "../../../services/handleGetCartItem";
+import { getToken } from "../../../services/authToken";
 
 const Header = () => {
+  const Token = getToken();
+  const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    getCart()
+      .then((response) => {
+        setProducts(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  const HandleSubmit = async (e) => {
+    e.preventDefault();
+    const searchText = document.getElementById("searchText").value;
+
+    if (!searchText) {
+      alert("Vui lòng nhập đầy đủ thông tin!");
+      return;
+    }
+    try {
+      const response = await searchProducts(searchText); // Gọi API tìm kiếm
+      const products = response.data;
+      console.log(products);
+      navigate("/search", { state: { products } });
+    } catch (error) {
+      console.error("Error while searching for products:", error);
+    }
+  };
+
+  let a = products.result
+  console.log(a)
+  // let cartCount = products.result.length;
+
   return (
     <div className="header">
       <div className="row">
@@ -30,7 +69,7 @@ const Header = () => {
                   <i className="fa-solid fa-cart-shopping">
                     <BsCart2 />
                   </i>
-                  <span className="cart-count">0</span>
+                  <span className="cart-count"></span>
                 </NavLink>
               </div>
 
@@ -49,12 +88,17 @@ const Header = () => {
                   <span className="hotline-text">Hotline bán hàng</span>
                 </div>
               </div>
-              <div className="search-bar">
-                <input type="text" placeholder="Tìm kiếm ..." />
-                <i className="fa-solid fa-magnifying-glass">
-                  <CiSearch />
-                </i>
-              </div>
+
+              <form onSubmit={HandleSubmit}>
+                <div className="search-bar">
+                  <input type="text" placeholder="Tìm kiếm ..." id="searchText" required />
+                  <button type="submit" className="search-button">
+                    <i className="fa-solid fa-magnifying-glass">
+                      <CiSearch />
+                    </i>
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
@@ -69,12 +113,12 @@ const Header = () => {
               </NavLink>
             </li>
             <li>
-              <a href="#news">
+              <NavLink to="/nuoc-hoa" activeClassName="active">
                 Sản phẩm{" "}
                 <i className="fa-solid fa-angle-down">
                   <RiArrowDownWideFill />
                 </i>
-              </a>
+              </NavLink>
               <ul className="dropdown">
                 <li>
                   <NavLink to="/nuoc-hoa-nam" activeClassName="active">
@@ -99,10 +143,14 @@ const Header = () => {
               </NavLink>
             </li>
             <li>
-              <a href="/consult">Tư vấn</a>
+              <NavLink to="/consult" activeClassName="active">
+                Tư vấn
+              </NavLink>
             </li>
             <li>
-              <a href="">Blog</a>
+              <NavLink to="/Blog" activeClassName="active">
+                Blog
+              </NavLink>
             </li>
             <li>
               <a href="#about">
