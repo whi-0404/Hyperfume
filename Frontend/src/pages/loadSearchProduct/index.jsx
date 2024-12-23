@@ -1,13 +1,12 @@
-import { memo, useState, useEffect } from "react";
+import { memo, useState } from "react";
+import { useLocation } from "react-router-dom";
 import handleBase64Decode from "../../components/covertBase64ToImg"
 import './style.scss';
-import { listProducts } from "../../services/ProductService";
 import ProductCard from "../../components/productCard";
 
-const NuocHoa = () => {
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+const LoadSearchProduct = () => {
+    const location = useLocation();
+    const products = location.state?.products || [];
 
     const [sortOption, setSortOption] = useState("latest");
     const [filters, setFilters] = useState({
@@ -20,23 +19,6 @@ const NuocHoa = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const productsPerPage = 12; // Show 12 products per page
 
-    useEffect(() => {
-        listProducts()
-            .then((response) => {
-                setProducts(response.data);
-                setLoading(false); // Kết thúc loading
-            })
-            .catch((error) => {
-                console.error(error);
-                setError('Failed to fetch products'); // Lưu lỗi vào state
-                setLoading(false);
-            });
-    }, []);
-
-    if (loading) return <div>Loading...</div>;
-
-    // Hiển thị lỗi nếu có
-    if (error) return <div>Error: {error}</div>;
 
     const handleFilterChange = (e) => {
         setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -224,4 +206,4 @@ const NuocHoa = () => {
     );
 };
 
-export default memo(NuocHoa);
+export default memo(LoadSearchProduct);

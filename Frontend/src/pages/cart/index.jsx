@@ -14,29 +14,29 @@ const cartData = [
 ];
 
 const App = () => {
-  // const [products, setProducts] = useState([]);
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // useEffect(() => {
-  //   getCart()
-  //     .then((response) => {
-  //       setProducts(response.data);
-  //       setLoading(false); // Kết thúc loading
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //       setError('Failed to fetch products'); // Lưu lỗi vào state
-  //       setLoading(false);
-  //     });
-  // }, []);
+  useEffect(() => {
+    getCart()
+      .then((response) => {
+        setProducts(response.data);
+        setLoading(false); // Kết thúc loading
+      })
+      .catch((error) => {
+        console.error(error);
+        setError('Failed to fetch products'); // Lưu lỗi vào state
+        setLoading(false);
+      });
+  }, []);
 
-  // if (loading) return <div>Loading...</div>;
+  if (loading) return <div>Loading...</div>;
 
-  // // Hiển thị lỗi nếu có
-  // if (error) return <div>Error: {error}</div>;
+  // Hiển thị lỗi nếu có
+  if (error) return <div>Error: {error}</div>;
 
-  // console.log(products.result)
+  console.log(products.result)
 
   return <Cart initialCartItems={cartData} />;
 };

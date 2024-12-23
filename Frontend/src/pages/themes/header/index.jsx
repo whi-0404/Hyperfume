@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from "react";
+import { memo } from "react";
 import "./style.scss";
 import logo from "../../../assets/logo.png";
 import slogan from "../../../assets/slogan.png";
@@ -11,29 +11,25 @@ import { searchProducts } from "../../../services/handleSearchPerfume"
 
 const Header = () => {
   const navigate = useNavigate();
-  const [products, setProducts] = useState([]);
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
     const searchText = document.getElementById("searchText").value;
 
-    // if (!searchText) {
-    //   alert("Vui lòng nhập đầy đủ thông tin!");
-    //   return;
-    // }
+    if (!searchText) {
+      alert("Vui lòng nhập đầy đủ thông tin!");
+      return;
+    }
 
     try {
       const response = await searchProducts(searchText); // Gọi API tìm kiếm
-      setProducts(response.data)
-
-      // Chuyển hướng sang trang kết quả tìm kiếm và truyền data qua state
-      // navigate("/search-results", { state: { products } });
+      const products = response.data;
+      console.log(products);
+      navigate("/search", { state: { products } });
     } catch (error) {
       console.error("Error while searching for products:", error);
     }
   };
-
-  console.log(products);
 
   return (
     <div className="header">
@@ -100,12 +96,12 @@ const Header = () => {
               </NavLink>
             </li>
             <li>
-              <a href="#news">
+              <NavLink to="/nuoc-hoa" activeClassName="active">
                 Sản phẩm{" "}
                 <i className="fa-solid fa-angle-down">
                   <RiArrowDownWideFill />
                 </i>
-              </a>
+              </NavLink>
               <ul className="dropdown">
                 <li>
                   <NavLink to="/nuoc-hoa-nam" activeClassName="active">
