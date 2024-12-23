@@ -3,13 +3,12 @@ import { NavLink } from 'react-router-dom';
 import CartItem from "./cartItem";
 import CartQuantityCount from "../cartQuantityCount";
 import "./style.scss";
-import { getToken } from "../../services/authToken";
+
 
 const Cart = ({ initialCartItems }) => {
     const [cartItems, setCartItems] = React.useState(initialCartItems);
     const [selectedItems, setSelectedItems] = useState([]);
     const [isAllChecked, setIsAllChecked] = useState(false);
-    const Token = getToken();
 
     const handleUpdateQuantity = (id, quantity) => {
         setCartItems((prevItems) =>
@@ -55,17 +54,6 @@ const Cart = ({ initialCartItems }) => {
     useEffect(() => {
         setIsAllChecked(selectedItems.length === cartItems.length && cartItems.length > 0);
     }, [selectedItems, cartItems]);
-
-    if (!Token) {
-        return (
-            <>
-                <div className="alert">
-                    <h1>Bạn chưa đăng nhập tài khoản!</h1>
-                    <NavLink to="/Sign-in" >Đăng nhập</NavLink>
-                </div>
-            </>
-        );
-    }
 
     return (
         <>
