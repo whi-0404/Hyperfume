@@ -13,18 +13,18 @@ const Cart = ({ initialCartItems }) => {
     const handleUpdateQuantity = (id, quantity) => {
         setCartItems((prevItems) =>
             prevItems.map((item) =>
-                item.id === id ? { ...item, quantity: Math.max(quantity, 1) } : item
+                item.perfumeVariant === id ? { ...item, quantity: Math.max(quantity, 1) } : item
             )
         );
     };
 
     const handleRemoveItem = (id) => {
-        setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+        setCartItems((prevItems) => prevItems.filter((item) => item.perfumeVariant !== id));
     };
 
     // Tính toán totalPrice chỉ với những sản phẩm được chọn
     const totalPrice = cartItems
-        .filter((item) => selectedItems.includes(item.id))  // Lọc những sản phẩm được chọn
+        .filter((item) => selectedItems.includes(item.perfumeVariant))  // Lọc những sản phẩm được chọn
         .reduce((total, item) => total + item.price * item.quantity, 0); // Tính tổng giá trị
 
     const shippingCost = (totalPrice <= 600000) ? 30000 : 0;
@@ -33,7 +33,7 @@ const Cart = ({ initialCartItems }) => {
     const handleSelectAll = (checked) => {
         setIsAllChecked(checked);
         if (checked) {
-            setSelectedItems(cartItems.map((item) => item.id));
+            setSelectedItems(cartItems.map((item) => item.perfumeVariant));
         } else {
             setSelectedItems([]);
         }
@@ -95,7 +95,7 @@ const Cart = ({ initialCartItems }) => {
                             <CartItem
                                 key={item.id}
                                 item={item}
-                                checked={selectedItems.includes(item.id)}
+                                checked={selectedItems.includes(item.perfumeVariant)}
                                 onCheckboxChange={handleItemCheckboxChange}
                                 onUpdateQuantity={handleUpdateQuantity}
                                 onRemoveItem={handleRemoveItem}
