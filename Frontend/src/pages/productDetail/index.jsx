@@ -6,7 +6,6 @@ import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import "./style.scss";
 import getProductDetail from "../../services/getProductDetail";
 import handleBase64Decode from "../../components/covertBase64ToImg";
-import addToCart from "../../services/handleAddToCart";
 
 const suggestProducts = [
   {
@@ -157,7 +156,7 @@ const ProductDetail = () => {
               </p>
               <img
                 className="about-product-img"
-                src={require("../../assets/image/Dior/dior_motasp.jpg")}
+                src={handleBase64Decode(products.result.perfumeImageResponseList[1].imageData)}
                 alt="product"
               ></img>
             </div>

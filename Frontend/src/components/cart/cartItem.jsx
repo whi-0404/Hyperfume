@@ -5,7 +5,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const CartItem = ({ item, checked, onCheckboxChange, onUpdateQuantity, onRemoveItem }) => {
     const handleCheckboxChange = (e) => {
-        onCheckboxChange(item.id, e.target.checked);
+        onCheckboxChange(item.perfumeVariant, e.target.checked);
     };
 
     return (
@@ -29,14 +29,14 @@ const CartItem = ({ item, checked, onCheckboxChange, onUpdateQuantity, onRemoveI
 
             <div className="product-details">
                 <h4>{item.perfumeName}</h4>
-                <p>Size: {item.variantName}</p>
+                <p>Size: {item.perfumeVariant}</p>
                 <p>Giá: {item.price.toLocaleString("vi-VN")} đồng</p>
                 <p>Khuyến mại: {item.discount}%</p>
 
                 <div className="quantity-controls">
-                    <button onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}>-</button>
+                    <button onClick={() => onUpdateQuantity(item.perfumeVariant, item.quantity - 1)}>-</button>
                     <span>{item.quantity}</span>
-                    <button onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}>+</button>
+                    <button onClick={() => onUpdateQuantity(item.perfumeVariant, item.quantity + 1)}>+</button>
                 </div>
 
             </div>
@@ -46,7 +46,7 @@ const CartItem = ({ item, checked, onCheckboxChange, onUpdateQuantity, onRemoveI
             </div>
 
 
-            <button className="remove-btn" onClick={() => onRemoveItem(item.id)}>
+            <button className="remove-btn" onClick={() => onRemoveItem(item.perfumeVariant)}>
                 <FontAwesomeIcon icon={faTrash} />
             </button>
         </div>

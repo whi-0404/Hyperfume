@@ -14,7 +14,6 @@ const ProductActions = ({ price, variantId }) => {
     };
 
     const handleAddToCart = async () => {
-        console.log(token)
         if (!variantId) {
             alert("Vui lòng chọn phiên bản sản phẩm trước khi thêm vào giỏ hàng.");
             return;
@@ -25,7 +24,6 @@ const ProductActions = ({ price, variantId }) => {
             return;
         }
 
-        console.log(variantId, quantity)
         try {
             const response = await addToCart(variantId, quantity);
             console.log("Add to cart response:", response);
