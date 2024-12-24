@@ -101,8 +101,23 @@
 
         .lable_sp {
             display: flex;
-            justify-content: space-between; // Căn giữa các tiêu đề
             margin-bottom: 10px;
+
+        .l1 {
+            margin-right: 80px;
+        }
+        .l2 {
+            margin-right: 40px;
+        }
+
+        .l3 {
+            margin-right: 60px;
+        }
+
+        .l4 {
+            margin-right: 60px;
+        }
+
         }
 
         .product1 {

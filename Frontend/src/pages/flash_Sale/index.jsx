@@ -30,180 +30,179 @@ const FlashSale = () => {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
         {
             name: 'Dior Sauvage EDP', brand: 'Dior', price: 5100000,
             oldPrice: 5670000, // Old price for discount display
             quantitySold: 50, // Example quantity sold
-            image: DiorSavage, link: '/product/1', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
+            image: DiorSavage, link: '/dior', fragrance: 'Lâu - 7h đến 12h', concentration: 'Eau de Parfum', group: 'Hương phương đông'
         },        
 
 
         
-        // Add more products as needed to test pagination
     ];
 
     
