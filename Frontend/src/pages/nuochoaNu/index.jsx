@@ -190,6 +190,7 @@ const NuocHoaNu = () => {
             <div className="product-grid">
                 {displayedProducts.map((products, index) => (
                     <ProductCard
+                        id={products.id}
                         img={handleBase64Decode(products.thumbnailImageData)}
                         name={products.name}
                         brandName={products.brandName}

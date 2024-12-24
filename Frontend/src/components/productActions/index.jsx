@@ -2,7 +2,7 @@ import React, { memo, useState } from "react";
 import { FaShoppingCart, FaPlus, FaMinus } from "react-icons/fa";
 import "./style.scss";
 
-const ProductActions = () => {
+const ProductActions = ({ price }) => {
     const [quantity, setQuantity] = useState(1);
 
     const increaseQuantity = () => setQuantity(quantity + 1);
@@ -12,7 +12,9 @@ const ProductActions = () => {
 
     return (
         <div className="product-actions">
-            <div className="price">4,150,000</div>
+            <div className="price">
+                {price ? price.toLocaleString() : ""}
+            </div>
             <button className="buy-now">MUA NGAY</button>
             <div className="quantity-box">
                 <button className="adjust-button" onClick={decreaseQuantity}>
