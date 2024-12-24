@@ -9,22 +9,9 @@ import { RiArrowDownWideFill } from "react-icons/ri";
 import { NavLink, useNavigate } from "react-router-dom";
 import { searchProducts } from "../../../services/handleSearchPerfume";
 import getCart from "../../../services/handleGetCartItem";
-import { getToken } from "../../../services/authToken";
 
 const Header = () => {
-  const Token = getToken();
-  const [products, setProducts] = useState([]);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    getCart()
-      .then((response) => {
-        setProducts(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
@@ -43,10 +30,6 @@ const Header = () => {
       console.error("Error while searching for products:", error);
     }
   };
-
-  let a = products.result
-  console.log(a)
-  // let cartCount = products.result.length;
 
   return (
     <div className="header">

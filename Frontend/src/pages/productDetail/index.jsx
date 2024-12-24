@@ -1,45 +1,60 @@
-import { memo, useState } from "react";
+import { memo, useState, useEffect } from "react";
 import ProductRating from "../../components/rating";
 import ProductActions from "../../components/productActions";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import "./style.scss";
+import getProductDetail from "../../services/getProductDetail";
+import handleBase64Decode from "../../components/covertBase64ToImg"
 
-const ProductDetail = () => {
+const suggestProducts = [
+  {
+    id: 1,
+    name: "Armaf Club De Nuit Intense Man Limited Edition Parfum",
+    price: "300,000đ - 2,150,000đ",
+    image: require("../../assets/productImages/armaf/armaf-club-de-nuit.jpg"),
+    url: "#",
+  },
+  {
+    id: 2,
+    name: "Creed Green Irish Tweed EDP",
+    price: "650,000đ - 6,100,000đ",
+    image: require("../../assets/productImages/creed/green-irish-tweed.png"),
+    url: "#",
+  },
+  {
+    id: 3,
+    name: "Roja Elysium Pour Homme Parfum",
+    price: "900,000đ - 7,600,000đ",
+    image: require("../../assets/productImages/roja-dove/roja-elysium.png"),
+    url: "#",
+  },
+  {
+    id: 4,
+    name: "Diesel Fuel for Life Homme EDP",
+    price: "250,000đ - 1,900,000đ",
+    image: require("../../assets/productImages/diesel/diesel-fuel.png"),
+    url: "#",
+  },
+];
+
+const ProductDetail = (id) => {
   const [currentPage, setCurrentPage] = useState(1);
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+  const [products, setProducts] = useState('');
 
-  const products = [
-    {
-      id: 1,
-      name: "Armaf Club De Nuit Intense Man Limited Edition Parfum",
-      price: "300,000đ - 2,150,000đ",
-      image: require("../../assets/productImages/armaf/armaf-club-de-nuit.jpg"),
-      url: "#",
-    },
-    {
-      id: 2,
-      name: "Creed Green Irish Tweed EDP",
-      price: "650,000đ - 6,100,000đ",
-      image: require("../../assets/productImages/creed/green-irish-tweed.png"),
-      url: "#",
-    },
-    {
-      id: 3,
-      name: "Roja Elysium Pour Homme Parfum",
-      price: "900,000đ - 7,600,000đ",
-      image: require("../../assets/productImages/roja-dove/roja-elysium.png"),
-      url: "#",
-    },
-    {
-      id: 4,
-      name: "Diesel Fuel for Life Homme EDP",
-      price: "250,000đ - 1,900,000đ",
-      image: require("../../assets/productImages/diesel/diesel-fuel.png"),
-      url: "#",
-    },
-  ];
+  useEffect(() => {
+    getProductDetail(6)
+      .then((response) => {
+        setProducts(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [id]);
+
+  console.log(products.result)
 
   return (
     <div className="container">
@@ -57,7 +72,7 @@ const ProductDetail = () => {
             Nước hoa nam
           </a>
           <span className="arrow"> &gt; </span>
-          <span className="current">Dior Sauvage Parfum</span>
+          <span className="current">{products.result.name}</span>
           <hr className="divider" />
         </section>
 
@@ -66,7 +81,7 @@ const ProductDetail = () => {
             <div className="image-preview">
               <img
                 id="main-image"
-                src={require("../../assets/image/Dior/dior_sauvage_big_1.jpg")}
+                src={handleBase64Decode(products.result.thumbnailImageData)}
                 alt="product"
               ></img>
             </div>
@@ -318,7 +333,7 @@ const ProductDetail = () => {
         <section className="sec-5 related-products">
           <h2 className="title">SẢN PHẨM LIÊN QUAN</h2>
           <div className="products-container">
-            {products.map((product) => (
+            {suggestProducts.map((product) => (
               <a
                 href={product.url}
                 key={product.id}

@@ -52,6 +52,7 @@ const CardSlider = () => {
           {products.result.map((product) => (
             <SwiperSlide>
               <ProductCard
+                id={product.id}
                 img={handleBase64Decode(product.thumbnailImageData)}
                 name={product.name}
                 brandName={product.brandName}
