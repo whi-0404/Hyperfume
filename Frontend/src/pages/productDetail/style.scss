@@ -165,9 +165,12 @@ hr {
       cursor: pointer;
 
       &:hover {
-        background-color: #f5f5f5;
+        border: 2px solid #007bff
       }
 
+      &.selected {
+        border: 2px solid #007bff; // Màu xanh biển khi được chọn
+      }
     }
   }
 }

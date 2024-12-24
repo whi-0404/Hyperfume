@@ -45,9 +45,11 @@ const ProductDetail = () => {
   const [products, setProducts] = useState(null);
   const [selectedPrice, setSelectedPrice] = useState(null);
   const [mainImage, setMainImage] = useState(null); // Ảnh chính
+  const [selectedVariantId, setSelectedVariantId] = useState(null); // Theo dõi variant được chọn
 
-  const handleVariantClick = (price) => {
+  const handleVariantClick = (variantId, price) => {
     setSelectedPrice(price);
+    setSelectedVariantId(variantId); // Cập nhật ID variant được chọn
   };
 
   const handlePageChange = (pageNumber) => {
@@ -63,7 +65,8 @@ const ProductDetail = () => {
       .then((response) => {
         setProducts(response);
         const thumbnailImage = response.result.perfumeImageResponseList.find(
-          (image) => image.thumbnail === true);
+          (image) => image.thumbnail === true
+        );
         setMainImage(thumbnailImage?.imageData); // Đặt ảnh chính ban đầu
       })
       .catch((error) => {
@@ -132,13 +135,14 @@ const ProductDetail = () => {
               {products.result.perfumeVariantResponseList.map((variant) => (
                 <button
                   key={variant.id}
-                  className="custom-button"
-                  onClick={() => handleVariantClick(variant.price)}>
+                  className={`custom-button ${selectedVariantId === variant.id ? "selected" : ""}`}
+                  onClick={() => handleVariantClick(variant.id, variant.price)}>
                   {variant.name}
                 </button>
               ))}
             </div>
-            <ProductActions price={selectedPrice} />
+
+            <ProductActions price={selectedPrice} variantId={selectedVariantId} />
           </div>
         </section>
 
@@ -164,95 +168,95 @@ const ProductDetail = () => {
               <ul>
                 <li>
                   <p>
-                    <span class="label">Thương hiệu</span>
+                    <span className="label">Thương hiệu</span>
                     <span>:</span>
-                    <span class="value">{products.result.brandName}</span>
+                    <span className="value">{products.result.brandName}</span>
                   </p>
                 </li>
                 <li>
                   <p>
-                    <span class="label">Giới tính</span>
+                    <span className="label">Giới tính</span>
                     <span>:</span>
-                    <span class="value">{products.result.perfume_gender}</span>
+                    <span className="value">{products.result.perfume_gender}</span>
                   </p>
                 </li>
                 <li>
                   <p>
-                    <span class="label">Nồng độ</span>
+                    <span className="label">Nồng độ</span>
                     <span>:</span>
-                    <span class="value">{products.result.concentration}</span>
+                    <span className="value">{products.result.concentration}</span>
                   </p>
                 </li>
                 <li>
                   <p>
-                    <span class="label">Nhóm hương</span>
+                    <span className="label">Nhóm hương</span>
                     <span>:</span>
-                    <span class="value">{products.result.screntFamilyName}</span>
+                    <span className="value">{products.result.screntFamilyName}</span>
                   </p>
                 </li>
                 <li>
                   <p>
-                    <span class="label">Mùi hương chính</span>
+                    <span className="label">Mùi hương chính</span>
                     <span>:</span>
-                    <span class="value">{products.result.main_notes}</span>
+                    <span className="value">{products.result.main_notes}</span>
                   </p>
                 </li>
                 <li>
                   <p>
-                    <span class="label">Độ lưu hương</span>
+                    <span className="label">Độ lưu hương</span>
                     <span>:</span>
-                    <span class="value">{products.result.longevity}</span>
+                    <span className="value">{products.result.longevity}</span>
                   </p>
                 </li>
                 <li>
                   <p>
-                    <span class="label">Độ tỏa hương</span>
+                    <span className="label">Độ tỏa hương</span>
                     <span>:</span>
-                    <span class="value">{products.result.sillage}</span>
+                    <span className="value">{products.result.sillage}</span>
                   </p>
                 </li>
                 <li>
                   <p>
-                    <span class="label">Phong cách</span>
+                    <span className="label">Phong cách</span>
                     <span>:</span>
-                    <span class="value">{products.result.style}</span>
+                    <span className="value">{products.result.style}</span>
                   </p>
                 </li>
                 <li>
                   <p>
-                    <span class="label">Thời điểm dùng</span>
+                    <span className="label">Thời điểm dùng</span>
                     <span>:</span>
-                    <span class="value">{products.result.season_usage}</span>
+                    <span className="value">{products.result.season_usage}</span>
                   </p>
                 </li>
                 <li>
                   <p>
-                    <span class="label">Năm phát hành</span>
+                    <span className="label">Năm phát hành</span>
                     <span>:</span>
-                    <span class="value">{products.result.release_year}</span>
+                    <span className="value">{products.result.release_year}</span>
                   </p>
                 </li>
                 <li>
                   <p>
-                    <span class="label">Xuất xứ</span>
+                    <span className="label">Xuất xứ</span>
                     <span>:</span>
-                    <span class="value">{products.result.countryName}</span>
+                    <span className="value">{products.result.countryName}</span>
                   </p>
                 </li>
               </ul>
               <div className="scent-structure">
                 <h2 className="normal-title">Thành phần mùi hương</h2>
                 <p>
-                  <span class="label">Hương đầu: </span>
-                  <span class="value">{products.result.top_notes}</span>
+                  <span className="label">Hương đầu: </span>
+                  <span className="value">{products.result.top_notes}</span>
                 </p>
                 <p>
-                  <span class="label">Hương giữa: </span>
-                  <span class="value">{products.result.middle_notes}</span>
+                  <span className="label">Hương giữa: </span>
+                  <span className="value">{products.result.middle_notes}</span>
                 </p>
                 <p>
-                  <span class="label">Hương cuối: </span>
-                  <span class="value">{products.result.base_notes}</span>
+                  <span className="label">Hương cuối: </span>
+                  <span className="value">{products.result.base_notes}</span>
                 </p>
               </div>
             </div>

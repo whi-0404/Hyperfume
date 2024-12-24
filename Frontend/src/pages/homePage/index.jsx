@@ -7,7 +7,6 @@ import ProductCardSlider from '../../components/productCard_Slider';
 import MaleProductCard_Slider from '../../components/maleProductCard_Slider';
 import FemaleProductCard_Slider from '../../components/femaleProductCard_Slider';
 import UnisexProductCard_Slider from '../../components/unisexProductCard_Slider';
-import addToCart from "../../services/handleAddToCart";
 
 function HomePage() {
     const [selectedProductType, setSelectedProductType] = useState('male');

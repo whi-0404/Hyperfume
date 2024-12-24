@@ -3,7 +3,7 @@ import { getToken } from "./authToken";
 
 const addToCart = async (variantId, quantity) => {
     const token = getToken();
-
+    console.log(token)
     try {
         const response = await api.post('/cart', {
             "variantId": variantId,
