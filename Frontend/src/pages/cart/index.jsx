@@ -14,12 +14,18 @@ const cartData = [
 ];
 
 const App = () => {
-  const Token = getToken();
+  const Token = getToken(); // Lấy Token
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // Nếu không có Token, không gọi API
+    if (!Token) {
+      setLoading(false); // Dừng trạng thái loading
+      return;
+    }
+
     getCart()
       .then((response) => {
         setProducts(response.data);
@@ -30,26 +36,25 @@ const App = () => {
         setError('Failed to fetch products'); // Lưu lỗi vào state
         setLoading(false);
       });
-  }, []);
+  }, [Token]);
 
-  if (loading) return <div>Loading...</div>;
-
-  // Hiển thị lỗi nếu có
-  if (error) return <div>Error: {error}</div>;
-
-  console.log(products.result)
-
+  // Kiểm tra nếu không có Token
   if (!Token) {
     return (
-      <>
-        <div className="alert">
-          <h1>Bạn chưa đăng nhập tài khoản!</h1>
-          <NavLink to="/Sign-in" >Đăng nhập</NavLink>
-        </div>
-      </>
+      <div className="alert">
+        <h1>Bạn chưa đăng nhập tài khoản!</h1>
+        <NavLink to="/Sign-in">Đăng nhập</NavLink>
+      </div>
     );
   }
 
+  // Render loading hoặc lỗi
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  console.log(products.result);
+
+  // Hiển thị danh sách sản phẩm nếu có
   return <Cart initialCartItems={products.result} />;
 };
 
