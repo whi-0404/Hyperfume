@@ -76,7 +76,7 @@ const renderUserRouter = () => {
             component: <ResetPass></ResetPass>
         },
         {
-            path: ROUTERS.USER.PRODUCT_DETAIL,
+            path: `${ROUTERS.USER.PRODUCT_DETAIL}/:id`,
             component: <ProductDetail></ProductDetail>
         },
         {

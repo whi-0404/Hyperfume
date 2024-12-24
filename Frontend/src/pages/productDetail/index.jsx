@@ -1,10 +1,12 @@
 import { memo, useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import ProductRating from "../../components/rating";
 import ProductActions from "../../components/productActions";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import "./style.scss";
 import getProductDetail from "../../services/getProductDetail";
-import handleBase64Decode from "../../components/covertBase64ToImg"
+import handleBase64Decode from "../../components/covertBase64ToImg";
+import addToCart from "../../services/handleAddToCart";
 
 const suggestProducts = [
   {
@@ -37,39 +39,52 @@ const suggestProducts = [
   },
 ];
 
-const ProductDetail = (id) => {
+const ProductDetail = () => {
+  const { id } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
+  const [products, setProducts] = useState(null);
+  const [selectedPrice, setSelectedPrice] = useState(null);
+  const [mainImage, setMainImage] = useState(null); // Ảnh chính
+
+  const handleVariantClick = (price) => {
+    setSelectedPrice(price);
+  };
+
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-  const [products, setProducts] = useState('');
+
+  const handleThumbnailClick = (imageData) => {
+    setMainImage(imageData); // Cập nhật ảnh chính khi click vào thumbnail
+  };
 
   useEffect(() => {
-    getProductDetail(6)
+    getProductDetail(id)
       .then((response) => {
         setProducts(response);
+        const thumbnailImage = response.result.perfumeImageResponseList.find(
+          (image) => image.thumbnail === true);
+        setMainImage(thumbnailImage?.imageData); // Đặt ảnh chính ban đầu
       })
       .catch((error) => {
         console.error(error);
       });
   }, [id]);
 
-  console.log(products.result)
+  if (!products) {
+    return <div>Product not found</div>;
+  }
 
   return (
-    <div className="container">
+    <div className="detail-product-container">
       <div className="body-sides">
         <section className="sec-1 breadcrumb">
           <a href="/" className="breadcrumb-link">
             Trang chủ
           </a>
           <span className="arrow"> &gt; </span>
-          <a href="/nuoc-hoa-nu" className="breadcrumb-link">
+          <a href="/nuoc-hoa" className="breadcrumb-link">
             Sản phẩm
-          </a>
-          <span className="arrow"> &gt; </span>
-          <a href="/nuoc-hoa-nam" className="breadcrumb-link">
-            Nước hoa nam
           </a>
           <span className="arrow"> &gt; </span>
           <span className="current">{products.result.name}</span>
@@ -79,54 +94,51 @@ const ProductDetail = (id) => {
         <section className="sec-2">
           <div className="product-images">
             <div className="image-preview">
-              <img
-                id="main-image"
-                src={handleBase64Decode(products.result.thumbnailImageData)}
-                alt="product"
-              ></img>
+              {mainImage && (
+                <img
+                  id="main-image"
+                  src={handleBase64Decode(mainImage)}
+                  alt="product"
+                />
+              )}
             </div>
+
             <div className="image-thumbnails">
-              <img
-                className="thumbnail"
-                src={require("../../assets/image/Dior/dior_sauvage_big_1.jpg")}
-                alt="product"
-              ></img>
-              <img
-                className="thumbnail"
-                src={require("../../assets/image/Dior/dior_sauvage_small_1.jpg")}
-                alt="product"
-              ></img>
-              <img
-                className="thumbnail"
-                src={require("../../assets/image/Dior/dior_sauvage_small_2.jpg")}
-                alt="product"
-              ></img>
-              <img
-                className="thumbnail"
-                src={require("../../assets/image/Dior/dior_sauvage_small_3.jpg")}
-                alt="product"
-              ></img>
+              {products.result.perfumeImageResponseList.map((image, index) => (
+                <img
+                  key={index}
+                  className="thumbnail"
+                  src={handleBase64Decode(image.imageData)}
+                  alt={`thumbnail-${index}`}
+                  onClick={() => handleThumbnailClick(image.imageData)}
+                />
+              ))}
             </div>
           </div>
+
           <div className="product-main-info">
             <div className="text">
               <div className="row product-title-gender">
-                <h2 className="product-title">Dior Sauvage Parfum</h2>
-                <p className="gender">Nam</p>
+                <h2 className="product-title">{products.result.name}</h2>
+                <p className="gender">{products.result.perfume_gender}</p>
               </div>
               <ProductRating rating={4} totalReviews={4} />
               <ul className="product-highlight-info">
-                <li>Thương hiệu: Christian Dior</li>
-                <li>Parfum 100ml</li>
-                <li>Standard Size</li>
+                <li>Thương hiệu: {products.result.brandName}</li>
               </ul>
             </div>
+
             <div className="button-group">
-              <button className="custom-button button1">Parfum 100ml</button>
-              <button className="custom-button button2">Parfum 100ml Tester</button>
-              <button className="custom-button button3">Parfum 60ml</button>
+              {products.result.perfumeVariantResponseList.map((variant) => (
+                <button
+                  key={variant.id}
+                  className="custom-button"
+                  onClick={() => handleVariantClick(variant.price)}>
+                  {variant.name}
+                </button>
+              ))}
             </div>
-            <ProductActions />
+            <ProductActions price={selectedPrice} />
           </div>
         </section>
 
@@ -137,12 +149,7 @@ const ProductDetail = (id) => {
             <div className="product-description">
               <h2 className="title">MÔ TẢ SẢN PHẨM</h2>
               <p className="about-product">
-                Nước hoa nam Dior Sauvage Parfum của thương hiệu Christian Dior
-                được ra mắt năm 2019 là một cách giải thích mới, tập trung cao
-                độ của bản gốc, lấy cảm hứng từ phong cảnh của thảo nguyên từ
-                bầu trời xanh, núi đá, nóng dưới ánh mặt trời sa mạc. Chuyên gia
-                nước hoa Dior François Demachy đã thiết kế bố cục để pha trộn sự
-                tươi mát tột độ với tông màu phương Đông ấm áp.
+                {products.result.perfume_description}
               </p>
               <img
                 className="about-product-img"
@@ -159,77 +166,77 @@ const ProductDetail = (id) => {
                   <p>
                     <span class="label">Thương hiệu</span>
                     <span>:</span>
-                    <span class="value">Christian Dior</span>
+                    <span class="value">{products.result.brandName}</span>
                   </p>
                 </li>
                 <li>
                   <p>
                     <span class="label">Giới tính</span>
                     <span>:</span>
-                    <span class="value">Nước hoa Nam</span>
+                    <span class="value">{products.result.perfume_gender}</span>
                   </p>
                 </li>
                 <li>
                   <p>
                     <span class="label">Nồng độ</span>
                     <span>:</span>
-                    <span class="value">Parfum</span>
+                    <span class="value">{products.result.concentration}</span>
                   </p>
                 </li>
                 <li>
                   <p>
                     <span class="label">Nhóm hương</span>
                     <span>:</span>
-                    <span class="value">Hương phương đông</span>
+                    <span class="value">{products.result.screntFamilyName}</span>
                   </p>
                 </li>
                 <li>
                   <p>
                     <span class="label">Mùi hương chính</span>
                     <span>:</span>
-                    <span class="value">Cam Bergamot, Hương Vanilla</span>
+                    <span class="value">{products.result.main_notes}</span>
                   </p>
                 </li>
                 <li>
                   <p>
                     <span class="label">Độ lưu hương</span>
                     <span>:</span>
-                    <span class="value">Rất lâu - Trên 12h</span>
+                    <span class="value">{products.result.longevity}</span>
                   </p>
                 </li>
                 <li>
                   <p>
                     <span class="label">Độ tỏa hương</span>
                     <span>:</span>
-                    <span class="value">Xa - Trong vòng bán kính 2m</span>
+                    <span class="value">{products.result.sillage}</span>
                   </p>
                 </li>
                 <li>
                   <p>
                     <span class="label">Phong cách</span>
                     <span>:</span>
-                    <span class="value">Lịch lãm, Nam tính, Lôi cuốn</span>
+                    <span class="value">{products.result.style}</span>
                   </p>
                 </li>
                 <li>
                   <p>
                     <span class="label">Thời điểm dùng</span>
                     <span>:</span>
-                    <span class="value">Thu, Đông</span>
+                    <span class="value">{products.result.season_usage}</span>
                   </p>
                 </li>
                 <li>
                   <p>
                     <span class="label">Năm phát hành</span>
                     <span>:</span>
-                    <span class="value">2019</span>
+                    <span class="value">{products.result.release_year}</span>
                   </p>
                 </li>
                 <li>
                   <p>
                     <span class="label">Xuất xứ</span>
                     <span>:</span>
-                    <span class="value">Pháp</span>
+                    <span class="value">{products.result.countryName}</span>
                   </p>
                 </li>
               </ul>
@@ -237,19 +244,15 @@ const ProductDetail = (id) => {
                 <h2 className="normal-title">Thành phần mùi hương</h2>
                 <p>
                   <span class="label">Hương đầu: </span>
-                  <span class="value">Cam Bergamot</span>
+                  <span class="value">{products.result.top_notes}</span>
                 </p>
                 <p>
                   <span class="label">Hương giữa: </span>
-                  <span class="value">
-                    Hạt tiêu Tứ xuyên, Hoa oải hương, Nhục đậu khấu, Hoa hồi
-                  </span>
+                  <span class="value">{products.result.middle_notes}</span>
                 </p>
                 <p>
                   <span class="label">Hương cuối: </span>
-                  <span class="value">
-                    Long diên hương, Hương Vanilla, Hổ phách
-                  </span>
+                  <span class="value">{products.result.base_notes}</span>
                 </p>
               </div>
             </div>

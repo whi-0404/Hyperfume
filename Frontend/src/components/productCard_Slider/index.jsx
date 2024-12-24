@@ -30,6 +30,7 @@ const CardSlider = () => {
 
   // Hiển thị lỗi nếu có
   if (error) return <div>Error: {error}</div>;
+
   return (
     <>
       <div className="cardSlider-container">

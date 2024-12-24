@@ -21,6 +21,8 @@ public class CartResponse {
 
     String variantName;
 
+    String perfumeName;
+
     Integer quantity;
 
     BigDecimal price;

@@ -93,7 +93,7 @@ const NuocHoaUnisex = () => {
             <div className="breadcrumb">
                 <a href="/" className="breadcrumb-link">Trang chủ</a>
                 <span className="arrow"> &gt; </span>
-                <a href="/nuoc-hoa-nu" className="breadcrumb-link">Sản phẩm</a>
+                <a href="/nuoc-hoa" className="breadcrumb-link">Sản phẩm</a>
                 <span className="arrow"> &gt; </span>
                 <span className="current">Nước hoa Unisex</span>
                 <hr className="divider" />
@@ -190,6 +190,7 @@ const NuocHoaUnisex = () => {
             <div className="product-grid">
                 {displayedProducts.map((products, index) => (
                     <ProductCard
+                        id={products.id}
                         img={handleBase64Decode(products.thumbnailImageData)}
                         name={products.name}
                         brandName={products.brandName}

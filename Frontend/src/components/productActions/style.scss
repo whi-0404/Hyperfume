@@ -31,7 +31,7 @@
     cursor: pointer;
 
     &:hover {
-      border: 5px solid black;
+      filter: brightness(85%)
     }
   }
 
@@ -86,7 +86,7 @@
     }
 
     &:hover {
-      border: 5px solid black;
+      filter: brightness(85%)
     }
   }
 
@@ -103,7 +103,7 @@
     cursor: pointer;
 
     &:hover {
-      border: 5px solid black;
+      filter: brightness(85%)
     }
   }
 }
