@@ -1,104 +1,110 @@
 .blog-container {
   margin: 0 auto;
   width: 50%;
-}
 
-.home-page {
-  padding: 20px;
-}
+  .home-page {
+    padding: 20px;
+  }
 
-.home-page h1 {
-  font-size: 50px;
-  margin: 1rem 0;
-}
+  .home-page h1 {
+    font-size: 50px;
+    margin: 1rem 0;
+  }
 
-.home-page p {
-  font-size: 30px;
-  color: #555;
-}
+  .home-page p {
+    font-size: 30px;
+    color: #555;
+  }
 
-.blog-page {
-  padding: 20px;
-}
+  .blog-page {
+    padding: 20px;
+  }
 
-.blog-list {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 25px;
-  text-align: center;
-}
+  .blog-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    text-align: center;
+  }
 
-.banner {
-  width: 100%;
-  height: 300px;
-  /* Chiều cao banner */
-  background-image: url("../../assets/01.jpg");
-  /* Đường dẫn hình ảnh */
-  background-size: cover;
-  /* Hình ảnh bao phủ toàn bộ div */
-  background-position: center;
-  /* Căn giữa hình ảnh */
-  display: flex;
-  justify-content: center;
-  /* Căn giữa nội dung ngang */
-  align-items: center;
-  /* Căn giữa nội dung dọc */
-  position: relative;
-  margin-bottom: 30px;
-}
+  .banner {
+    width: 100%;
+    height: 300px;
+    /* Chiều cao banner */
+    background-image: url("../../assets/01.jpg");
+    /* Đường dẫn hình ảnh */
+    background-size: cover;
+    /* Hình ảnh bao phủ toàn bộ div */
+    background-position: center;
+    /* Căn giữa hình ảnh */
+    display: flex;
+    justify-content: center;
+    /* Căn giữa nội dung ngang */
+    align-items: center;
+    /* Căn giữa nội dung dọc */
+    position: relative;
+    margin-bottom: 30px;
+  }
 
-.banner-title {
-  font-size: 48px;
-  color: #fff;
-  /* Màu chữ trắng */
-  font-weight: bold;
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-  /* Tạo đổ bóng */
-}
+  .banner-title {
+    font-size: 48px;
+    color: #fff;
+    /* Màu chữ trắng */
+    font-weight: bold;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    /* Tạo đổ bóng */
+  }
 
-.blog-detail h2 {
-  font-size: 35px;
-}
+  .blog-detail h2 {
+    font-size: 35px;
+  }
 
-.blog-detail p {
-  font-size: 25px;
-}
+  .blog-detail p {
+    font-size: 25px;
+  }
 
-.hihi {
-  text-align: center;
-}
+  .hihi {
+    text-align: center;
+  }
 
-.back-button {
-  font-size: 20px;
-  color: #fff;
-  padding: 5px;
-  background-color: #D4A373;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  cursor: pointer;
-  display: inline-block; /* Đảm bảo nút không chiếm toàn bộ chiều ngang */
-}
+  .back-button {
+    font-size: 20px;
+    color: #fff;
+    padding: 5px;
+    background-color: #D4A373;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    /* Đảm bảo nút không chiếm toàn bộ chiều ngang */
+  }
 
-.back-button:hover {
-  filter: brightness(85%);
-}
+  .back-button:hover {
+    filter: brightness(85%);
+  }
 
-p, img {
-  margin-bottom: 20px; /* Khoảng cách dưới đoạn văn */
-}
+  p,
+  img {
+    margin-bottom: 20px;
+    /* Khoảng cách dưới đoạn văn */
+  }
 
-h2, h3, h4 {
-  margin-bottom: 10px;
-}
+  h2,
+  h3,
+  h4 {
+    margin-bottom: 10px;
+  }
 
-h2 {
-  color: darkred;
-}
+  h2 {
+    color: darkred;
+  }
 
-h3, h4 {
-  color: darkblue;
-}
+  h3,
+  h4 {
+    color: darkblue;
+  }
 
-p {
-  text-align: justify;
+  p {
+    text-align: justify;
+  }
 }
