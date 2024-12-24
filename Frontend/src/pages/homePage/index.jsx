@@ -11,19 +11,6 @@ import UnisexProductCard_Slider from '../../components/unisexProductCard_Slider'
 function HomePage() {
     const [selectedProductType, setSelectedProductType] = useState('male');
 
-    // useEffect(() => {
-    //     getCart(token)
-    //         .then((response) => {
-    //             setProducts(response.data);
-    //             setLoading(false); // Kết thúc loading
-    //         })
-    //         .catch((error) => {
-    //             console.error(error);
-    //             setError('Failed to fetch products'); // Lưu lỗi vào state
-    //             setLoading(false);
-    //         });
-    // }, []);
-
     return (
         <>
             <div className='container'>

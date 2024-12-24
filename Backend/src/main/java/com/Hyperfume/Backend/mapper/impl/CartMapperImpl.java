@@ -48,6 +48,7 @@ public class CartMapperImpl implements CartMapper {
             cartResponse.quantity(cart.getQuantity());
             cartResponse.totalPrice(cartUtil.calculateTotalPrice(cart));
             cartResponse.imageData(this.CartImageData(cart));
+            cartResponse.perfumeName(this.cartPerfumeName(cart));
             return cartResponse.build();
         }
     }
@@ -152,6 +153,19 @@ public class CartMapperImpl implements CartMapper {
 
                     return perfumeImageUtil.encodeImageData(perfumeImage.getImage_data());
                 }
+            }
+        }
+    }
+
+    private String cartPerfumeName(Cart cart) {
+        if (cart == null) {
+            return null;
+        } else {
+            PerfumeVariant perfumeVariant = cart.getPerfumeVariant();
+            if (perfumeVariant == null) {
+                return null;
+            } else {
+                return perfumeVariant.getPerfume().getName();
             }
         }
     }

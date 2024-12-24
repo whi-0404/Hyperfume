@@ -19,6 +19,7 @@ import ProductConsult from "./pages/productConsult";
 import AboutUs from "./pages/aboutUs";
 import BlogPage from "./pages/blog";
 import LoadSearchProduct from "./pages/loadSearchProduct";
+import Profile from "./pages/profile"
 
 const renderUserRouter = () => {
     const userRouters = [
@@ -75,7 +76,7 @@ const renderUserRouter = () => {
             component: <ResetPass></ResetPass>
         },
         {
-            path: ROUTERS.USER.PRODUCT_DETAIL,
+            path: `${ROUTERS.USER.PRODUCT_DETAIL}/:id`,
             component: <ProductDetail></ProductDetail>
         },
         {
@@ -93,6 +94,10 @@ const renderUserRouter = () => {
         {
             path: ROUTERS.USER.SEARCH,
             component: <LoadSearchProduct></LoadSearchProduct>
+        },
+        {
+            path: ROUTERS.USER.PROFILE,
+            component: <Profile></Profile>
         }
     ]
 

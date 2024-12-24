@@ -1,117 +1,147 @@
-import { memo, useState } from "react";
+import { memo, useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import ProductRating from "../../components/rating";
 import ProductActions from "../../components/productActions";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import "./style.scss";
+import getProductDetail from "../../services/getProductDetail";
+import handleBase64Decode from "../../components/covertBase64ToImg";
+
+const suggestProducts = [
+  {
+    id: 1,
+    name: "Armaf Club De Nuit Intense Man Limited Edition Parfum",
+    price: "300,000đ - 2,150,000đ",
+    image: require("../../assets/productImages/armaf/armaf-club-de-nuit.jpg"),
+    url: "#",
+  },
+  {
+    id: 2,
+    name: "Creed Green Irish Tweed EDP",
+    price: "650,000đ - 6,100,000đ",
+    image: require("../../assets/productImages/creed/green-irish-tweed.png"),
+    url: "#",
+  },
+  {
+    id: 3,
+    name: "Roja Elysium Pour Homme Parfum",
+    price: "900,000đ - 7,600,000đ",
+    image: require("../../assets/productImages/roja-dove/roja-elysium.png"),
+    url: "#",
+  },
+  {
+    id: 4,
+    name: "Diesel Fuel for Life Homme EDP",
+    price: "250,000đ - 1,900,000đ",
+    image: require("../../assets/productImages/diesel/diesel-fuel.png"),
+    url: "#",
+  },
+];
 
 const ProductDetail = () => {
+  const { id } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
+  const [products, setProducts] = useState(null);
+  const [selectedPrice, setSelectedPrice] = useState(null);
+  const [mainImage, setMainImage] = useState(null); // Ảnh chính
+  const [selectedVariantId, setSelectedVariantId] = useState(null); // Theo dõi variant được chọn
+
+  const handleVariantClick = (variantId, price) => {
+    setSelectedPrice(price);
+    setSelectedVariantId(variantId); // Cập nhật ID variant được chọn
+  };
+
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  const products = [
-    {
-      id: 1,
-      name: "Armaf Club De Nuit Intense Man Limited Edition Parfum",
-      price: "300,000đ - 2,150,000đ",
-      image: require("../../assets/productImages/armaf/armaf-club-de-nuit.jpg"),
-      url: "#",
-    },
-    {
-      id: 2,
-      name: "Creed Green Irish Tweed EDP",
-      price: "650,000đ - 6,100,000đ",
-      image: require("../../assets/productImages/creed/green-irish-tweed.png"),
-      url: "#",
-    },
-    {
-      id: 3,
-      name: "Roja Elysium Pour Homme Parfum",
-      price: "900,000đ - 7,600,000đ",
-      image: require("../../assets/productImages/roja-dove/roja-elysium.png"),
-      url: "#",
-    },
-    {
-      id: 4,
-      name: "Diesel Fuel for Life Homme EDP",
-      price: "250,000đ - 1,900,000đ",
-      image: require("../../assets/productImages/diesel/diesel-fuel.png"),
-      url: "#",
-    },
-  ];
+  const handleThumbnailClick = (imageData) => {
+    setMainImage(imageData); // Cập nhật ảnh chính khi click vào thumbnail
+  };
+
+  useEffect(() => {
+    getProductDetail(id)
+      .then((response) => {
+        setProducts(response);
+        const thumbnailImage = response.result.perfumeImageResponseList.find(
+          (image) => image.thumbnail === true
+        );
+        setMainImage(thumbnailImage?.imageData); // Đặt ảnh chính ban đầu
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [id]);
+
+  if (!products) {
+    return <div>Product not found</div>;
+  }
 
   return (
-    <div className="container">
+    <div className="detail-product-container">
       <div className="body-sides">
         <section className="sec-1 breadcrumb">
           <a href="/" className="breadcrumb-link">
             Trang chủ
           </a>
           <span className="arrow"> &gt; </span>
-          <a href="/nuoc-hoa-nu" className="breadcrumb-link">
+          <a href="/nuoc-hoa" className="breadcrumb-link">
             Sản phẩm
           </a>
           <span className="arrow"> &gt; </span>
-          <a href="/nuoc-hoa-nam" className="breadcrumb-link">
-            Nước hoa nam
-          </a>
-          <span className="arrow"> &gt; </span>
-          <span className="current">Dior Sauvage Parfum</span>
+          <span className="current">{products.result.name}</span>
           <hr className="divider" />
         </section>
 
         <section className="sec-2">
           <div className="product-images">
             <div className="image-preview">
-              <img
-                id="main-image"
-                src={require("../../assets/image/Dior/dior_sauvage_big_1.jpg")}
-                alt="product"
-              ></img>
+              {mainImage && (
+                <img
+                  id="main-image"
+                  src={handleBase64Decode(mainImage)}
+                  alt="product"
+                />
+              )}
             </div>
+
             <div className="image-thumbnails">
-              <img
-                className="thumbnail"
-                src={require("../../assets/image/Dior/dior_sauvage_big_1.jpg")}
-                alt="product"
-              ></img>
-              <img
-                className="thumbnail"
-                src={require("../../assets/image/Dior/dior_sauvage_small_1.jpg")}
-                alt="product"
-              ></img>
-              <img
-                className="thumbnail"
-                src={require("../../assets/image/Dior/dior_sauvage_small_2.jpg")}
-                alt="product"
-              ></img>
-              <img
-                className="thumbnail"
-                src={require("../../assets/image/Dior/dior_sauvage_small_3.jpg")}
-                alt="product"
-              ></img>
+              {products.result.perfumeImageResponseList.map((image, index) => (
+                <img
+                  key={index}
+                  className="thumbnail"
+                  src={handleBase64Decode(image.imageData)}
+                  alt={`thumbnail-${index}`}
+                  onClick={() => handleThumbnailClick(image.imageData)}
+                />
+              ))}
             </div>
           </div>
+
           <div className="product-main-info">
             <div className="text">
               <div className="row product-title-gender">
-                <h2 className="product-title">Dior Sauvage Parfum</h2>
-                <p className="gender">Nam</p>
+                <h2 className="product-title">{products.result.name}</h2>
+                <p className="gender">{products.result.perfume_gender}</p>
               </div>
               <ProductRating rating={4} totalReviews={4} />
               <ul className="product-highlight-info">
-                <li>Thương hiệu: Christian Dior</li>
-                <li>Parfum 100ml</li>
-                <li>Standard Size</li>
+                <li>Thương hiệu: {products.result.brandName}</li>
               </ul>
             </div>
+
             <div className="button-group">
-              <button className="custom-button button1">Parfum 100ml</button>
-              <button className="custom-button button2">Parfum 100ml Tester</button>
-              <button className="custom-button button3">Parfum 60ml</button>
+              {products.result.perfumeVariantResponseList.map((variant) => (
+                <button
+                  key={variant.id}
+                  className={`custom-button ${selectedVariantId === variant.id ? "selected" : ""}`}
+                  onClick={() => handleVariantClick(variant.id, variant.price)}>
+                  {variant.name}
+                </button>
+              ))}
             </div>
-            <ProductActions />
+
+            <ProductActions price={selectedPrice} variantId={selectedVariantId} />
           </div>
         </section>
 
@@ -122,16 +152,11 @@ const ProductDetail = () => {
             <div className="product-description">
               <h2 className="title">MÔ TẢ SẢN PHẨM</h2>
               <p className="about-product">
-                Nước hoa nam Dior Sauvage Parfum của thương hiệu Christian Dior
-                được ra mắt năm 2019 là một cách giải thích mới, tập trung cao
-                độ của bản gốc, lấy cảm hứng từ phong cảnh của thảo nguyên từ
-                bầu trời xanh, núi đá, nóng dưới ánh mặt trời sa mạc. Chuyên gia
-                nước hoa Dior François Demachy đã thiết kế bố cục để pha trộn sự
-                tươi mát tột độ với tông màu phương Đông ấm áp.
+                {products.result.perfume_description}
               </p>
               <img
                 className="about-product-img"
-                src={require("../../assets/image/Dior/dior_motasp.jpg")}
+                src={handleBase64Decode(products.result.perfumeImageResponseList[1].imageData)}
                 alt="product"
               ></img>
             </div>
@@ -142,99 +167,95 @@ const ProductDetail = () => {
               <ul>
                 <li>
                   <p>
-                    <span class="label">Thương hiệu</span>
+                    <span className="label">Thương hiệu</span>
                     <span>:</span>
-                    <span class="value">Christian Dior</span>
+                    <span className="value">{products.result.brandName}</span>
                   </p>
                 </li>
                 <li>
                   <p>
-                    <span class="label">Giới tính</span>
+                    <span className="label">Giới tính</span>
                     <span>:</span>
-                    <span class="value">Nước hoa Nam</span>
+                    <span className="value">{products.result.perfume_gender}</span>
                   </p>
                 </li>
                 <li>
                   <p>
-                    <span class="label">Nồng độ</span>
+                    <span className="label">Nồng độ</span>
                     <span>:</span>
-                    <span class="value">Parfum</span>
+                    <span className="value">{products.result.concentration}</span>
                   </p>
                 </li>
                 <li>
                   <p>
-                    <span class="label">Nhóm hương</span>
+                    <span className="label">Nhóm hương</span>
                     <span>:</span>
-                    <span class="value">Hương phương đông</span>
+                    <span className="value">{products.result.screntFamilyName}</span>
                   </p>
                 </li>
                 <li>
                   <p>
-                    <span class="label">Mùi hương chính</span>
+                    <span className="label">Mùi hương chính</span>
                     <span>:</span>
-                    <span class="value">Cam Bergamot, Hương Vanilla</span>
+                    <span className="value">{products.result.main_notes}</span>
                   </p>
                 </li>
                 <li>
                   <p>
-                    <span class="label">Độ lưu hương</span>
+                    <span className="label">Độ lưu hương</span>
                     <span>:</span>
-                    <span class="value">Rất lâu - Trên 12h</span>
+                    <span className="value">{products.result.longevity}</span>
                   </p>
                 </li>
                 <li>
                   <p>
-                    <span class="label">Độ tỏa hương</span>
+                    <span className="label">Độ tỏa hương</span>
                     <span>:</span>
-                    <span class="value">Xa - Trong vòng bán kính 2m</span>
+                    <span className="value">{products.result.sillage}</span>
                   </p>
                 </li>
                 <li>
                   <p>
-                    <span class="label">Phong cách</span>
+                    <span className="label">Phong cách</span>
                     <span>:</span>
-                    <span class="value">Lịch lãm, Nam tính, Lôi cuốn</span>
+                    <span className="value">{products.result.style}</span>
                   </p>
                 </li>
                 <li>
                   <p>
-                    <span class="label">Thời điểm dùng</span>
+                    <span className="label">Thời điểm dùng</span>
                     <span>:</span>
-                    <span class="value">Thu, Đông</span>
+                    <span className="value">{products.result.season_usage}</span>
                   </p>
                 </li>
                 <li>
                   <p>
-                    <span class="label">Năm phát hành</span>
+                    <span className="label">Năm phát hành</span>
                     <span>:</span>
-                    <span class="value">2019</span>
+                    <span className="value">{products.result.release_year}</span>
                   </p>
                 </li>
                 <li>
                   <p>
-                    <span class="label">Xuất xứ</span>
+                    <span className="label">Xuất xứ</span>
                     <span>:</span>
-                    <span class="value">Pháp</span>
+                    <span className="value">{products.result.countryName}</span>
                   </p>
                 </li>
               </ul>
               <div className="scent-structure">
                 <h2 className="normal-title">Thành phần mùi hương</h2>
                 <p>
-                  <span class="label">Hương đầu: </span>
-                  <span class="value">Cam Bergamot</span>
+                  <span className="label">Hương đầu: </span>
+                  <span className="value">{products.result.top_notes}</span>
                 </p>
                 <p>
-                  <span class="label">Hương giữa: </span>
-                  <span class="value">
-                    Hạt tiêu Tứ xuyên, Hoa oải hương, Nhục đậu khấu, Hoa hồi
-                  </span>
+                  <span className="label">Hương giữa: </span>
+                  <span className="value">{products.result.middle_notes}</span>
                 </p>
                 <p>
-                  <span class="label">Hương cuối: </span>
-                  <span class="value">
-                    Long diên hương, Hương Vanilla, Hổ phách
-                  </span>
+                  <span className="label">Hương cuối: </span>
+                  <span className="value">{products.result.base_notes}</span>
                 </p>
               </div>
             </div>
@@ -318,7 +339,7 @@ const ProductDetail = () => {
         <section className="sec-5 related-products">
           <h2 className="title">SẢN PHẨM LIÊN QUAN</h2>
           <div className="products-container">
-            {products.map((product) => (
+            {suggestProducts.map((product) => (
               <a
                 href={product.url}
                 key={product.id}

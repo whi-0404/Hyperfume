@@ -30,6 +30,7 @@ const CardSlider = () => {
 
   // Hiển thị lỗi nếu có
   if (error) return <div>Error: {error}</div>;
+
   return (
     <>
       <div className="cardSlider-container">
@@ -52,6 +53,7 @@ const CardSlider = () => {
           {products.result.map((product) => (
             <SwiperSlide>
               <ProductCard
+                id={product.id}
                 img={handleBase64Decode(product.thumbnailImageData)}
                 name={product.name}
                 brandName={product.brandName}
