@@ -8,7 +8,6 @@ import { BsCart2 } from "react-icons/bs";
 import { RiArrowDownWideFill } from "react-icons/ri";
 import { NavLink, useNavigate } from "react-router-dom";
 import { searchProducts } from "../../../services/handleSearchPerfume";
-import getCart from "../../../services/handleGetCartItem";
 
 const Header = () => {
   const navigate = useNavigate();
