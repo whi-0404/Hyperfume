@@ -28,7 +28,7 @@ const CartItem = ({ item, checked, onCheckboxChange, onUpdateQuantity, onRemoveI
             <img src={handleBase64Decode(item.imageData)} alt={item.name} className="product-image" />
 
             <div className="product-details">
-                <h4>{item.name}</h4>
+                <h4>{item.perfumeName}</h4>
                 <p>Size: {item.variantName}</p>
                 <p>Giá: {item.price.toLocaleString("vi-VN")} đồng</p>
                 <p>Khuyến mại: {item.discount}%</p>
