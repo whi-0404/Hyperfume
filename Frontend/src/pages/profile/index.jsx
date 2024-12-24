@@ -1,8 +1,43 @@
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
+import { NavLink } from 'react-router-dom';
 import "./style.scss";
 import { FaBell } from "react-icons/fa";
+import { UserInfo } from "../../services/handleUserInfo";
+import { getToken } from "../../services/authToken"
 
 const Profile = () => {
+  const Token = getToken(); // Lấy Token
+  const [user, setUser] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!Token) {
+      setLoading(false); // Dừng trạng thái loading
+      return;
+    }
+
+    UserInfo(Token)
+      .then((response) => {
+        setUser(response.data);
+        setLoading(false); // Kết thúc loading
+      })
+      .catch((error) => {
+        console.error(error);
+        setError('Failed to fetch products'); // Lưu lỗi vào state
+        setLoading(false);
+      });
+  }, [Token]);
+
+  if (!Token) {
+    return (
+      <div className="alert">
+        <h1>Bạn chưa đăng nhập tài khoản!</h1>
+        <NavLink to="/Sign-in">Đăng nhập</NavLink>
+      </div>
+    );
+  }
+
   return (
     <div className="container">
       <div className="body-section">
@@ -21,12 +56,8 @@ const Profile = () => {
             <div className="detail-section">
               <ul className="detail-profile">
                 <li className="item">
-                  <label className="item-label">Họ</label>
-                  <p className="item-value">Lê</p>
-                </li>
-                <li className="item">
-                  <label className="item-label">Tên</label>
-                  <p className="item-value">Huy</p>
+                  <label className="item-label">Họ và tên</label>
+                  <p className="item-value">Lê Huy</p>
                 </li>
                 <li className="item">
                   <label className="item-label">Số điện thoại</label>

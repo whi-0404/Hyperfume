@@ -18,7 +18,6 @@
 }
 
 .blog-page {
-  text-align: center;
   padding: 20px;
 }
 
@@ -26,6 +25,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 25px;
+  text-align: center;
 }
 
 .banner {
@@ -64,6 +64,10 @@
   font-size: 25px;
 }
 
+.hihi {
+  text-align: center;
+}
+
 .back-button {
   font-size: 20px;
   color: #fff;
@@ -72,8 +76,29 @@
   border: 1px solid #ddd;
   border-radius: 5px;
   cursor: pointer;
+  display: inline-block; /* Đảm bảo nút không chiếm toàn bộ chiều ngang */
 }
 
 .back-button:hover {
   filter: brightness(85%);
+}
+
+p, img {
+  margin-bottom: 20px; /* Khoảng cách dưới đoạn văn */
+}
+
+h2, h3, h4 {
+  margin-bottom: 10px;
+}
+
+h2 {
+  color: darkred;
+}
+
+h3, h4 {
+  color: darkblue;
+}
+
+p {
+  text-align: justify;
 }

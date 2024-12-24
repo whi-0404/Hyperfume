@@ -6,7 +6,6 @@ export const UserInfo = async (token) => {
         alert("Vui lòng đăng nhập!");
         return;
     }
-
     try {
         const response = await api.get('/users/my-info', {
             headers: {
