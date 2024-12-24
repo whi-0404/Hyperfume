@@ -29,7 +29,7 @@ const CartItem = ({ item, checked, onCheckboxChange, onUpdateQuantity, onRemoveI
 
             <div className="product-details">
                 <h4>{item.name}</h4>
-                <p>Size: {item.size}</p>
+                <p>Size: {item.variantName}</p>
                 <p>Giá: {item.price.toLocaleString("vi-VN")} đồng</p>
                 <p>Khuyến mại: {item.discount}%</p>
 

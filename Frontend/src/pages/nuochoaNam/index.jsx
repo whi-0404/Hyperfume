@@ -99,7 +99,7 @@ const NuocHoaNam = () => {
             <div className="breadcrumb">
                 <a href="/" className="breadcrumb-link">Trang chủ</a>
                 <span className="arrow"> &gt; </span>
-                <a href="/nuoc-hoa-nu" className="breadcrumb-link">Sản phẩm</a>
+                <a href="/nuoc-hoa" className="breadcrumb-link">Sản phẩm</a>
                 <span className="arrow"> &gt; </span>
                 <span className="current">Nước hoa Nam</span>
                 <hr className="divider" />
