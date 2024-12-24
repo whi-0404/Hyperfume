@@ -5,7 +5,8 @@ import ProductActions from "../../components/productActions";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import "./style.scss";
 import getProductDetail from "../../services/getProductDetail";
-import handleBase64Decode from "../../components/covertBase64ToImg"
+import handleBase64Decode from "../../components/covertBase64ToImg";
+import addToCart from "../../services/handleAddToCart";
 
 const suggestProducts = [
   {
@@ -41,22 +42,29 @@ const suggestProducts = [
 const ProductDetail = () => {
   const { id } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
-  const [products, setProducts] = useState('');
+  const [products, setProducts] = useState(null);
   const [selectedPrice, setSelectedPrice] = useState(null);
+  const [mainImage, setMainImage] = useState(null); // Ảnh chính
 
-  // Hàm xử lý khi click vào một variant
   const handleVariantClick = (price) => {
-    setSelectedPrice(price); // Cập nhật giá khi click
+    setSelectedPrice(price);
   };
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
+  const handleThumbnailClick = (imageData) => {
+    setMainImage(imageData); // Cập nhật ảnh chính khi click vào thumbnail
+  };
+
   useEffect(() => {
     getProductDetail(id)
       .then((response) => {
         setProducts(response);
+        const thumbnailImage = response.result.perfumeImageResponseList.find(
+          (image) => image.thumbnail === true);
+        setMainImage(thumbnailImage?.imageData); // Đặt ảnh chính ban đầu
       })
       .catch((error) => {
         console.error(error);
@@ -64,20 +72,18 @@ const ProductDetail = () => {
   }, [id]);
 
   if (!products) {
-    return <div>Product not found</div>; // Nếu product không có, hiển thị thông báo không tìm thấy
+    return <div>Product not found</div>;
   }
 
-  const thumbnailImage = products.result.perfumeImageResponseList.find(image => image.thumbnail === true);
-
   return (
-    <div className="container">
+    <div className="detail-product-container">
       <div className="body-sides">
         <section className="sec-1 breadcrumb">
           <a href="/" className="breadcrumb-link">
             Trang chủ
           </a>
           <span className="arrow"> &gt; </span>
-          <a href="/nuoc-hoa-nu" className="breadcrumb-link">
+          <a href="/nuoc-hoa" className="breadcrumb-link">
             Sản phẩm
           </a>
           <span className="arrow"> &gt; </span>
@@ -88,35 +94,28 @@ const ProductDetail = () => {
         <section className="sec-2">
           <div className="product-images">
             <div className="image-preview">
-              <img
-                id="main-image"
-                src={handleBase64Decode(thumbnailImage.imageData)} // Giải mã Base64 để hiển thị hình ảnh
-                alt="product"
-              />
+              {mainImage && (
+                <img
+                  id="main-image"
+                  src={handleBase64Decode(mainImage)}
+                  alt="product"
+                />
+              )}
             </div>
+
             <div className="image-thumbnails">
-              <img
-                className="thumbnail"
-                src={require("../../assets/image/Dior/dior_sauvage_big_1.jpg")}
-                alt="product"
-              ></img>
-              <img
-                className="thumbnail"
-                src={require("../../assets/image/Dior/dior_sauvage_small_1.jpg")}
-                alt="product"
-              ></img>
-              <img
-                className="thumbnail"
-                src={require("../../assets/image/Dior/dior_sauvage_small_2.jpg")}
-                alt="product"
-              ></img>
-              <img
-                className="thumbnail"
-                src={require("../../assets/image/Dior/dior_sauvage_small_3.jpg")}
-                alt="product"
-              ></img>
+              {products.result.perfumeImageResponseList.map((image, index) => (
+                <img
+                  key={index}
+                  className="thumbnail"
+                  src={handleBase64Decode(image.imageData)}
+                  alt={`thumbnail-${index}`}
+                  onClick={() => handleThumbnailClick(image.imageData)}
+                />
+              ))}
             </div>
           </div>
+
           <div className="product-main-info">
             <div className="text">
               <div className="row product-title-gender">
@@ -128,9 +127,13 @@ const ProductDetail = () => {
                 <li>Thương hiệu: {products.result.brandName}</li>
               </ul>
             </div>
+
             <div className="button-group">
-              {products.result.perfumeVariantResponseList.map(variant => (
-                <button key={variant.id} className="custom-button" onClick={() => handleVariantClick(variant.price)}>
+              {products.result.perfumeVariantResponseList.map((variant) => (
+                <button
+                  key={variant.id}
+                  className="custom-button"
+                  onClick={() => handleVariantClick(variant.price)}>
                   {variant.name}
                 </button>
               ))}

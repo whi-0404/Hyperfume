@@ -11,55 +11,64 @@ const productData = [
         img: require("../../assets/productImages/creed/green-irish-tweed.png"),
         name: "Green Irish Tweed",
         brandName: "Creed",
-        price: "650,000đ - 6,100,000đ"
+        price1: 1100000,
+        price2: 3000000
     },
     {
         img: require("../../assets/productImages/creed/creed-aventus.png"),
         name: "Aventus",
         brandName: "Creed",
-        price: "650,000đ - 6,100,000đ"
+        price1: 1100000,
+        price2: 3000000
     },
     {
         img: require("../../assets/productImages/maison-crivelli-oud-maracuja.png"),
         name: "Oud Maracuja",
         brandName: "Maison Criveli",
-        price: "650,000đ - 6,100,000đ"
+        price1: 1100000,
+        price2: 3000000
     },
     {
         img: require("../../assets/productImages/dior-homme-sport.png"),
         name: "Homme Sport",
         brandName: "Dior",
-        price: "300,000đ - 2,800,000đ"
+        price1: 1100000,
+        price2: 3000000
     },
     {
         img: require("../../assets/productImages/replica-jazz-club.png"),
         name: "Replica Jazz club",
         brandName: "Maison Margiela",
-        price: "350,000đ - 2,700,000đ"
+        price1: 350000,
+        price2: 3100000
     },
     {
         img: require("../../assets/productImages/dior_sauvage.png"),
         name: "Sauvage EDP ",
         brandName: "Dior",
-        price: "350,000đ - 2,700,000đ"
+        price1: 350000,
+        price2: 3100000
     },
     {
         img: require("../../assets/productImages/creed/green-irish-tweed.png"),
         name: "Ombre Leather",
         brandName: "Tom Ford",
-        price: "400,000đ - 3,500,000đ"
+        price1: 350000,
+        price2: 3100000
     },
     {
         img: require("../../assets/productImages/creed/green-irish-tweed.png"),
         name: "Apple Brandy On the Rock",
         brandName: "By Kilian",
-        price: "900,000đ - 4,100,000đ"
+        price1: 350000,
+        price2: 3100000
     },
     {
         img: require("../../assets/productImages/creed/green-irish-tweed.png"),
         name: "Apple Brandy On the Rock",
         brandName: "By Kilian",
-        price: "900,000đ - 4,100,000đ"
+        price1: 1100000,
+        price2: 3000000
     },
 ];
 
@@ -70,7 +79,7 @@ const CardSlider = () => {
                 <Swiper
                     modules={[Navigation, Pagination, A11y, Autoplay]}
                     spaceBetween={40}
-                    slidesPerView={7}
+                    slidesPerView={4}
                     autoplay={{
                         delay: 2500,
                         disableOnInteraction: false,
@@ -89,7 +98,8 @@ const CardSlider = () => {
                                 img={product.img}
                                 name={product.name}
                                 brandName={product.brandName}
-                                price={product.price}
+                                price1={product.price1}
+                                price2={product.price2}
                             />
                         </SwiperSlide>
                     ))}

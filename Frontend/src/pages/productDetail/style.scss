@@ -1,5 +1,6 @@
-.container {
+.detail-product-container {
   background-color: #f5f1eb;
+  padding: 20px;
 }
 
 hr {
@@ -32,7 +33,7 @@ hr {
     transition: color 0.3s;
 
     &:hover {
-      color: #ffe0b2; // Change color on hover
+      color: #FFE0B2; // Change color on hover
     }
   }
 
@@ -76,11 +77,12 @@ hr {
     }
 
     .image-thumbnails {
+      height: 102px;
+      width: auto;
       display: flex;
       justify-content: space-between;
+      gap: 15px;
       align-items: center;
-      height: 102px;
-      width: 428px;
 
       .thumbnail {
         height: 100%;
