@@ -30,6 +30,7 @@ const CartItem = ({ item, checked, onCheckboxChange, onUpdateQuantity, onRemoveI
                 <h4>{item.name}</h4>
                 <p>Size: {item.size}</p>
                 <p>Giá: {item.price.toLocaleString("vi-VN")} đồng</p>
+                <p>Khuyến mại: {item.sale}%</p>
 
                 <div className="quantity-controls">
                     <button onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}>-</button>
@@ -40,7 +41,7 @@ const CartItem = ({ item, checked, onCheckboxChange, onUpdateQuantity, onRemoveI
             </div>
 
             <div className="total-cost">
-                <p>{(item.price * item.quantity).toLocaleString("vi-VN")} đồng</p>
+                <p>{(item.price * item.quantity * (100 - item.sale) / 100).toLocaleString("vi-VN")} đồng</p>
             </div>
 
 

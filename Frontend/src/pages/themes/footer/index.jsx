@@ -15,9 +15,9 @@ const Footer = () => {
                     <div class="Thong-tin">
                         <p>Thông tin thêm</p>
                         <ul>
-                            <li><a href="">Giới thiệu về Hyperfume</a></li>
-                            <li><a href="">Blog</a></li>
-                            <li><a href="">Trả góp qua thẻ tín dụng</a></li>
+                            <li><a href="/">Giới thiệu về Hyperfume</a></li>
+                            <li><a href="/">Blog</a></li>
+                            <li><a href="/">Trả góp qua thẻ tín dụng</a></li>
                             <li><Link to="/Instruction">Chính sách bảo hành/đổi trả</Link></li>
                             <li><Link to="/Instruction">Chính sách thanh toán</Link></li>
                             <li><Link to="/Instruction">Chính sách vận chuyển</Link></li>
@@ -37,16 +37,16 @@ const Footer = () => {
                     <div class="Thanh-toan">
                         <p>Phương thức thanh toán</p>
                         <img src={FrameCard} alt="Phương thức thanh toán" /> <br />
-                        <a href=""><img src={boCongThuong} alt="" /></a>
+                        <a href="/"><img src={boCongThuong} alt="" /></a>
                     </div>
 
                     <div class="Follow">
                         <p>Follow us</p>
                         <div class="media icon">
-                            <a href="">
+                            <a href="/">
                                 <FontAwesomeIcon icon={faFacebookF} />
                             </a>
-                            <a href="" >
+                            <a href="/" >
                                 <FontAwesomeIcon icon={faInstagram} />
                             </a>
                         </div>

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import { memo } from 'react';
 import './style.scss';
 import img from '../../assets/image/check-box.png';
@@ -12,7 +13,7 @@ const intruct = () => {
                     <a href="/Instruction" className="breadcrumb-link">
                         <span className="current">Hướng dẫn</span>
                     </a>
-                    <hr />
+                    <hr className="divider" />
                 </div>
 
                 <div className='intruct'>

@@ -1,7 +1,17 @@
 .cardSlider-container {
     width: 100%;
-    max-width: 1200px;
+    height: 420px;
+    max-width: 50%;
     margin: 0 auto;
+
+    .swiper-slide {
+        height: 450px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: auto;
+        text-align: center;
+    }
 
     .swiper-button-next,
     .swiper-button-prev {

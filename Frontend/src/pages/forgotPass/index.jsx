@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
 import './style.scss';
@@ -23,19 +24,6 @@ const signIn = () => {
                                 Đặt lại mật khẩu
                             </button>
                         </Link>
-
-                        <div className="divider">
-                            <span>HOẶC</span>
-                        </div>
-
-                        <div className="social-signIn">
-                            <button className="facebook-button">
-                                <FontAwesomeIcon icon={faFacebook} /> Facebook
-                            </button>
-                            <button className="google-button">
-                                <FontAwesomeIcon icon={faGoogle} /> Google
-                            </button>
-                        </div>
 
                         <p className="signup-text">
                             Bạn chưa có tài khoản? <Link to="/Sign-Up">Đăng ký</Link>
