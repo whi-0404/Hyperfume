@@ -6,8 +6,6 @@ import com.Hyperfume.Backend.entity.*;
 import com.Hyperfume.Backend.exception.AppException;
 import com.Hyperfume.Backend.exception.ErrorCode;
 import com.Hyperfume.Backend.mapper.OrderItemMapper;
-import com.Hyperfume.Backend.mapper.impl.utils.CartUtil;
-import com.Hyperfume.Backend.mapper.impl.utils.PerfumeImageUtil;
 import com.Hyperfume.Backend.mapper.impl.utils.PerfumeVariantUtil;
 import com.Hyperfume.Backend.repository.PerfumeImageRepository;
 import com.Hyperfume.Backend.repository.PerfumeVariantRepository;
@@ -21,7 +19,6 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class OrderItemMapperImpl implements OrderItemMapper {
     private final PerfumeImageRepository perfumeImageRepository;
-    private final PerfumeImageUtil perfumeImageUtil;
     private final PerfumeVariantUtil perfumeVariantUtil;
     private final PerfumeVariantRepository perfumeVariantRepository;
 
@@ -134,7 +131,7 @@ public class OrderItemMapperImpl implements OrderItemMapper {
                     PerfumeImage perfumeImage = perfumeImageRepository.findByPerfumeIdAndIsThumbnailTrue(perfume.getId())
                             .orElseThrow(() -> new AppException(ErrorCode.IMAGE_NOT_FOUND));
 
-                    return perfumeImageUtil.encodeImageData(perfumeImage.getImage_data());
+                    return perfumeImage.getImageUrl();
                 }
             }
         }

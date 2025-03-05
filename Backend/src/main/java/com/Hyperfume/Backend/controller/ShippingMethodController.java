@@ -4,6 +4,7 @@ import com.Hyperfume.Backend.dto.request.ShippingRequest;
 import com.Hyperfume.Backend.dto.response.ApiResponse;
 import com.Hyperfume.Backend.dto.response.ShippingResponse;
 import com.Hyperfume.Backend.service.ShippingMethodService;
+import com.Hyperfume.Backend.service.impl.ShippingMethodServiceImpl;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/shipping_method")
+@RequestMapping("/shipping_methods")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j

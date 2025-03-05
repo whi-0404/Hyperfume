@@ -4,6 +4,7 @@ import com.Hyperfume.Backend.dto.request.PaymentMethodRequest;
 import com.Hyperfume.Backend.dto.response.ApiResponse;
 import com.Hyperfume.Backend.dto.response.PaymentMethodResponse;
 import com.Hyperfume.Backend.service.PaymentMethodService;
+import com.Hyperfume.Backend.service.impl.PaymentMethodServiceImpl;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

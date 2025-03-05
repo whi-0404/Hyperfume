@@ -23,9 +23,6 @@ public class PerfumeVariantMapperImpl implements PerfumeVariantMapper {
             perfumeVariant.perfume(this.perfumeVariantRequestToPerfume(request));
             perfumeVariant.name(request.getName());
             perfumeVariant.price(request.getPrice());
-            if (request.getDiscount() != null) {
-                perfumeVariant.discount(request.getDiscount());
-            }
 
             perfumeVariant.perfume_stock_quantity(request.getPerfume_stock_quantity());
             return perfumeVariant.build();
@@ -42,7 +39,6 @@ public class PerfumeVariantMapperImpl implements PerfumeVariantMapper {
             perfumeVariantResponse.id(variant.getId());
             perfumeVariantResponse.name(variant.getName());
             perfumeVariantResponse.price(variant.getPrice());
-            perfumeVariantResponse.discount(variant.getDiscount());
             perfumeVariantResponse.perfume_stock_quantity(variant.getPerfume_stock_quantity());
             perfumeVariantResponse.discountedPrice(perfumeVariantUtil.calculateDiscountedPrice(variant));
             return perfumeVariantResponse.build();
@@ -58,10 +54,6 @@ public class PerfumeVariantMapperImpl implements PerfumeVariantMapper {
 
             if (request.getPrice() != null) {
                 variant.setPrice(request.getPrice());
-            }
-
-            if (request.getDiscount() != null) {
-                variant.setDiscount(request.getDiscount());
             }
 
             variant.setPerfume_stock_quantity(request.getPerfume_stock_quantity());

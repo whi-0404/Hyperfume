@@ -4,12 +4,12 @@ import com.Hyperfume.Backend.dto.request.CountryRequest;
 import com.Hyperfume.Backend.dto.response.ApiResponse;
 import com.Hyperfume.Backend.dto.response.CountryResponse;
 import com.Hyperfume.Backend.service.CountryService;
+import com.Hyperfume.Backend.service.impl.CountryServiceImpl;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

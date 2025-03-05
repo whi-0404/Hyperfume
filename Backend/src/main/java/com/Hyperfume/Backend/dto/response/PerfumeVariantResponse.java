@@ -15,7 +15,6 @@ public class PerfumeVariantResponse {
     String name;
     int perfumeId;
     BigDecimal price;
-    double discount;
     BigDecimal discountedPrice;
     int perfume_stock_quantity;
 }

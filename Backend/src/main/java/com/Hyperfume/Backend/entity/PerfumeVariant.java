@@ -28,8 +28,5 @@ public class PerfumeVariant {
 
     BigDecimal price;
 
-    @Column(name = "discount", columnDefinition = "DOUBLE DEFAULT 0.0")
-    double discount;
-
     int perfume_stock_quantity;
 }

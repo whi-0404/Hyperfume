@@ -1,7 +1,7 @@
 package com.Hyperfume.Backend.configuration;
 
 import com.Hyperfume.Backend.dto.request.IntrospectRequest;
-import com.Hyperfume.Backend.service.AuthenticationService;
+import com.Hyperfume.Backend.service.impl.AuthenticationServiceImpl;
 import com.nimbusds.jose.JOSEException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +22,7 @@ public class CustomJwtDecoder implements JwtDecoder {
     private String signerKey;
 
     @Autowired
-    private AuthenticationService authenticationService;
+    private AuthenticationServiceImpl authenticationService;
 
     private NimbusJwtDecoder nimbusJwtDecoder = null;
 

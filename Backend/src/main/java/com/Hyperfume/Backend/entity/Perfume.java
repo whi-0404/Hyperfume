@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
@@ -57,6 +58,9 @@ public class Perfume {
     @Column(name = "is_flash_sale")
     boolean flash_sale;
     int sold;
+    @Column(name = "discount", columnDefinition = "DOUBLE DEFAULT 0.0")
+    double discount;
+
     @Column(name = "created_at", updatable = false)
     LocalDate createdAt;
     @Column(name = "updated_at")

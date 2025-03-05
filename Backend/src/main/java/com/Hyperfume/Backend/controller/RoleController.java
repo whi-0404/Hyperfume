@@ -4,6 +4,7 @@ import com.Hyperfume.Backend.dto.request.RoleRequest;
 import com.Hyperfume.Backend.dto.response.ApiResponse;
 import com.Hyperfume.Backend.dto.response.RoleResponse;
 import com.Hyperfume.Backend.service.RoleService;
+import com.Hyperfume.Backend.service.impl.RoleServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

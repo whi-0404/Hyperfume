@@ -24,7 +24,6 @@ public class PerfumeImage {
     @Column(name = "is_thumbnail",  nullable = false)
     boolean thumbnail;
 
-    @Lob
-    @Column(columnDefinition = "LONGBLOB")
-    byte[] image_data;
+    @Column(name ="image_url")
+    String imageUrl;
 }

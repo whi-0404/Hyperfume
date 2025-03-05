@@ -17,7 +17,7 @@ public class CartResponse {
 
     Integer perfumeVariant;
 
-    String imageData;
+    String imageUrl;
 
     String variantName;
 

@@ -20,10 +20,6 @@ public class PerfumeVariantRequest {
     @DecimalMin(value = "0.0", inclusive = true, message = "PRICE_INVALID")
     BigDecimal price;
 
-    @DecimalMin(value = "0.0", inclusive = true, message = "DISCOUNT_INVALID")
-    @DecimalMax(value = "100.0", inclusive = true, message = "DISCOUNT_INVALID")
-    Double discount;
-
     @Min(value = 0, message = "STOCK_INVALID")
     int perfume_stock_quantity;
 }

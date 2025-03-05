@@ -6,6 +6,7 @@ import com.Hyperfume.Backend.dto.response.ApiResponse;
 import com.Hyperfume.Backend.dto.response.PerfumeResponse;
 import com.Hyperfume.Backend.dto.response.UserResponse;
 import com.Hyperfume.Backend.service.UserService;
+import com.Hyperfume.Backend.service.impl.UserServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

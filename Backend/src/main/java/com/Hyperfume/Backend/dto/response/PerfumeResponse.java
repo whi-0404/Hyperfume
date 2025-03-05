@@ -41,6 +41,8 @@ public class PerfumeResponse {
     boolean flash_sale;
     int sold;
 
+    double discount;
+
     LocalDate createdAt;
     LocalDate updatedAt;
 

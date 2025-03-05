@@ -21,10 +21,9 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity   //Phân quyền cho method
+@EnableMethodSecurity
 public class SecurityConfig {
 
-    // Các endpoints mà ai cũng có thể truy cập được
     private final String[] PUBLIC_ENDPOINTS = {
             "/users/**",
             "/auth/token", "/auth/introspect", "/auth/logout", "/perfumes/**", "/brands/**"
@@ -34,8 +33,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(PUBLIC_ENDPOINTS).permitAll() // Các endpoint public
-                        .anyRequest().authenticated() // Các endpoint khác yêu cầu xác thực
+                        .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                        .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwtConfigurer -> jwtConfigurer
@@ -43,8 +42,8 @@ public class SecurityConfig {
                                 .jwtAuthenticationConverter(jwtAuthenticationConverter())
                         )
                 )
-                .csrf(AbstractHttpConfigurer::disable) // Tắt CSRF nếu không cần thiết
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())); // Cấu hình CORS
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
         return httpSecurity.build();
     }
@@ -52,13 +51,13 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000")); // Cho phép frontend truy cập
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE")); // Các phương thức HTTP được phép
-        configuration.setAllowedHeaders(List.of("*")); // Cho phép tất cả các header
-        configuration.setAllowCredentials(true); // Cho phép gửi cookie hoặc thông tin xác thực
+        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration); // Áp dụng cho tất cả các endpoint
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
@@ -80,7 +79,7 @@ public class SecurityConfig {
 
     @Bean
     public CustomJwtDecoder customJwtDecoder() {
-        return new CustomJwtDecoder(); // Thay thế bằng logic của bạn
+        return new CustomJwtDecoder();
     }
 }
 

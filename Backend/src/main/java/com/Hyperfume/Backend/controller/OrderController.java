@@ -1,12 +1,10 @@
 package com.Hyperfume.Backend.controller;
 
 import com.Hyperfume.Backend.dto.request.CreateOrderRequest;
-import com.Hyperfume.Backend.dto.request.OrderItemRequest;
-import com.Hyperfume.Backend.dto.request.OrderRequest;
 import com.Hyperfume.Backend.dto.response.ApiResponse;
 import com.Hyperfume.Backend.dto.response.OrderResponse;
 import com.Hyperfume.Backend.service.OrderService;
-import jakarta.validation.Valid;
+import com.Hyperfume.Backend.service.impl.OrderServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -14,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/orders")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j

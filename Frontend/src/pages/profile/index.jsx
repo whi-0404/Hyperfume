@@ -8,26 +8,21 @@ import { getToken } from "../../services/authToken"
 const Profile = () => {
   const Token = getToken(); // Lấy Token
   const [user, setUser] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
   useEffect(() => {
     if (!Token) {
-      setLoading(false); // Dừng trạng thái loading
       return;
     }
 
     UserInfo(Token)
       .then((response) => {
-        setUser(response.data);
-        setLoading(false); // Kết thúc loading
+        setUser(response);
       })
       .catch((error) => {
         console.error(error);
-        setError('Failed to fetch products'); // Lưu lỗi vào state
-        setLoading(false);
       });
   }, [Token]);
+
+  console.log(user)
 
   if (!Token) {
     return (
@@ -57,15 +52,15 @@ const Profile = () => {
               <ul className="detail-profile">
                 <li className="item">
                   <label className="item-label">Họ và tên</label>
-                  <p className="item-value">Lê Huy</p>
+                  <p className="item-value">{user.result.fullname}</p>
                 </li>
                 <li className="item">
                   <label className="item-label">Số điện thoại</label>
-                  <p className="item-value">0123456789</p>
+                  <p className="item-value">{user.result.phone}</p>
                 </li>
                 <li className="item">
                   <label className="item-label">Email</label>
-                  <p className="item-value">ledanghoanghuy@gmail.com</p>
+                  <p className="item-value">{user.result.email}</p>
                 </li>
                 <li className="item">
                   <label className="item-label">Ngày sinh</label>

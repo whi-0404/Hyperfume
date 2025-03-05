@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 public class PerfumeVariantUtil {
     public BigDecimal calculateDiscountedPrice(PerfumeVariant variant) {
         BigDecimal price = variant.getPrice();
-        BigDecimal discount = BigDecimal.valueOf(variant.getDiscount());
+        BigDecimal discount = BigDecimal.valueOf(variant.getPerfume().getDiscount());
         BigDecimal discountAmount = discount.divide(BigDecimal.valueOf(100)).multiply(price);
         return price.subtract(discountAmount);
     }

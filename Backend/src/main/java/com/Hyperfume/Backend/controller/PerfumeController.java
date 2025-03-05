@@ -2,16 +2,17 @@ package com.Hyperfume.Backend.controller;
 
 import com.Hyperfume.Backend.dto.request.PerfumeRequest;
 import com.Hyperfume.Backend.dto.response.ApiResponse;
+import com.Hyperfume.Backend.dto.response.PageResponse;
 import com.Hyperfume.Backend.dto.response.PerfumeGetAllResponse;
 import com.Hyperfume.Backend.dto.response.PerfumeResponse;
 import com.Hyperfume.Backend.service.PerfumeService;
+import com.Hyperfume.Backend.service.impl.PerfumeServiceImpl;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,32 +25,76 @@ import java.util.List;
 public class PerfumeController {
 
     PerfumeService perfumeService;
-    @GetMapping("/collections/type/{typeName}")
-    public ApiResponse<List<PerfumeGetAllResponse>> getTypePerfume(@PathVariable String typeName){
-        return  ApiResponse.<List<PerfumeGetAllResponse>>builder()
-                .result(perfumeService.getTypePerfume(typeName))
+
+    @GetMapping("/byTypeName/{typeName}")
+    public ApiResponse<PageResponse<PerfumeGetAllResponse>> getPerfumesByTypeName(
+            @PathVariable String typeName,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size){
+        return  ApiResponse.<PageResponse<PerfumeGetAllResponse>>builder()
+                .result(perfumeService.getPerfumesByTypeName(typeName, page, size))
                 .build();
     }
 
-    @GetMapping("/collections")
-    public ApiResponse<List<PerfumeGetAllResponse>> getGenderPerfume(@RequestParam("gender") String gender){
-        return  ApiResponse.<List<PerfumeGetAllResponse>>builder()
-                .result(perfumeService.getGenderPerfume(gender))
+    @GetMapping("/byGender")
+    public ApiResponse<PageResponse<PerfumeGetAllResponse>> getPerfumesByGender(
+            @RequestParam("gender") String gender,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size){
+        return  ApiResponse.<PageResponse<PerfumeGetAllResponse>>builder()
+                .result(perfumeService.getPerfumesByGender(gender, page, size))
                 .build();
     }
+
+    @GetMapping("/byBrand/{brandId}")
+    public ApiResponse<PageResponse<PerfumeGetAllResponse>> getPerfumesByBrand(
+            @PathVariable int brandId,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size){
+        return  ApiResponse.<PageResponse<PerfumeGetAllResponse>>builder()
+                .result(perfumeService.getPerfumesByBrand(brandId, page, size))
+                .build();
+    }
+
+    @GetMapping("/byCountry/{countryId}")
+    public ApiResponse<PageResponse<PerfumeGetAllResponse>> getPerfumesByCountry(
+            @PathVariable int countryId,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size){
+        return  ApiResponse.<PageResponse<PerfumeGetAllResponse>>builder()
+                .result(perfumeService.getPerfumesByCountry(countryId, page, size))
+                .build();
+    }
+
+    @GetMapping("/byScrentFamily/{screntId}")
+    public ApiResponse<PageResponse<PerfumeGetAllResponse>> getPerfumesByScrentFamily(
+            @PathVariable int ScrentId,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size){
+        return  ApiResponse.<PageResponse<PerfumeGetAllResponse>>builder()
+                .result(perfumeService.getPerfumesByScrentFamily(ScrentId, page, size))
+                .build();
+    }
+
+
 
     @GetMapping("/search")
-    public ApiResponse<List<PerfumeGetAllResponse>> searchPerfumes(@RequestParam("name") String name){
-        return  ApiResponse.<List<PerfumeGetAllResponse>>builder()
-                .result(perfumeService.searchPerfumesByName(name))
+    public ApiResponse<PageResponse<PerfumeGetAllResponse>> searchPerfumes(
+            @RequestParam("name") String name,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size){
+        return  ApiResponse.<PageResponse<PerfumeGetAllResponse>>builder()
+                .result(perfumeService.searchPerfumesByName(name, page, size))
                 .build();
     }
 
     // Lấy danh sách nước hoa
     @GetMapping
-    public ApiResponse<List<PerfumeGetAllResponse>> getAllPerfumes() {
-        return ApiResponse.<List<PerfumeGetAllResponse>>builder()
-                .result(perfumeService.getAllPerfumes())
+    public ApiResponse<PageResponse<PerfumeGetAllResponse>> getAllPerfumes(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
+        return ApiResponse.<PageResponse<PerfumeGetAllResponse>>builder()
+                .result(perfumeService.getAllPerfumes(page, size))
                 .build();
     }
 
@@ -96,9 +141,11 @@ public class PerfumeController {
     }
 
     @GetMapping("/flash-sale")
-    public ApiResponse<List<PerfumeGetAllResponse>> getFlashSalePerfumes(){
-        return ApiResponse.<List<PerfumeGetAllResponse>>builder()
-                .result(perfumeService.getFlashSalePerfumes())
+    public ApiResponse<PageResponse<PerfumeGetAllResponse>> getFlashSalePerfumes(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size){
+        return ApiResponse.<PageResponse<PerfumeGetAllResponse>>builder()
+                .result(perfumeService.getFlashSalePerfumes(page, size))
                 .build();
     }
 }

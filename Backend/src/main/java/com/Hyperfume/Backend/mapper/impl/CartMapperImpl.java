@@ -7,7 +7,6 @@ import com.Hyperfume.Backend.exception.AppException;
 import com.Hyperfume.Backend.exception.ErrorCode;
 import com.Hyperfume.Backend.mapper.CartMapper;
 import com.Hyperfume.Backend.mapper.impl.utils.CartUtil;
-import com.Hyperfume.Backend.mapper.impl.utils.PerfumeImageUtil;
 import com.Hyperfume.Backend.repository.PerfumeImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,7 +17,6 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class CartMapperImpl implements CartMapper {
     private final CartUtil cartUtil;
-    private final PerfumeImageUtil perfumeImageUtil;
     private final PerfumeImageRepository perfumeImageRepository;
 
     @Override
@@ -47,7 +45,7 @@ public class CartMapperImpl implements CartMapper {
             cartResponse.discount(this.cartPerfumeVariantDiscount(cart));
             cartResponse.quantity(cart.getQuantity());
             cartResponse.totalPrice(cartUtil.calculateTotalPrice(cart));
-            cartResponse.imageData(this.CartImageData(cart));
+            cartResponse.imageUrl(this.CartImageData(cart));
             cartResponse.perfumeName(this.cartPerfumeName(cart));
             return cartResponse.build();
         }
@@ -130,7 +128,7 @@ public class CartMapperImpl implements CartMapper {
             if (perfumeVariant == null) {
                 return 0.0;
             } else {
-                double discount = perfumeVariant.getDiscount();
+                double discount = perfumeVariant.getPerfume().getDiscount();
                 return discount;
             }
         }
@@ -151,7 +149,7 @@ public class CartMapperImpl implements CartMapper {
                     PerfumeImage perfumeImage = perfumeImageRepository.findByPerfumeIdAndIsThumbnailTrue(perfume.getId())
                             .orElseThrow(() -> new AppException(ErrorCode.IMAGE_NOT_FOUND));
 
-                    return perfumeImageUtil.encodeImageData(perfumeImage.getImage_data());
+                    return perfumeImage.getImageUrl();
                 }
             }
         }

@@ -12,5 +12,5 @@ public class PerfumeImageResponse {
     int id;
     boolean thumbnail;
     int perfumeId;
-    String imageData;
+    String imageUrl;
 }

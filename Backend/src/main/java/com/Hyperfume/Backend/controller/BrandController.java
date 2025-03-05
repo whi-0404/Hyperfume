@@ -1,12 +1,10 @@
 package com.Hyperfume.Backend.controller;
 
 import com.Hyperfume.Backend.dto.request.BrandRequest;
-import com.Hyperfume.Backend.dto.request.UserCreationRequest;
-import com.Hyperfume.Backend.dto.request.UserUpdateRequest;
 import com.Hyperfume.Backend.dto.response.ApiResponse;
 import com.Hyperfume.Backend.dto.response.BrandResponse;
-import com.Hyperfume.Backend.dto.response.UserResponse;
 import com.Hyperfume.Backend.service.BrandService;
+import com.Hyperfume.Backend.service.impl.BrandServiceImpl;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

@@ -1,12 +1,10 @@
 package com.Hyperfume.Backend.controller;
 
-import com.Hyperfume.Backend.dto.request.PaymentMethodRequest;
 import com.Hyperfume.Backend.dto.request.ShippingAddressRequest;
 import com.Hyperfume.Backend.dto.response.ApiResponse;
-import com.Hyperfume.Backend.dto.response.PaymentMethodResponse;
 import com.Hyperfume.Backend.dto.response.ShippingAddressResponse;
-import com.Hyperfume.Backend.service.PaymentMethodService;
 import com.Hyperfume.Backend.service.ShippingAddressService;
+import com.Hyperfume.Backend.service.impl.ShippingAddressServiceImpl;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

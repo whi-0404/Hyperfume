@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Entity
 @Data
 @Builder
@@ -18,4 +20,8 @@ public class Brand {
     int id;
     @Column(name = "brand_name", nullable = false, unique = true)
     String name;
+
+    @OneToMany
+    @JoinColumn(name = "brand_id")
+    List<Perfume> perfumes;
 }

@@ -4,6 +4,7 @@ import com.Hyperfume.Backend.dto.request.PerfumeVariantRequest;
 import com.Hyperfume.Backend.dto.response.ApiResponse;
 import com.Hyperfume.Backend.dto.response.PerfumeVariantResponse;
 import com.Hyperfume.Backend.service.PerfumeVariantService;
+import com.Hyperfume.Backend.service.impl.PerfumeVariantServiceImpl;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +33,7 @@ public class PerfumeVariantController {
 
     // 2. Thêm một phiên bản mới
     @PostMapping
-    public ApiResponse<PerfumeVariantResponse> addVariant(@PathVariable Integer perfumeId,
-                                                          @RequestBody @Valid PerfumeVariantRequest request) {
-        request.setPerfumeId(perfumeId);
+    public ApiResponse<PerfumeVariantResponse> addVariant(@RequestBody @Valid PerfumeVariantRequest request) {
         return ApiResponse.<PerfumeVariantResponse>builder()
                 .result(perfumeVariantService.addVariant(request))
                 .build();
@@ -42,10 +41,8 @@ public class PerfumeVariantController {
 
     // 3. Cập nhật thông tin một phiên bản
     @PutMapping("/{variantId}")
-    public ApiResponse<PerfumeVariantResponse> updateVariant(@PathVariable Integer perfumeId,
-                                                             @PathVariable Integer variantId,
+    public ApiResponse<PerfumeVariantResponse> updateVariant(@PathVariable Integer variantId,
                                                              @RequestBody @Valid PerfumeVariantRequest request) {
-        request.setPerfumeId(perfumeId);
         return ApiResponse.<PerfumeVariantResponse>builder()
                 .result(perfumeVariantService.updateVariant(variantId, request))
                 .build();

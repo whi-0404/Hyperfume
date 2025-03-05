@@ -16,4 +16,5 @@ public interface PerfumeImageRepository extends JpaRepository<PerfumeImage, Inte
     @Query("SELECT p FROM PerfumeImage p WHERE p.perfume.id = :perfumeId AND p.thumbnail = true")
     Optional<PerfumeImage> findByPerfumeIdAndIsThumbnailTrue(@Param("perfumeId") Integer perfumeId);
 
+    boolean existsByPerfumeIdAndThumbnailTrue(Integer perfumeId);
 }
