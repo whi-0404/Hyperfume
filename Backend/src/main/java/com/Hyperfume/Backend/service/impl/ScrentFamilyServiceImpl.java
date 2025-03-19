@@ -41,7 +41,6 @@ public class ScrentFamilyServiceImpl implements ScrentFamilyService {
         return screntFamilyMapper.toScrentFamilyResponse(screntFamilyRepository.save(screntFamily));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     public List<ScrentFamilyResponse> getScrentFamilies()
     {
 

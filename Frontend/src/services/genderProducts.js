@@ -1,10 +1,10 @@
 import api from './axiosConfig';
 
-export const maleProducts = async () => {
+export const genderProducts = async (gender) => {
     try {
-        const response = await api.get('/perfumes/collections',
+        const response = await api.get('/perfumes/byGender',
             {
-                params: { gender: 'Nam' },
+                params: { gender: gender },
             });
         return response; // Trả về dữ liệu từ response
     } catch (error) {

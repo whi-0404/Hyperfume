@@ -40,7 +40,7 @@ public class PerfumeImageServiceImpl implements PerfumeImageService {
     private static final long MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 5MB
     private static final int MAX_NORMAL_IMAGE_COUNT = 5;
 
-    private static final String uploadDir = "E:\\Final_Hyperfume\\Hyperfume\\FileData\\images";
+    private static final String UP_LOAD_DIR = "E:\\Final_Hyperfume\\Hyperfume\\Frontend\\src\\assets\\productImages\\images";
 
     @PreAuthorize("hasRole('ADMIN')")
     public PerfumeImageResponse addImageThumbnail(PerfumeImageRequest request) {
@@ -156,7 +156,7 @@ public class PerfumeImageServiceImpl implements PerfumeImageService {
                     : ".jpg";
             String uniqueFileName = UUID.randomUUID().toString() + fileExtension;
 
-            Path filePath = Paths.get(uploadDir, uniqueFileName);
+            Path filePath = Paths.get(UP_LOAD_DIR, uniqueFileName);
 
             imageFile.transferTo(filePath.toFile());
 

@@ -4,10 +4,7 @@ import com.Hyperfume.Backend.dto.request.PerfumeRequest;
 import com.Hyperfume.Backend.dto.response.PageResponse;
 import com.Hyperfume.Backend.dto.response.PerfumeGetAllResponse;
 import com.Hyperfume.Backend.dto.response.PerfumeResponse;
-import com.Hyperfume.Backend.entity.Brand;
-import com.Hyperfume.Backend.entity.Country;
-import com.Hyperfume.Backend.entity.Perfume;
-import com.Hyperfume.Backend.entity.ScrentFamily;
+import com.Hyperfume.Backend.entity.*;
 import com.Hyperfume.Backend.exception.AppException;
 import com.Hyperfume.Backend.exception.ErrorCode;
 import com.Hyperfume.Backend.mapper.PerfumeMapper;
@@ -15,6 +12,7 @@ import com.Hyperfume.Backend.repository.BrandRepository;
 import com.Hyperfume.Backend.repository.CountryRepository;
 import com.Hyperfume.Backend.repository.PerfumeRepository;
 import com.Hyperfume.Backend.repository.ScrentFamilyRepository;
+import com.Hyperfume.Backend.repository.specification.PerfumeSpecification;
 import com.Hyperfume.Backend.service.PerfumeService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,11 +44,16 @@ public class PerfumeServiceImpl implements PerfumeService {
     PerfumeMapper perfumeMapper;
 
     // Lấy danh sách nước hoa
-    public PageResponse<PerfumeGetAllResponse> getAllPerfumes(int page, int size) {
-        Pageable pageable = PageRequest.of(page - 1, size,
-                Sort.by("createdAt").descending());
+    public PageResponse<PerfumeGetAllResponse> getAllPerfumes(int page, int size, String sortOption, String gender ,String longevity,
+                                                              Integer brandId, String concentration, Integer screntFamilyId,
+                                                              Long maxPrice) {
 
-        Page<Perfume> pageData = perfumeRepository.findAll(pageable);
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        Specification<Perfume> spec = PerfumeSpecification.getSpecifications(
+                gender, longevity, brandId, concentration, screntFamilyId, maxPrice, sortOption);
+
+        Page<Perfume> pageData = perfumeRepository.findAll(spec, pageable);
 
         return PageResponse.<PerfumeGetAllResponse>builder()
                 .pageSize(pageData.getSize())

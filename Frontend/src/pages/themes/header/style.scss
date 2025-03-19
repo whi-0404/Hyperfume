@@ -248,6 +248,8 @@ nav li i {
     padding: 0;
     margin: 0;
     list-style-type: none;
+    min-width: 180px; /* Thêm chiều rộng tối thiểu cho dropdown */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Thêm bóng đổ nhẹ */
 }
 
 nav li:hover .dropdown {
@@ -258,6 +260,7 @@ nav li:hover .dropdown {
 .dropdown li {
     margin: 0;
     /* Xóa margin cho các mục trong menu sổ xuống */
+    width: 100%; 
 }
 
 .dropdown li a {
@@ -265,10 +268,24 @@ nav li:hover .dropdown {
     /* Padding cho các mục trong menu sổ xuống */
     color: #3E2723;
     /* Màu chữ cho các mục trong menu sổ xuống */
+    display: block; /* Đảm bảo link chiếm toàn bộ không gian */
+    text-align: left; /* Căn chỉnh văn bản sang trái */
 }
 
 .dropdown li a:hover {
     background-color: #E7AE77;
     /* Thay đổi màu nền khi hover trong menu sổ xuống */
     transition: 0.4s;
+}
+
+/* Thêm vào CSS cho dropdown-toggle */
+.dropdown-toggle {
+    display: block;
+    color: #3E2723;
+    text-align: center;
+    font-size: 24px;
+    font-weight: regular;
+    padding: 14px 14px;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
 }

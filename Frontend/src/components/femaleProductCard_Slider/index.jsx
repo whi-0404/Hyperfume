@@ -28,41 +28,34 @@ const productData = [
         price1: 350000,
         price2: 3100000
     },
-    {
-        img: require("../../assets/productImages/creed/green-irish-tweed.png"),
-        name: "Angel's Share",
-        brandName: "By Kilian",
-        price1: 900000,
-        price2: 4100000,
-    },
-    {
-        img: require("../../assets/productImages/creed/green-irish-tweed.png"),
-        name: "Replica Sailing Day",
-        brandName: "Maison Margiela",
-        price1: 350000,
-        price2: 2700000,
-    },
-    {
-        img: require("../../assets/productImages/creed/green-irish-tweed.png"),
-        name: "Replica ",
-        brandName: "Maison Margiela",
-        price1: 350000,
-        price2: 2700000,
-    },
-    {
-        img: require("../../assets/productImages/creed/green-irish-tweed.png"),
-        name: "Apple Brandy On the Rock",
-        brandName: "By Kilian",
-        price1: 900000,
-        price2: 4100000,
-    },
-    {
-        img: require("../../assets/productImages/creed/green-irish-tweed.png"),
-        name: "Apple Brandy On the Rock",
-        brandName: "By Kilian",
-        price1: 900000,
-        price2: 4100000,
-    },
+    // {
+    //     img: require("../../assets/productImages/creed/green-irish-tweed.png"),
+    //     name: "Angel's Share",
+    //     brandName: "By Kilian",
+    //     price1: 900000,
+    //     price2: 4100000,
+    // },
+    // {
+    //     img: require("../../assets/productImages/creed/green-irish-tweed.png"),
+    //     name: "Replica Sailing Day",
+    //     brandName: "Maison Margiela",
+    //     price1: 350000,
+    //     price2: 2700000,
+    // },
+    // {
+    //     img: require("../../assets/productImages/creed/green-irish-tweed.png"),
+    //     name: "Replica ",
+    //     brandName: "Maison Margiela",
+    //     price1: 350000,
+    //     price2: 2700000,
+    // },
+    // {
+    //     img: require("../../assets/productImages/creed/green-irish-tweed.png"),
+    //     name: "Apple Brandy On the Rock",
+    //     brandName: "By Kilian",
+    //     price1: 900000,
+    //     price2: 4100000,
+    // },
     {
         img: require("../../assets/productImages/creed/green-irish-tweed.png"),
         name: "Apple Brandy On the Rock",
@@ -70,6 +63,13 @@ const productData = [
         price1: 900000,
         price2: 4100000,
     },
+    // {
+    //     img: require("../../assets/productImages/creed/green-irish-tweed.png"),
+    //     name: "Apple Brandy On the Rock",
+    //     brandName: "By Kilian",
+    //     price1: 900000,
+    //     price2: 4100000,
+    // },
 ];
 
 const CardSlider = () => {

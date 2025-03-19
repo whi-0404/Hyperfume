@@ -30,7 +30,7 @@ public class PerfumeController {
     public ApiResponse<PageResponse<PerfumeGetAllResponse>> getPerfumesByTypeName(
             @PathVariable String typeName,
             @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size){
+            @RequestParam(value = "size", defaultValue = "15") int size){
         return  ApiResponse.<PageResponse<PerfumeGetAllResponse>>builder()
                 .result(perfumeService.getPerfumesByTypeName(typeName, page, size))
                 .build();
@@ -40,7 +40,7 @@ public class PerfumeController {
     public ApiResponse<PageResponse<PerfumeGetAllResponse>> getPerfumesByGender(
             @RequestParam("gender") String gender,
             @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size){
+            @RequestParam(value = "size", defaultValue = "15") int size){
         return  ApiResponse.<PageResponse<PerfumeGetAllResponse>>builder()
                 .result(perfumeService.getPerfumesByGender(gender, page, size))
                 .build();
@@ -50,7 +50,7 @@ public class PerfumeController {
     public ApiResponse<PageResponse<PerfumeGetAllResponse>> getPerfumesByBrand(
             @PathVariable int brandId,
             @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size){
+            @RequestParam(value = "size", defaultValue = "15") int size){
         return  ApiResponse.<PageResponse<PerfumeGetAllResponse>>builder()
                 .result(perfumeService.getPerfumesByBrand(brandId, page, size))
                 .build();
@@ -60,7 +60,7 @@ public class PerfumeController {
     public ApiResponse<PageResponse<PerfumeGetAllResponse>> getPerfumesByCountry(
             @PathVariable int countryId,
             @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size){
+            @RequestParam(value = "size", defaultValue = "15") int size){
         return  ApiResponse.<PageResponse<PerfumeGetAllResponse>>builder()
                 .result(perfumeService.getPerfumesByCountry(countryId, page, size))
                 .build();
@@ -70,7 +70,7 @@ public class PerfumeController {
     public ApiResponse<PageResponse<PerfumeGetAllResponse>> getPerfumesByScrentFamily(
             @PathVariable int ScrentId,
             @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size){
+            @RequestParam(value = "size", defaultValue = "15") int size){
         return  ApiResponse.<PageResponse<PerfumeGetAllResponse>>builder()
                 .result(perfumeService.getPerfumesByScrentFamily(ScrentId, page, size))
                 .build();
@@ -82,7 +82,7 @@ public class PerfumeController {
     public ApiResponse<PageResponse<PerfumeGetAllResponse>> searchPerfumes(
             @RequestParam("name") String name,
             @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size){
+            @RequestParam(value = "size", defaultValue = "15") int size){
         return  ApiResponse.<PageResponse<PerfumeGetAllResponse>>builder()
                 .result(perfumeService.searchPerfumesByName(name, page, size))
                 .build();
@@ -92,9 +92,17 @@ public class PerfumeController {
     @GetMapping
     public ApiResponse<PageResponse<PerfumeGetAllResponse>> getAllPerfumes(
             @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size) {
+            @RequestParam(value = "size", defaultValue = "15") int size,
+            @RequestParam(value = "gender", required = false) String gender,
+            @RequestParam(value = "sort", defaultValue = "latest") String sortOption,
+            @RequestParam(value = "longevity", required = false) String longevity,
+            @RequestParam(value = "brandId", required = false) Integer brandId,
+            @RequestParam(value = "concentration", required = false) String concentration,
+            @RequestParam(value = "screntFamilyId", required = false) Integer screntFamilyId,
+            @RequestParam(value = "maxPrice", required = false) Long maxPrice) {
         return ApiResponse.<PageResponse<PerfumeGetAllResponse>>builder()
-                .result(perfumeService.getAllPerfumes(page, size))
+                .result(perfumeService.getAllPerfumes(page, size, sortOption, gender, longevity, brandId,
+                        concentration, screntFamilyId, maxPrice))
                 .build();
     }
 
@@ -143,7 +151,7 @@ public class PerfumeController {
     @GetMapping("/flash-sale")
     public ApiResponse<PageResponse<PerfumeGetAllResponse>> getFlashSalePerfumes(
             @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size){
+            @RequestParam(value = "size", defaultValue = "15") int size){
         return ApiResponse.<PageResponse<PerfumeGetAllResponse>>builder()
                 .result(perfumeService.getFlashSalePerfumes(page, size))
                 .build();

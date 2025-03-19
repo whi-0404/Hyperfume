@@ -10,9 +10,7 @@ import ForgotPass from "./pages/forgotPass";
 import ResetPass from "./pages/resetPass";
 import ProductDetail from "./pages/productDetail";
 import Nuochoa from "./pages/nuochoa";
-import NuochoaNam from "./pages/nuochoaNam";
-import NuochoaNu from "./pages/nuochoaNu";
-import NuochoaUnisex from "./pages/nuochoaUnisex";
+import NuocHoaGender from "./pages/nuocHoaByGender";
 import FlashSale from "./pages/flash_Sale";
 import ThanhToan from "./pages/thanhToan";
 import ProductConsult from "./pages/productConsult";
@@ -33,15 +31,15 @@ const renderUserRouter = () => {
         },
         {
             path: ROUTERS.USER.NUOCHOANAM,
-            component: <NuochoaNam />
+            component: <NuocHoaGender />
         },
         {
             path: ROUTERS.USER.NUOCHOANU,
-            component: <NuochoaNu />
+            component: <NuocHoaGender />
         },
         {
             path: ROUTERS.USER.NUOCHOAUNISEX,
-            component: <NuochoaUnisex />
+            component: <NuocHoaGender />
         },
         {
             path: ROUTERS.USER.FLASHSALE,

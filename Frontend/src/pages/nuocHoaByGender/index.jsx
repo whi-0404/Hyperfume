@@ -1,4 +1,5 @@
 import { memo, useState, useEffect, Fragment } from "react";
+import { useLocation } from 'react-router-dom';
 import './style.scss';
 import { listProducts } from "../../services/AllProduct";
 import ProductCard from "../../components/productCard";
@@ -35,9 +36,13 @@ const ListNuocHoa = () => {
     const [error, setError] = useState(null);
     const [brandList, setBrandList] = useState([]);
     const [screntFamiliesList, setScrentList] = useState([]);
+    const location = useLocation();
+    const genderFromNav = location.state?.gender || "";
+    const [gender, setGender] = useState(genderFromNav);
 
     const [sortOption, setSortOption] = useState(initialParams.sort);
     const [filters, setFilters] = useState({
+        gender: gender,
         longevity: initialParams.longevity,
         brandId: initialParams.brandId,
         concentration: initialParams.concentration,
@@ -45,6 +50,13 @@ const ListNuocHoa = () => {
         maxPrice: initialParams.maxPrice
     });
     const [currentPage, setCurrentPage] = useState(getInitialPage());
+
+    useEffect(() => {
+        if (location.state?.gender) {
+            setGender(location.state.gender);
+            setFilters(prev => ({ ...prev, gender: location.state.gender }));
+        }
+    }, [location.state?.gender]);
 
     // Load brands from sessionStorage or fetch from API
     useEffect(() => {
@@ -169,7 +181,8 @@ const ListNuocHoa = () => {
             page: currentPage,
             sort: sortOption,
         };
-    
+        
+        if(filters.gender) queryParams.gender = filters.gender;
         if (filters.longevity) queryParams.longevity = filters.longevity;
         if (filters.brandId) queryParams.brandId = filters.brandId;
         if (filters.concentration) queryParams.concentration = filters.concentration;
@@ -274,11 +287,11 @@ const ListNuocHoa = () => {
                 <span className="arrow"> &gt; </span>
                 <a href="/nuoc-hoa" className="breadcrumb-link">Sản phẩm</a>
                 <span className="arrow"> &gt; </span>
-                <span className="current">Nước hoa</span>
+                <span className="current">Nước hoa {gender}</span>
                 <hr className="divider" />
             </div>
 
-            <h1 className="product-title">Nước hoa</h1>
+            <h1 className="product-title">Nước hoa {gender}</h1>
 
             <div className="filter-section">
                 <div className="filter-group">

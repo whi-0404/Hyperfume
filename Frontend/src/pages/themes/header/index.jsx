@@ -8,9 +8,33 @@ import { BsCart2 } from "react-icons/bs";
 import { RiArrowDownWideFill } from "react-icons/ri";
 import { NavLink, useNavigate } from "react-router-dom";
 import { searchProducts } from "../../../services/handleSearchPerfume";
+import { brands } from "../../../services/getBrand";
+import { countries } from "../../../services/getCountry";
 
 const Header = () => {
   const navigate = useNavigate();
+  const [brandList, setBrandList] = useState([]);
+  const [countryList, setCountryList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const loadBrands = async () => {
+      const brands = await fetchBrands();
+      setBrandList(brands);
+    };
+    
+    loadBrands();
+  }, []);
+
+  useEffect(() => {
+    const loadCountries = async () => {
+      const countries = await fetchCountries();
+      setCountryList(countries);
+    };
+    
+    loadCountries();
+  }, []);
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
@@ -27,6 +51,70 @@ const Header = () => {
       navigate("/search", { state: { products } });
     } catch (error) {
       console.error("Error while searching for products:", error);
+    }
+  };
+
+  const fetchBrands = async () => {
+    const cachedBrands = sessionStorage.getItem("brands");
+
+    if (cachedBrands) {
+        return JSON.parse(cachedBrands);
+    } else {
+        try {
+            setLoading(true); // Bắt đầu load dữ liệu
+            const response = await brands(); // Gọi API
+
+            if (response.data && response.data.code === 1000) {
+                const brandList = response.data.result;
+                
+                // Lưu vào sessionStorage
+                sessionStorage.setItem("brands", JSON.stringify(brandList));
+
+                setLoading(false); // Hoàn tất load dữ liệu
+                return brandList;
+            } else {
+                setError("Invalid response format");
+                setLoading(false);
+                return [];
+            }
+        } catch (error) {
+            console.error(error);
+            setError("Failed to fetch brands");
+            setLoading(false);
+            return [];
+        }
+    }
+  };
+
+  const fetchCountries = async () => {
+    const cachedCountries = sessionStorage.getItem("countries");
+
+    if (cachedCountries) {
+        return JSON.parse(cachedCountries);
+    } else {
+        try {
+            setLoading(true); // Bắt đầu load dữ liệu
+            const response = await countries(); // Gọi API
+
+            if (response.data && response.data.code === 1000) {
+                const countryList = response.data.result;
+                
+                // Lưu vào sessionStorage
+                sessionStorage.setItem("countries", JSON.stringify(countryList));
+
+                setLoading(false); // Hoàn tất load dữ liệu
+                return countryList;
+            } else {
+                setError("Invalid response format");
+                setLoading(false);
+                return [];
+            }
+        } catch (error) {
+            console.error(error);
+            setError("Failed to fetch countries");
+            setLoading(false);
+            return [];
+        }
     }
   };
 
@@ -101,22 +189,77 @@ const Header = () => {
                   <RiArrowDownWideFill />
                 </i>
               </NavLink>
-              <ul className="dropdown">
+              <ul className="dropdown"> 
                 <li>
-                  <NavLink to="/nuoc-hoa-nam" activeClassName="active">
+                  <NavLink to="/nuoc-hoa-nam" activeClassName="active" state={{ gender: "Nam" }}>
                     Nước hoa Nam
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/nuoc-hoa-nu" activeClassName="active">
+                  <NavLink to="/nuoc-hoa-nu" activeClassName="active" state={{ gender: "Nữ" }}> 
                     Nước hoa Nữ
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/nuoc-hoa-unisex" activeClassName="active">
+                  <NavLink to="/nuoc-hoa-unisex" activeClassName="active" state={{ gender: "Unisex" }}>
                     Nước hoa Unisex
                   </NavLink>
                 </li>
+              </ul>
+            </li>
+            <li>
+            <div className="dropdown-toggle">
+                Thương hiệu{" "}
+                <i className="fa-solid fa-angle-down">
+                  <RiArrowDownWideFill />
+                </i>
+              </div>
+              <ul className="dropdown">
+                {loading ? (
+                  <li>Đang tải...</li>
+                ) : error ? (
+                  <li>{error}</li>
+                ) : (
+                  brandList.map((brand, index) => (
+                    <li key={index}>
+                      <NavLink 
+                        to={`/brand/${brand.name}`} 
+                        activeClassName="active" 
+                        state={{ brand: brand.name }}
+                      >
+                        {brand.name}
+                      </NavLink>
+                    </li>
+                  ))
+                )}
+              </ul>
+            </li>
+            <li>
+              <div className="dropdown-toggle">
+                Xuất xứ{" "}
+                <i className="fa-solid fa-angle-down">
+                  <RiArrowDownWideFill />
+                </i>
+              </div>
+
+              <ul className="dropdown">
+                {loading ? (
+                  <li>Đang tải...</li>
+                ) : error ? (
+                  <li>{error}</li>
+                ) : (
+                  countryList.map((country, index) => (
+                    <li key={index}>
+                      <NavLink 
+                        to={`/country/${country.name}`} 
+                        activeClassName="active" 
+                        state={{ country: country.name }}
+                      >
+                        {country.name}
+                      </NavLink>
+                    </li>
+                  ))
+                )}
               </ul>
             </li>
             <li>

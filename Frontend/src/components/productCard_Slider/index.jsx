@@ -6,7 +6,7 @@ import "./style.scss";
 import "swiper/css";
 import "swiper/css/bundle";
 import ProductCard from "../productCard";
-import { listProducts } from "../../services/ProductService";
+import { listProducts } from "../../services/AllProduct";
 
 const CardSlider = () => {
   const [products, setProducts] = useState([]);
