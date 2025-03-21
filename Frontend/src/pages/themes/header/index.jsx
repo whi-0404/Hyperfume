@@ -222,13 +222,13 @@ const Header = () => {
                 ) : (
                   brandList.map((brand, index) => (
                     <li key={index}>
-                      <NavLink 
-                        to={`/brand/${brand.name}`} 
-                        activeClassName="active" 
-                        state={{ brand: brand.name }}
+                      <NavLink
+                      to={`/nuoc-hoa/thuong-hieu/${brand.name}`}
+                      activeClassName="active"
+                      state={{ brandId: brand.id, brandName: brand.name }}
                       >
-                        {brand.name}
-                      </NavLink>
+                      {brand.name}
+                    </NavLink>
                     </li>
                   ))
                 )}
@@ -251,9 +251,9 @@ const Header = () => {
                   countryList.map((country, index) => (
                     <li key={index}>
                       <NavLink 
-                        to={`/country/${country.name}`} 
+                        to={`/nuoc-hoa/xuat-xu/${country.name}`} 
                         activeClassName="active" 
-                        state={{ country: country.name }}
+                        state={{ countryId: country.id, countryName: country.name }}
                       >
                         {country.name}
                       </NavLink>

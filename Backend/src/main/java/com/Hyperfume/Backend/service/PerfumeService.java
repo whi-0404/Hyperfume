@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PerfumeService {
     PageResponse<PerfumeGetAllResponse> getAllPerfumes(int page, int size, String sortOption, String gender,
-                                                       String longevity, Integer brandId, String concentration,
+                                                       String longevity, Integer countryId, Integer brandId, String concentration,
                                                        Integer screntFamilyId, Long maxPrice);
     PerfumeResponse getPerfumeById(int id);
     PerfumeResponse createPerfume(PerfumeRequest request);

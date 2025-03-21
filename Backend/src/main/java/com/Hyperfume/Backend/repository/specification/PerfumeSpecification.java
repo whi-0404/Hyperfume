@@ -61,7 +61,8 @@ public class PerfumeSpecification {
         };
     }
 
-    public static Specification<Perfume> getSpecifications(String gender, String longevity, Integer brandId, String concentration,
+    public static Specification<Perfume> getSpecifications(String gender, String longevity,
+                                                           Integer countryId, Integer brandId, String concentration,
                                                            Integer screntFamilyId, Long maxPrice, String sortOption){
 
         return (root, query, cb) -> {
@@ -85,6 +86,10 @@ public class PerfumeSpecification {
 
             if (longevity != null) {
                 predicates.add(cb.equal(root.get("longevity"), longevity));
+            }
+
+            if(countryId != null){
+                predicates.add(cb.equal(root.get("country").get("id"), countryId));
             }
 
             if (brandId != null) {

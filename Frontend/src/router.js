@@ -11,6 +11,8 @@ import ResetPass from "./pages/resetPass";
 import ProductDetail from "./pages/productDetail";
 import Nuochoa from "./pages/nuochoa";
 import NuocHoaGender from "./pages/nuocHoaByGender";
+import NuocHoaBrand from "./pages/nuocHoaByBrand";
+import NuocHoaCountry from "./pages/nuocHoaByCountry";
 import FlashSale from "./pages/flash_Sale";
 import ThanhToan from "./pages/thanhToan";
 import ProductConsult from "./pages/productConsult";
@@ -40,6 +42,14 @@ const renderUserRouter = () => {
         {
             path: ROUTERS.USER.NUOCHOAUNISEX,
             component: <NuocHoaGender />
+        },
+        {
+            path: ROUTERS.USER.NUOCHOABRAND, 
+            component: <NuocHoaBrand />
+        },
+        {
+            path: ROUTERS.USER.NUOCHOACOUNTRY, 
+            component: <NuocHoaCountry />
         },
         {
             path: ROUTERS.USER.FLASHSALE,

@@ -45,13 +45,13 @@ public class PerfumeServiceImpl implements PerfumeService {
 
     // Lấy danh sách nước hoa
     public PageResponse<PerfumeGetAllResponse> getAllPerfumes(int page, int size, String sortOption, String gender ,String longevity,
-                                                              Integer brandId, String concentration, Integer screntFamilyId,
+                                                              Integer countryId, Integer brandId, String concentration, Integer screntFamilyId,
                                                               Long maxPrice) {
 
         Pageable pageable = PageRequest.of(page - 1, size);
 
         Specification<Perfume> spec = PerfumeSpecification.getSpecifications(
-                gender, longevity, brandId, concentration, screntFamilyId, maxPrice, sortOption);
+                gender, longevity, countryId, brandId, concentration, screntFamilyId, maxPrice, sortOption);
 
         Page<Perfume> pageData = perfumeRepository.findAll(spec, pageable);
 

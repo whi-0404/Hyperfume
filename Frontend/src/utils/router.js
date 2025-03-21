@@ -5,6 +5,8 @@ export const ROUTERS = {
         NUOCHOANAM: "nuoc-hoa-nam",
         NUOCHOANU: "nuoc-hoa-nu",
         NUOCHOAUNISEX: "nuoc-hoa-unisex",
+        NUOCHOABRAND: "nuoc-hoa/thuong-hieu/:brandName",
+        NUOCHOACOUNTRY: "nuoc-hoa/xuat-xu/:countryName",
         FLASHSALE: "flash-sale",
         THANHTOAN: "thanh-toan",
         SIGNIN: "Sign-In",

@@ -14,6 +14,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -46,15 +47,14 @@ public class PerfumeController {
                 .build();
     }
 
-    @GetMapping("/byBrand/{brandId}")
-    public ApiResponse<PageResponse<PerfumeGetAllResponse>> getPerfumesByBrand(
-            @PathVariable int brandId,
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "15") int size){
-        return  ApiResponse.<PageResponse<PerfumeGetAllResponse>>builder()
-                .result(perfumeService.getPerfumesByBrand(brandId, page, size))
-                .build();
-    }
+//    @GetMapping("/byBrand/{brandId}")
+//    public String redirectToPerfumesByBrand(
+//            @PathVariable int brandId,
+//            RedirectAttributes redirectAttributes){
+//
+//        redirectAttributes.addAttribute("brandId", brandId);
+//        return "redirect:/perfumes";
+//    }
 
     @GetMapping("/byCountry/{countryId}")
     public ApiResponse<PageResponse<PerfumeGetAllResponse>> getPerfumesByCountry(
@@ -96,12 +96,13 @@ public class PerfumeController {
             @RequestParam(value = "gender", required = false) String gender,
             @RequestParam(value = "sort", defaultValue = "latest") String sortOption,
             @RequestParam(value = "longevity", required = false) String longevity,
+            @RequestParam(value = "countryId", required = false) Integer countryId,
             @RequestParam(value = "brandId", required = false) Integer brandId,
             @RequestParam(value = "concentration", required = false) String concentration,
             @RequestParam(value = "screntFamilyId", required = false) Integer screntFamilyId,
             @RequestParam(value = "maxPrice", required = false) Long maxPrice) {
         return ApiResponse.<PageResponse<PerfumeGetAllResponse>>builder()
-                .result(perfumeService.getAllPerfumes(page, size, sortOption, gender, longevity, brandId,
+                .result(perfumeService.getAllPerfumes(page, size, sortOption, gender, longevity, countryId, brandId,
                         concentration, screntFamilyId, maxPrice))
                 .build();
     }
