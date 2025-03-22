@@ -5,6 +5,7 @@ import ProductActions from "../../components/productActions";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import "./style.scss";
 import getProductDetail from "../../services/getProductDetail";
+import getRates from "../../services/getRate"; // Added import for getRates API
 import handleBase64Decode from "../../components/covertBase64ToImg";
 
 const suggestProducts = [
@@ -43,39 +44,99 @@ const ProductDetail = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState(null);
   const [selectedPrice, setSelectedPrice] = useState(null);
-  const [mainImage, setMainImage] = useState(null); // Ảnh chính
-  const [selectedVariantId, setSelectedVariantId] = useState(null); // Theo dõi variant được chọn
+  const [mainImage, setMainImage] = useState(null);
+  const [selectedVariantId, setSelectedVariantId] = useState(null);
+  const [ratings, setRatings] = useState([]); // Added state for ratings
+  const [averageRating, setAverageRating] = useState(0); // Added state for average rating
+
+  // Function to determine if image is base64 or URL
+  const getImageSource = (imageUrl) => {
+    if (typeof imageUrl === 'string' && imageUrl.startsWith('data:image')) {
+      return imageUrl; // Base64 image
+    } else if (typeof imageUrl === 'string' && imageUrl.includes('/')) {
+      // Image is a URL path
+      try {
+        return require(`../../assets/productImages/${imageUrl}`);
+      } catch (e) {
+        // If the require fails, might be a full URL
+        return imageUrl;
+      }
+    } else {
+      // Directly decode if it's base64 without proper formatting
+      return handleBase64Decode(imageUrl);
+    }
+  };
 
   const handleVariantClick = (variantId, price) => {
     setSelectedPrice(price);
-    setSelectedVariantId(variantId); // Cập nhật ID variant được chọn
+    setSelectedVariantId(variantId);
   };
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  const handleThumbnailClick = (imageData) => {
-    setMainImage(imageData); // Cập nhật ảnh chính khi click vào thumbnail
+  const handleThumbnailClick = (imageUrl) => {
+    setMainImage(imageUrl);
+  };
+
+  // Calculate the average rating from ratings data
+  const calculateAverageRating = (ratingData) => {
+    if (!ratingData ) return 0;
+    const totalStars = ratingData.reduce((acc, rate) => acc + rate.rateStar, 0);
+    return totalStars / ratingData.length;
   };
 
   useEffect(() => {
+    // Fetch product details
     getProductDetail(id)
       .then((response) => {
         setProducts(response);
+        
+        // Initialize with first variant if available
+        if (response.result.perfumeVariantResponseList && 
+            response.result.perfumeVariantResponseList.length > 0) {
+          const firstVariant = response.result.perfumeVariantResponseList[0];
+          setSelectedVariantId(firstVariant.id);
+          setSelectedPrice(firstVariant.price);
+        }
+        
+        // Set main image
         const thumbnailImage = response.result.perfumeImageResponseList.find(
           (image) => image.thumbnail === true
         );
-        setMainImage(thumbnailImage?.imageData); // Đặt ảnh chính ban đầu
+        
+        if (thumbnailImage) {
+          setMainImage(thumbnailImage.imageUrl);
+        }
       })
       .catch((error) => {
-        console.error(error);
+        console.error("Error fetching product details:", error);
+      });
+      
+    // Fetch ratings for this product
+    getRates(id)
+      .then((response) => {
+        if (response && response.code === 1000 && response.result) {
+          setRatings(response.result);
+          setAverageRating(calculateAverageRating(response.result));
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching ratings:", error);
       });
   }, [id]);
 
   if (!products) {
     return <div>Product not found</div>;
   }
+
+  // Get current page ratings
+  const itemsPerPage = 2;
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentRatings = ratings.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(ratings.length / itemsPerPage);
 
   return (
     <div className="detail-product-container">
@@ -99,8 +160,8 @@ const ProductDetail = () => {
               {mainImage && (
                 <img
                   id="main-image"
-                  src={handleBase64Decode(mainImage)}
-                  alt="product"
+                  src={getImageSource(mainImage)}
+                  alt={products.result.name}
                 />
               )}
             </div>
@@ -110,9 +171,9 @@ const ProductDetail = () => {
                 <img
                   key={index}
                   className="thumbnail"
-                  src={handleBase64Decode(image.imageData)}
+                  src={getImageSource(image.imageUrl)}
                   alt={`thumbnail-${index}`}
-                  onClick={() => handleThumbnailClick(image.imageData)}
+                  onClick={() => handleThumbnailClick(image.imageUrl)}
                 />
               ))}
             </div>
@@ -124,9 +185,13 @@ const ProductDetail = () => {
                 <h2 className="product-title">{products.result.name}</h2>
                 <p className="gender">{products.result.perfume_gender}</p>
               </div>
-              <ProductRating rating={4} totalReviews={4} />
+              {/* Updated to show dynamic rating */}
+              <ProductRating rating={averageRating} totalReviews={ratings.length} />
               <ul className="product-highlight-info">
                 <li>Thương hiệu: {products.result.brandName}</li>
+                {products.result.flash_sale && (
+                  <li className="flash-sale">Flash Sale!</li>
+                )}
               </ul>
             </div>
 
@@ -141,7 +206,16 @@ const ProductDetail = () => {
               ))}
             </div>
 
-            <ProductActions price={selectedPrice} variantId={selectedVariantId} />
+            <ProductActions 
+              price={selectedPrice} 
+              variantId={selectedVariantId} 
+              discount={products.result.discount}
+              discountedPrice={
+                selectedVariantId && products.result.perfumeVariantResponseList
+                  ? products.result.perfumeVariantResponseList.find(v => v.id === selectedVariantId)?.discountedPrice
+                  : null
+              }
+            />
           </div>
         </section>
 
@@ -154,11 +228,13 @@ const ProductDetail = () => {
               <p className="about-product">
                 {products.result.perfume_description}
               </p>
-              <img
-                className="about-product-img"
-                src={handleBase64Decode(products.result.perfumeImageResponseList[1].imageData)}
-                alt="product"
-              ></img>
+              {products.result.perfumeImageResponseList.length > 1 && (
+                <img
+                  className="about-product-img"
+                  src={getImageSource(products.result.perfumeImageResponseList[1].imageUrl)}
+                  alt="product"
+                />
+              )}
             </div>
           </div>
           <div className="col-6">
@@ -264,6 +340,7 @@ const ProductDetail = () => {
 
         <hr></hr>
 
+        {/* Updated Review Section to use API data */}
         <section className="sec-4">
           <div className="review-header">
             <h2 className="review-title">Đánh giá và nhận xét</h2>
@@ -271,67 +348,49 @@ const ProductDetail = () => {
           </div>
           <hr></hr>
           <div className="review-body">
-            <div className="review-article">
-              <div className="review-user-account">
-                <div className="avatar">
-                  <img
-                    src={require("../../assets/image/UsersImages/henryle.jpg")}
-                    alt="avatar"
-                  />
+            {currentRatings.length > 0 ? (
+              currentRatings.map((rating) => (
+                <div key={rating.id} className="review-article">
+                  <div className="review-user-account">
+                    <div className="avatar">
+                      {/* You might want to add user avatar from API if available */}
+                      <div className="avatar-placeholder">{rating.userName.charAt(0)}</div>
+                    </div>
+                    <div className="user-name">{rating.userName}</div>
+                  </div>
+                  <div className="review-star">
+                    {Array.from({ length: 5 }, (_, index) =>
+                      index < rating.rateStar ? (
+                        <AiFillStar key={index} className="star filled" />
+                      ) : (
+                        <AiOutlineStar key={index} className="star" />
+                      )
+                    )}
+                  </div>
+                  <div className="review-time">{rating.rateDatetime}</div>
+                  <div className="review-text">{rating.rateContext}</div>
+                  <hr></hr>
                 </div>
-                <div className="user-name">Henry Le</div>
-              </div>
-              <div className="review-star">
-                {Array.from({ length: 5 }, (_, index) =>
-                  index < 5 ? (
-                    <AiFillStar key={index} className="star filled" />
-                  ) : (
-                    <AiOutlineStar key={index} className="star" />
-                  )
-                )}
-              </div>
-              <div className="review-time">4 tháng trước</div>
-              <div className="review-text">Mùi này thơm, mọi người nên thử</div>
-            </div>
-            <hr></hr>
-            <div className="review-article">
-              <div className="review-user-account">
-                <div className="avatar">
-                  <img
-                    src={require("../../assets/image/UsersImages/madeline.jpg")}
-                    alt="avatar"
-                  />
-                </div>
-                <div className="user-name">Madelyne Kim</div>
-              </div>
-              <div className="review-star">
-                {Array.from({ length: 5 }, (_, index) =>
-                  index < 5 ? (
-                    <AiFillStar key={index} className="star filled" />
-                  ) : (
-                    <AiOutlineStar key={index} className="star" />
-                  )
-                )}
-              </div>
-              <div className="review-time">7 tháng trước</div>
-              <div className="review-text">
-                Mùi này oke, mua liền đi mọi người ơi
-              </div>
-            </div>
+              ))
+            ) : (
+              <div className="no-reviews">Chưa có đánh giá nào cho sản phẩm này</div>
+            )}
           </div>
-          <hr></hr>
-          <div className="review-pagination">
-            {Array.from({ length: 2 }, (_, index) => (
-              <button
-                key={index}
-                onClick={() => handlePageChange(index + 1)}
-                disabled={currentPage === index + 1}
-                className={currentPage === index + 1 ? "active" : ""}
-              >
-                {index + 1}
-              </button>
-            ))}
-          </div>
+          
+          {ratings.length > 0 && (
+            <div className="review-pagination">
+              {Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index}
+                  onClick={() => handlePageChange(index + 1)}
+                  disabled={currentPage === index + 1}
+                  className={currentPage === index + 1 ? "active" : ""}
+                >
+                  {index + 1}
+                </button>
+              ))}
+            </div>
+          )}
         </section>
 
         <hr></hr>
