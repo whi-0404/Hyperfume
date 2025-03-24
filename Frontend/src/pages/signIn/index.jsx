@@ -7,11 +7,11 @@ import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import PasswordToggle from '../../components/passHide-Unhide';
 
 import SignInService from '../../services/handleSignIn';
-import { setToken, removeToken } from '../../services/authToken';
-import { UserInfo } from '../../services/handleUserInfo';
+import {useUser} from '../../utils/userContext';
 
 const SignIn = () => {
     const navigate = useNavigate();
+    const { fetchUserInfo } = useUser();
 
     const HandleSubmit = async (e) => {
         e.preventDefault();
@@ -25,18 +25,18 @@ const SignIn = () => {
         }
 
         try {
-            removeToken()
             const signInResult = await SignInService(username, password);
-            const token = signInResult.result.token;
-            setToken(token); // Lưu token vào sessionStorage
+            if (signInResult.code!==1000 || !signInResult.result.authenticated){
+                throw new Error('Đăng nhập thất bại!');}
             alert('Đăng nhập thành công!');
 
-            const userInfo = await UserInfo(token);
-            console.log(userInfo);
+            await fetchUserInfo();
 
-            if (userInfo.result.role.name === "USER") {
+            const userInfo = await fetchUserInfo();
+
+            if (userInfo && userInfo.role.name === "USER") {
                 navigate('/'); // Chuyển hướng đến trang chủ
-            } else if (userInfo.result.role.name === "ADMIN") {
+            } else if (userInfo && userInfo.role.name === "ADMIN") {
                 navigate('/admin'); // Chuyển hướng đến trang admin
             }
 

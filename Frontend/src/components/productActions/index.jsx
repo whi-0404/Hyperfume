@@ -2,11 +2,9 @@ import React, { memo, useState } from "react";
 import { FaShoppingCart, FaPlus, FaMinus } from "react-icons/fa";
 import "./style.scss";
 import addToCart from "../../services/handleAddToCart";
-import { getToken } from "../../services/authToken";
 
 const ProductActions = ({ price, variantId }) => {
     const [quantity, setQuantity] = useState(1);
-    const token = getToken()
 
     const increaseQuantity = () => setQuantity(quantity + 1);
     const decreaseQuantity = () => {
@@ -19,17 +17,17 @@ const ProductActions = ({ price, variantId }) => {
             return;
         }
 
-        if (!token) {
-            alert('Bạn cần đăng nhập tài khoản để thêm vào giỏ hàng!');
-            return;
-        }
-
         try {
             const response = await addToCart(variantId, quantity);
             console.log("Add to cart response:", response);
-        } catch (error) {
+          } catch (error) {
             console.error("Failed to add to cart:", error);
-            alert("Thêm vào giỏ hàng thất bại. Vui lòng thử lại.");
+            // Giả sử server trả về lỗi 401 nếu người dùng chưa đăng nhập
+            if (error.response && error.response.status === 401) {
+              alert("Bạn cần đăng nhập tài khoản để thêm vào giỏ hàng!");
+            } else {
+              alert("Thêm vào giỏ hàng thất bại. Vui lòng thử lại.");
+            }
         }
     };
 

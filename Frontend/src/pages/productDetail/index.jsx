@@ -6,7 +6,6 @@ import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import "./style.scss";
 import getProductDetail from "../../services/getProductDetail";
 import getRates from "../../services/getRate"; // Added import for getRates API
-import handleBase64Decode from "../../components/covertBase64ToImg";
 
 const suggestProducts = [
   {
@@ -63,7 +62,7 @@ const ProductDetail = () => {
       }
     } else {
       // Directly decode if it's base64 without proper formatting
-      return handleBase64Decode(imageUrl);
+      return imageUrl;
     }
   };
 

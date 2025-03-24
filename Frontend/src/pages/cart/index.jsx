@@ -1,7 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
 import { NavLink } from 'react-router-dom';
 import Cart from "../../components/cart/cart";
-import { getToken } from "../../services/authToken";
 import greenIrishTweed from "../../assets/productImages/creed/green-irish-tweed.png";
 import diorHommeSport from "../../assets/productImages/dior-homme-sport.png";
 import getCart from "../../services/handleGetCartItem";
@@ -14,43 +13,42 @@ const cartData = [
 ];
 
 const App = () => {
-  const Token = getToken(); // Lấy Token
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Nếu không có Token, không gọi API
-    if (!Token) {
-      setLoading(false); // Dừng trạng thái loading
-      return;
-    }
-
     getCart()
       .then((response) => {
         setProducts(response.data);
         setLoading(false); // Kết thúc loading
       })
-      .catch((error) => {
+      .catch((error) => { 
         console.error(error);
-        setError('Failed to fetch products'); // Lưu lỗi vào state
+        if(error.response && error.response.status === 401) {
+          setError("Bạn chưa đăng nhập tài khoản!");
+        }
+        else {
+          setError('Failed to fetch products'); // Lưu lỗi vào state
+        }
         setLoading(false);
       });
-  }, [Token]);
+  }, []);
 
-  // Kiểm tra nếu không có Token
-  if (!Token) {
-    return (
-      <div className="alert">
-        <h1>Bạn chưa đăng nhập tài khoản!</h1>
-        <NavLink to="/Sign-in">Đăng nhập</NavLink>
-      </div>
-    );
+  if (loading) return <div>Loading...</div>;
+
+  if (error) {
+    if (error === "Bạn chưa đăng nhập tài khoản!") {
+      return (
+        <div className="alert">
+          <h1>{error}</h1>
+          <NavLink to="/Sign-in">Đăng nhập</NavLink>
+        </div>
+      );
+    }
+    return <div>Error: {error}</div>;
   }
 
-  // Render loading hoặc lỗi
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
 
   console.log(products.result);
 

@@ -3,12 +3,15 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import RouterCustom from './router';
 import './styles/style.scss';
+import { UserProvider } from './utils/userContext'; // Import UserProvider
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <>
-    <BrowserRouter>
-      <RouterCustom></RouterCustom>
-    </BrowserRouter>
+    <UserProvider> {/* Bọc toàn bộ ứng dụng trong UserProvider */}
+      <BrowserRouter>
+        <RouterCustom></RouterCustom>
+      </BrowserRouter>
+    </UserProvider>
   </>
 );

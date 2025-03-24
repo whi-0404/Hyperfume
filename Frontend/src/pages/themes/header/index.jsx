@@ -10,6 +10,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { searchProducts } from "../../../services/handleSearchPerfume";
 import { brands } from "../../../services/getBrand";
 import { countries } from "../../../services/getCountry";
+import {useUser} from "../../../utils/userContext";
+import defaultAvatar from "../../../assets/image/UsersImages/avt_default.png";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -17,6 +19,7 @@ const Header = () => {
   const [countryList, setCountryList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { user } = useUser();
 
   useEffect(() => {
     const loadBrands = async () => {
@@ -142,10 +145,26 @@ const Header = () => {
                   <span className="cart-count"></span>
                 </NavLink>
               </div>
-
-              <span className="login-text">
+            { !user ? 
+              (<span className="login-text">
                 <NavLink to="/Sign-in">ĐĂNG NHẬP</NavLink>
               </span>
+              ) : (
+                <div className="user-profile">
+                  <div className="avatar-container">
+                  <NavLink to="/Profile">
+                    <img 
+                      src={user.avatar ? user.avatar : defaultAvatar} 
+                      alt="Avatar" 
+                      className="user-avatar" 
+                    />
+                    </NavLink>
+                  </div>
+                  <span className="login-text">
+                    <NavLink to="/Profile">{user.fullname}</NavLink>
+                  </span>
+                </div>
+                )}
             </div>
 
             <div className="hotline-search">

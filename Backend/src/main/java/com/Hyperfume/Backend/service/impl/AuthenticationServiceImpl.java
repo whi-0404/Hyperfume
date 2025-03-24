@@ -18,6 +18,8 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +46,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Value("${jwt.signerKey}")
     private String SIGNER_KEY;
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request)
+    public AuthenticationResponse authenticate(AuthenticationRequest request, HttpServletResponse response)
     {
         var user=userRepository.findByUsername(request.getUsername())
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -56,11 +58,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if(!authenticated)
             throw new AppException(ErrorCode.UNAUTHENTICATED);
 
-        var token=generateToken(user);
+        var token = generateToken(user);
+
+        Cookie cookie = new Cookie("jwt", token);
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(24*60*60);
+        cookie.setPath("/");
+        response.addCookie(cookie);
 
         return AuthenticationResponse.builder()
-                .token(token)
                 .authenticated(true)
+                .token(token)
                 .build();
     }
 
@@ -135,7 +143,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var token=generateToken(user);
 
         return AuthenticationResponse.builder()
-                .token(token)
                 .authenticated(true)
                 .build();
     }

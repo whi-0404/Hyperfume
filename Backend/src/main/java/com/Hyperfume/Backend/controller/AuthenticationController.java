@@ -10,6 +10,7 @@ import com.Hyperfume.Backend.dto.request.AuthenticationRequest;
 import com.Hyperfume.Backend.dto.request.IntrospectRequest;
 import com.Hyperfume.Backend.dto.response.AuthenticationResponse;
 import com.Hyperfume.Backend.dto.response.IntrospectResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -28,9 +29,10 @@ public class AuthenticationController {
     AuthenticationService authenticationService;
 
     @PostMapping("/token")
-    ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request)
+    ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request,
+                                                     HttpServletResponse response)
     {
-        var result=authenticationService.authenticate(request);
+        var result=authenticationService.authenticate(request, response);
         return ApiResponse.<AuthenticationResponse>builder()
                 .result(result)
                 .build();

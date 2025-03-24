@@ -1,22 +1,14 @@
 import api from "./axiosConfig";
-import { getToken } from "./authToken";
 
 const getCart = async () => {
-    let token = getToken();
-
-    if (!token) {
-        alert("Vui lòng đăng nhập!");
-        return;
-    }
     try {
-        const response = await api.get('/cart', {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            }
-        })
+        const response = await api.get('/cart')
         console.log('Giỏ hàng của người dùng:', response.data);
         return response;
     } catch (error) {
+        if (error.response && error.response.status === 401) {
+            alert("Bạn chưa đăng nhập, vui lòng đăng nhập!");
+        }
         console.error('Error signing up:', error);
         throw error; // quăng lỗi để xử lý ở component gọi service
     }

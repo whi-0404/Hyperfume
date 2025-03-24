@@ -3,28 +3,29 @@ import { NavLink } from 'react-router-dom';
 import "./style.scss";
 import { FaBell } from "react-icons/fa";
 import { UserInfo } from "../../services/handleUserInfo";
-import { getToken } from "../../services/authToken"
 
-const Profile = () => {
-  const Token = getToken(); // Lấy Token
+const Profile = () => {;
   const [user, setUser] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    if (!Token) {
-      return;
-    }
 
-    UserInfo(Token)
+    UserInfo()
       .then((response) => {
         setUser(response);
       })
       .catch((error) => {
         console.error(error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-  }, [Token]);
+  }, []);
 
-  console.log(user)
+  if (loading) {
+    return <div className="loading">Loading...</div>;
+  }
 
-  if (!Token) {
+  if (!user || !user.result) {
     return (
       <div className="alert">
         <h1>Bạn chưa đăng nhập tài khoản!</h1>
