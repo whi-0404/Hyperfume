@@ -12,4 +12,6 @@ public interface RateMapper {
 
     @Mapping(target = "userId", source = "user.id")
     RateResponse toResponse(Rate rate);
+
+    void updateRate(Rate rate, RateRequest request);
 }

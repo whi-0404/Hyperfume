@@ -35,12 +35,19 @@ public class RateMapperImpl implements RateMapper {
         } else {
             RateResponse.RateResponseBuilder rateResponse = RateResponse.builder();
             rateResponse.userId(this.rateUserId(rate));
-            rateResponse.id(rate.getId());
             rateResponse.rateStar(rate.getRateStar());
             rateResponse.rateContext(rate.getRateContext());
             rateResponse.rateDatetime(rate.getRateDatetime());
             rateResponse.userName(rate.getUser().getUsername());
             return rateResponse.build();
+        }
+    }
+    public void updateRate(Rate rate, RateRequest request){
+        if(request.getRateContext()!=null){
+            rate.setRateContext(request.getRateContext());
+        }
+        if(request.getRateStar() !=null){
+            rate.setRateStar(request.getRateStar());
         }
     }
 

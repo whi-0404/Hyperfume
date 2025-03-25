@@ -37,4 +37,11 @@ public class RateController {
                 .result(rateService.getRatesByPerfumeId(perfumeId))
                 .build();
     }
+    @PutMapping
+    public ApiResponse<String> updateRate(@Valid @RequestBody RateRequest request){
+        rateService.updateRate(request);
+        return ApiResponse.<String>builder()
+                .result("Rate has been update")
+                .build();
+    }
 }

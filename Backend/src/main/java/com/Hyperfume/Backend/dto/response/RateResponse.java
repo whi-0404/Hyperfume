@@ -12,8 +12,6 @@ import java.time.LocalDateTime;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RateResponse {
-    Integer id;
-
     Integer userId;
 
     String userName;

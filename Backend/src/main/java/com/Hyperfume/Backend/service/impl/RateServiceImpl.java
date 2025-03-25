@@ -4,6 +4,7 @@ import com.Hyperfume.Backend.dto.request.RateRequest;
 import com.Hyperfume.Backend.dto.response.RateResponse;
 import com.Hyperfume.Backend.entity.Rate;
 import com.Hyperfume.Backend.entity.User;
+import com.Hyperfume.Backend.entity.serializable.RateKey;
 import com.Hyperfume.Backend.exception.AppException;
 import com.Hyperfume.Backend.exception.ErrorCode;
 import com.Hyperfume.Backend.mapper.RateMapper;
@@ -43,12 +44,20 @@ public class RateServiceImpl implements RateService {
         if (!perfumeRepository.existsById(request.getPerfumeId()))
             throw new AppException(ErrorCode.PERFUME_NOT_EXISTED);
 
+        // Tạo khóa chính cho Rate
+        RateKey rateKey = new RateKey(user.getId(), request.getPerfumeId());
+
+        // Kiểm tra nếu đánh giá đã tồn tại
+        if (rateRepository.existsById(rateKey)) {
+            throw new AppException(ErrorCode.RATE_EXISTED);
+        }
+
         Rate rate = rateMapper.toEntity(request);
 
         rate.setUser(user);
+        rate.setId(rateKey);
 
-        rateRepository.save(rateRepository.save(rate));
-
+        rateRepository.save(rate);
         return rateMapper.toResponse(rate);
     }
 
@@ -62,5 +71,24 @@ public class RateServiceImpl implements RateService {
         return rates.stream()
                 .map(rateMapper::toResponse)
                 .collect(Collectors.toList());
+    }
+    @Transactional
+    public void updateRate(RateRequest request){
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        User user = userRepository.findByUsername(name)
+                .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        if (!perfumeRepository.existsById(request.getPerfumeId()))
+            throw new AppException(ErrorCode.PERFUME_NOT_EXISTED);
+
+        // Tạo khóa chính cho Rate
+        RateKey rateKey = new RateKey(user.getId(), request.getPerfumeId());
+        Rate rate = rateRepository.findById(rateKey).orElseThrow(()-> new AppException(ErrorCode.RATE_NOT_EXISTED));
+
+        rateMapper.updateRate(rate, request);
+
+        rateRepository.save(rate);
     }
 }

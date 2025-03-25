@@ -8,4 +8,5 @@ import java.util.List;
 public interface RateService {
     RateResponse addRate(RateRequest request);
     List<RateResponse> getRatesByPerfumeId(Integer perfumeId);
+    void updateRate(RateRequest request);
 }

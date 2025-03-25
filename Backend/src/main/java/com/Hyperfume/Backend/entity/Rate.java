@@ -1,5 +1,6 @@
 package com.Hyperfume.Backend.entity;
 
+import com.Hyperfume.Backend.entity.serializable.RateKey;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -15,16 +16,17 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name="rates")
 public class Rate {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    @EmbeddedId
+    RateKey id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @MapsId("userId")
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     User user;
 
     @ManyToOne
-    @JoinColumn(name = "perfume_id", nullable = false)
+    @MapsId("perfumeId")
+    @JoinColumn(name = "perfume_id", insertable = false, updatable = false)
     Perfume perfume;
 
     @Column(name = "rate_star")

@@ -5,7 +5,7 @@ import ProductActions from "../../components/productActions";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import "./style.scss";
 import getProductDetail from "../../services/getProductDetail";
-import getRates from "../../services/getRate"; // Added import for getRates API
+import { addRate, getRates } from "../../services/handleRate"; // Added import for getRates API
 
 const suggestProducts = [
   {
@@ -48,6 +48,13 @@ const ProductDetail = () => {
   const [ratings, setRatings] = useState([]); // Added state for ratings
   const [averageRating, setAverageRating] = useState(0); // Added state for average rating
 
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [reviewText, setReviewText] = useState("");
+  const [reviewRating, setReviewRating] = useState(0);
+  const [reviewSubmitting, setReviewSubmitting] = useState(false);
+  const [reviewError, setReviewError] = useState("");
+  const [reviewSuccess, setReviewSuccess] = useState(false);
+
   // Function to determine if image is base64 or URL
   const getImageSource = (imageUrl) => {
     if (typeof imageUrl === 'string' && imageUrl.startsWith('data:image')) {
@@ -84,6 +91,89 @@ const ProductDetail = () => {
     if (!ratingData ) return 0;
     const totalStars = ratingData.reduce((acc, rate) => acc + rate.rateStar, 0);
     return totalStars / ratingData.length;
+  };
+  
+  const openReviewForm = () => {
+    setShowReviewForm(true);
+    setReviewText("");
+    setReviewRating(0);
+    setReviewError("");
+    setReviewSuccess(false);
+  };
+
+  const closeReviewForm = () => {
+    setShowReviewForm(false);
+  };
+
+  const handleStarClick = (starRating) => {
+    setReviewRating(starRating);
+  };
+
+  const handleReviewTextChange = (e) => {
+    setReviewText(e.target.value);
+  };
+
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Validate form
+    if (reviewRating === 0) {
+      setReviewError("Vui lòng chọn số sao đánh giá");
+      return;
+    }
+    
+    if (reviewText.trim() === "") {
+      setReviewError("Vui lòng nhập nội dung đánh giá");
+      return;
+    }
+    
+    setReviewSubmitting(true);
+    setReviewError("");
+    
+    try {
+      // Prepare request body
+      const rateRequest = {
+        perfumeId: id,
+        rateStar: reviewRating,
+        rateContext: reviewText
+      };
+      
+      // Call API to add rate
+      const response = await addRate(id, rateRequest);
+      
+      if (response && response.code === 1000) {
+        // Success - update the ratings list
+        setReviewSuccess(true);
+        
+        // Refresh ratings after successful submission
+        getRates(id)
+          .then((response) => {
+            if (response && response.code === 1000 && response.result) {
+              setRatings(response.result);
+              setAverageRating(calculateAverageRating(response.result));
+              
+              // Reset form after short delay
+              setTimeout(() => {
+                setShowReviewForm(false);
+                setReviewSuccess(false);
+              }, 350);
+            }
+          });
+      } 
+      else {
+        setReviewError("Có lỗi xảy ra khi gửi đánh giá");
+      }
+    } catch (error) {
+       if( error.response.data.code === 1037) {
+        setReviewError("Bạn chỉ được đánh giá sản phẩm một lần");
+      }
+      else{
+      console.error("Error submitting review:", error);
+       setReviewError("Có lỗi xảy ra khi gửi đánh giá");
+      }
+    } finally {
+      setReviewSubmitting(false);
+    }
   };
 
   useEffect(() => {
@@ -339,11 +429,11 @@ const ProductDetail = () => {
 
         <hr></hr>
 
-        {/* Updated Review Section to use API data */}
+        {/* Updated Review Section */}
         <section className="sec-4">
           <div className="review-header">
             <h2 className="review-title">Đánh giá và nhận xét</h2>
-            <button className="review-button">Viết đánh giá</button>
+            <button className="review-button" onClick={openReviewForm}>Viết đánh giá</button>
           </div>
           <hr></hr>
           <div className="review-body">
@@ -352,10 +442,9 @@ const ProductDetail = () => {
                 <div key={rating.id} className="review-article">
                   <div className="review-user-account">
                     <div className="avatar">
-                      {/* You might want to add user avatar from API if available */}
-                      <div className="avatar-placeholder">{rating.userName.charAt(0)}</div>
+                      <div className="avatar-placeholder">{rating.userName ? rating.userName.charAt(0) : 'U'}</div>
                     </div>
-                    <div className="user-name">{rating.userName}</div>
+                    <div className="user-name">{rating.userName || 'Anonymous'}</div>
                   </div>
                   <div className="review-star">
                     {Array.from({ length: 5 }, (_, index) =>
@@ -417,6 +506,71 @@ const ProductDetail = () => {
           </div>
         </section>
       </div>
+
+      {/* Review Form Modal */}
+      {showReviewForm && (
+        <div className="review-modal-overlay">
+          <div className="review-modal">
+            <div className="review-modal-header">
+              <h3>Viết đánh giá</h3>
+              <button className="close-button" onClick={closeReviewForm}>×</button>
+            </div>
+            
+            <form onSubmit={handleReviewSubmit} className="review-form">
+              <div className="star-rating-selector">
+                <p>Chọn số sao đánh giá:</p>
+                <div className="star-container">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <span 
+                      key={star} 
+                      onClick={() => handleStarClick(star)}
+                      className="star-selector"
+                    >
+                      {star <= reviewRating ? (
+                        <AiFillStar className="star filled" />
+                      ) : (
+                        <AiOutlineStar className="star" />
+                      )}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="review-text-container">
+                <label htmlFor="review-text">Nội dung đánh giá:</label>
+                <textarea 
+                  id="review-text"
+                  value={reviewText}
+                  onChange={handleReviewTextChange}
+                  placeholder="Nhập nội dung đánh giá của bạn tại đây..."
+                  rows={5}
+                />
+              </div>
+              
+              {reviewError && <div className="review-error">{reviewError}</div>}
+              {reviewSuccess && <div className="review-success">Đánh giá của bạn đã được gửi thành công!</div>}
+              
+              <div className="review-submit-container">
+                <button 
+                  type="button" 
+                  className="cancel-button"
+                  onClick={closeReviewForm}
+                  disabled={reviewSubmitting}
+                >
+                  Hủy bỏ
+                </button>
+                <button 
+                  type="submit" 
+                  className="submit-button"
+                  disabled={reviewSubmitting}
+                >
+                  {reviewSubmitting ? 'Đang gửi...' : 'Gửi đánh giá'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

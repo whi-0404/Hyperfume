@@ -435,4 +435,180 @@ hr {
       }
     }
   }
+
+
+}
+  // Review Modal Styles
+.review-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.review-modal {
+  background-color: #fff;
+  border-radius: 8px;
+  width: 95%;  // Tăng từ 90% lên 95%
+  max-width: 800px;  // Tăng từ 600px lên 800px
+  max-height: 95vh;  // Tăng từ 90vh lên 95vh
+  overflow-y: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  
+  .review-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;  // Tăng padding từ 16px 20px lên 20px 24px
+    border-bottom: 1px solid #e0e0e0;
+    
+    h3 {
+      font-size: 40px;  // Tăng từ 24px lên 28px
+      margin: 0;
+    }
+    
+    .close-button {
+      background: none;
+      border: none;
+      font-size: 40px;  // Tăng từ 28px lên 32px
+      cursor: pointer;
+      color: #888;
+      
+      &:hover {
+        color: #000;
+      }
+    }
+  }
+  
+  .review-form {
+    padding: 30px;  // Tăng từ 20px lên 24px
+    
+    .star-rating-selector {
+      margin-bottom: 24px;  // Tăng từ 20px lên 24px
+      
+      p {
+        font-size: 30px;  // Tăng từ 18px lên 20px
+        margin-bottom: 12px;  // Tăng từ 10px lên 12px
+      }
+      
+      .star-container {
+        display: flex;
+        gap: 12px;  // Tăng từ 10px lên 12px
+        
+        .star-selector {
+          cursor: pointer;
+          
+          .star {
+            font-size: 40px;  // Tăng từ 32px lên 40px
+            color: #ccc;
+            
+            &.filled {
+              color: #ffc107;
+            }
+          }
+        }
+      }
+    }
+    
+    .review-text-container {
+      margin-bottom: 24px;  // Tăng từ 20px lên 24px
+      
+      label {
+        display: block;
+        font-size: 30px;  // Tăng từ 18px lên 20px
+        margin-bottom: 10px;  // Tăng từ 8px lên 10px
+      }
+      
+      textarea {
+        width: 100%;
+        padding: 16px;  // Tăng từ 12px lên 16px
+        font-size: 25px;  // Tăng từ 16px lên 18px
+        min-height: 200px;  // Thêm chiều cao tối thiểu
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        resize: vertical;
+        
+        &:focus {
+          outline: none;
+          border-color: #007bff;
+        }
+      }
+    }
+    
+    .review-error {
+      color: #dc3545;
+      background-color: #f8d7da;
+      padding: 12px;  // Tăng từ 10px lên 12px
+      border-radius: 4px;
+      margin-bottom: 24px;  // Tăng từ 20px lên 24px
+      font-size: 25px;  // Thêm kích thước font
+    }
+    
+    .review-success {
+      color: #28a745;
+      background-color: #d4edda;
+      padding: 12px;  // Tăng từ 10px lên 12px
+      border-radius: 4px;
+      margin-bottom: 24px;  // Tăng từ 20px lên 24px
+      font-size: 25px;  // Thêm kích thước font
+    }
+    
+    .review-submit-container {
+      display: flex;
+      justify-content: flex-end;
+      gap: 16px;  // Tăng từ 10px lên 16px
+      
+      button {
+        padding: 12px 24px;  // Tăng từ 10px 20px lên 12px 24px
+        font-size: 25px;  // Tăng từ 16px lên 18px
+        border-radius: 6px;  // Tăng từ 4px lên 6px
+        cursor: pointer;
+        
+        &.cancel-button {
+          background-color: #f8f9fa;
+          border: 1px solid #ddd;
+          
+          &:hover {
+            background-color: #e2e6ea;
+          }
+        }
+        
+        &.submit-button {
+          background-color: #000080;
+          color: white;
+          border: none;
+          font-weight: bold;  // Thêm font-weight bold
+          
+          &:hover {
+            background-color: #00005a;
+          }
+          
+          &:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Style for avatar placeholder
+.avatar-placeholder {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #666;
 }
