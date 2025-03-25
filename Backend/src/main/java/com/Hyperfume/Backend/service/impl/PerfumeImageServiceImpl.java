@@ -1,8 +1,19 @@
 package com.Hyperfume.Backend.service.impl;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.Hyperfume.Backend.dto.request.PerfumeImageRequest;
 import com.Hyperfume.Backend.dto.response.PerfumeImageResponse;
-
 import com.Hyperfume.Backend.entity.PerfumeImage;
 import com.Hyperfume.Backend.exception.AppException;
 import com.Hyperfume.Backend.exception.ErrorCode;
@@ -10,23 +21,11 @@ import com.Hyperfume.Backend.mapper.PerfumeImageMapper;
 import com.Hyperfume.Backend.repository.PerfumeImageRepository;
 import com.Hyperfume.Backend.repository.PerfumeRepository;
 import com.Hyperfume.Backend.service.PerfumeImageService;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,14 +39,15 @@ public class PerfumeImageServiceImpl implements PerfumeImageService {
     private static final long MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 5MB
     private static final int MAX_NORMAL_IMAGE_COUNT = 5;
 
-    private static final String UP_LOAD_DIR = "E:\\Final_Hyperfume\\Hyperfume\\Frontend\\src\\assets\\productImages\\images";
+    private static final String UP_LOAD_DIR =
+            "E:\\Final_Hyperfume\\Hyperfume\\Frontend\\src\\assets\\productImages\\images";
 
     @PreAuthorize("hasRole('ADMIN')")
     public PerfumeImageResponse addImageThumbnail(PerfumeImageRequest request) {
         if (!perfumeRepository.existsById(request.getPerfumeId()))
             throw new AppException(ErrorCode.PERFUME_NOT_EXISTED);
 
-        if(perfumeImageRepository.existsByPerfumeIdAndThumbnailTrue(request.getPerfumeId())){
+        if (perfumeImageRepository.existsByPerfumeIdAndThumbnailTrue(request.getPerfumeId())) {
             throw new AppException(ErrorCode.DUPLICATE_THUMBNAIL_IMAGE);
         }
 
@@ -69,9 +69,7 @@ public class PerfumeImageServiceImpl implements PerfumeImageService {
 
     public List<PerfumeImageResponse> getImagesByPerfumeId(Integer perfumeId) {
         List<PerfumeImage> images = perfumeImageRepository.findByPerfumeId(perfumeId);
-        return images.stream()
-                .map(perfumeImageMapper::toResponse)
-                .collect(Collectors.toList());
+        return images.stream().map(perfumeImageMapper::toResponse).collect(Collectors.toList());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -100,7 +98,6 @@ public class PerfumeImageServiceImpl implements PerfumeImageService {
         return responses;
     }
 
-
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteImage(Integer imageId) {
         if (!perfumeImageRepository.existsById(imageId)) {
@@ -109,16 +106,18 @@ public class PerfumeImageServiceImpl implements PerfumeImageService {
         perfumeImageRepository.deleteById(imageId);
     }
 
-    public PerfumeImageResponse getThumbnailByPerfumeId(Integer perfumeId){
-        PerfumeImage thumbnail = perfumeImageRepository.findByPerfumeIdAndIsThumbnailTrue(perfumeId)
+    public PerfumeImageResponse getThumbnailByPerfumeId(Integer perfumeId) {
+        PerfumeImage thumbnail = perfumeImageRepository
+                .findByPerfumeIdAndIsThumbnailTrue(perfumeId)
                 .orElseThrow(() -> new AppException(ErrorCode.THUMBNAIL_NOT_FOUND));
 
         return perfumeImageMapper.toResponse(thumbnail);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public PerfumeImageResponse updateThumbnailByPerfumeId(PerfumeImageRequest request){
-        PerfumeImage thumbnail = perfumeImageRepository.findByPerfumeIdAndIsThumbnailTrue(request.getPerfumeId())
+    public PerfumeImageResponse updateThumbnailByPerfumeId(PerfumeImageRequest request) {
+        PerfumeImage thumbnail = perfumeImageRepository
+                .findByPerfumeIdAndIsThumbnailTrue(request.getPerfumeId())
                 .orElseThrow(() -> new AppException(ErrorCode.THUMBNAIL_NOT_FOUND));
 
         MultipartFile imageFile = request.getImageFile();
@@ -133,7 +132,6 @@ public class PerfumeImageServiceImpl implements PerfumeImageService {
         return perfumeImageMapper.toResponse(perfumeImageRepository.save(thumbnail));
     }
 
-
     private void validateImageSize(MultipartFile file) {
         if (file.getSize() > MAX_IMAGE_SIZE) {
             throw new AppException(ErrorCode.INVALID_IMAGE_FILE);
@@ -144,16 +142,15 @@ public class PerfumeImageServiceImpl implements PerfumeImageService {
         try {
             return file.getBytes();
         } catch (IOException e) {
-        throw new AppException(ErrorCode.FAILED_READ_IMAGE);
+            throw new AppException(ErrorCode.FAILED_READ_IMAGE);
         }
     }
 
-    private String uploadImageFileToDir(MultipartFile imageFile){
-        try{
+    private String uploadImageFileToDir(MultipartFile imageFile) {
+        try {
             String originalFileName = imageFile.getOriginalFilename();
-            String fileExtension = originalFileName != null
-                    ? originalFileName.substring(originalFileName.lastIndexOf("."))
-                    : ".jpg";
+            String fileExtension =
+                    originalFileName != null ? originalFileName.substring(originalFileName.lastIndexOf(".")) : ".jpg";
             String uniqueFileName = UUID.randomUUID().toString() + fileExtension;
 
             Path filePath = Paths.get(UP_LOAD_DIR, uniqueFileName);
@@ -161,10 +158,8 @@ public class PerfumeImageServiceImpl implements PerfumeImageService {
             imageFile.transferTo(filePath.toFile());
 
             return uniqueFileName;
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             throw new AppException(ErrorCode.FAILED_READ_IMAGE);
         }
     }
 }
-

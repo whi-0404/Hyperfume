@@ -1,10 +1,11 @@
 package com.Hyperfume.Backend.exception;
 
-public class AppException extends RuntimeException{
-    public AppException(ErrorCode errorCode){
+public class AppException extends RuntimeException {
+    public AppException(ErrorCode errorCode) {
         super(errorCode.getMessage());
-        this.errorCode=errorCode;
+        this.errorCode = errorCode;
     }
+
     private ErrorCode errorCode;
 
     public ErrorCode getErrorCode() {

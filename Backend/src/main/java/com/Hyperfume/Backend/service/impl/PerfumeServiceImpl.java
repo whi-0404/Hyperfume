@@ -1,5 +1,14 @@
 package com.Hyperfume.Backend.service.impl;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.Hyperfume.Backend.dto.request.PerfumeRequest;
 import com.Hyperfume.Backend.dto.response.PageResponse;
 import com.Hyperfume.Backend.dto.response.PerfumeGetAllResponse;
@@ -14,26 +23,16 @@ import com.Hyperfume.Backend.repository.PerfumeRepository;
 import com.Hyperfume.Backend.repository.ScrentFamilyRepository;
 import com.Hyperfume.Backend.repository.specification.PerfumeSpecification;
 import com.Hyperfume.Backend.service.PerfumeService;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@FieldDefaults(level= AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PerfumeServiceImpl implements PerfumeService {
 
     PerfumeRepository perfumeRepository;
@@ -44,9 +43,17 @@ public class PerfumeServiceImpl implements PerfumeService {
     PerfumeMapper perfumeMapper;
 
     // Lấy danh sách nước hoa
-    public PageResponse<PerfumeGetAllResponse> getAllPerfumes(int page, int size, String sortOption, String gender ,String longevity,
-                                                              Integer countryId, Integer brandId, String concentration, Integer screntFamilyId,
-                                                              Long maxPrice) {
+    public PageResponse<PerfumeGetAllResponse> getAllPerfumes(
+            int page,
+            int size,
+            String sortOption,
+            String gender,
+            String longevity,
+            Integer countryId,
+            Integer brandId,
+            String concentration,
+            Integer screntFamilyId,
+            Long maxPrice) {
 
         Pageable pageable = PageRequest.of(page - 1, size);
 
@@ -59,14 +66,16 @@ public class PerfumeServiceImpl implements PerfumeService {
                 .pageSize(pageData.getSize())
                 .totalPages(pageData.getTotalPages())
                 .totalElements(pageData.getTotalElements())
-                .Data(pageData.getContent().stream().map(perfumeMapper::toGetAllPerfumeResponse).toList())
+                .Data(pageData.getContent().stream()
+                        .map(perfumeMapper::toGetAllPerfumeResponse)
+                        .toList())
                 .build();
     }
 
     // Lấy thông tin nước hoa theo ID
     public PerfumeResponse getPerfumeById(int id) {
-        Perfume perfume = perfumeRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.PERFUME_NOT_EXISTED));
+        Perfume perfume =
+                perfumeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.PERFUME_NOT_EXISTED));
         return perfumeMapper.toResponse(perfume);
     }
 
@@ -74,11 +83,14 @@ public class PerfumeServiceImpl implements PerfumeService {
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public PerfumeResponse createPerfume(PerfumeRequest request) {
-        Brand brand = brandRepository.findById(request.getBrandId())
+        Brand brand = brandRepository
+                .findById(request.getBrandId())
                 .orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_EXISTED));
-        ScrentFamily screntFamily = screntFamilyRepository.findById(request.getScrentFamilyId())
+        ScrentFamily screntFamily = screntFamilyRepository
+                .findById(request.getScrentFamilyId())
                 .orElseThrow(() -> new AppException(ErrorCode.SCRENT_FAMILY_NOT_EXISTED));
-        Country country = countryRepository.findById(request.getCountryId())
+        Country country = countryRepository
+                .findById(request.getCountryId())
                 .orElseThrow(() -> new AppException(ErrorCode.COUNTRY_NOT_EXISTED));
 
         Perfume perfume = perfumeMapper.toEntity(request, brand, screntFamily, country);
@@ -91,22 +103,25 @@ public class PerfumeServiceImpl implements PerfumeService {
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public PerfumeResponse updatePerfume(int id, PerfumeRequest request) {
-        Perfume perfume = perfumeRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.PERFUME_NOT_EXISTED));
+        Perfume perfume =
+                perfumeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.PERFUME_NOT_EXISTED));
 
         Brand brand = null;
-        if(request.getBrandId()!=null) {
-            brand = brandRepository.findById(request.getBrandId())
+        if (request.getBrandId() != null) {
+            brand = brandRepository
+                    .findById(request.getBrandId())
                     .orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_EXISTED));
         }
         ScrentFamily screntFamily = null;
-        if(request.getScrentFamilyId()!=null) {
-            screntFamily = screntFamilyRepository.findById(request.getScrentFamilyId())
+        if (request.getScrentFamilyId() != null) {
+            screntFamily = screntFamilyRepository
+                    .findById(request.getScrentFamilyId())
                     .orElseThrow(() -> new AppException(ErrorCode.SCRENT_FAMILY_NOT_EXISTED));
         }
         Country country = null;
-        if(request.getCountryId()!=null) {
-            country = countryRepository.findById(request.getCountryId())
+        if (request.getCountryId() != null) {
+            country = countryRepository
+                    .findById(request.getCountryId())
                     .orElseThrow(() -> new AppException(ErrorCode.COUNTRY_NOT_EXISTED));
         }
         perfumeMapper.updateEntity(perfume, request, brand, screntFamily, country);
@@ -124,10 +139,10 @@ public class PerfumeServiceImpl implements PerfumeService {
         perfumeRepository.deleteById(id);
     }
 
-    //Flash sale
+    // Flash sale
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
-    public void toggleFlashSale(Integer perfumeId, boolean isFlashSale){
+    public void toggleFlashSale(Integer perfumeId, boolean isFlashSale) {
         if (!perfumeRepository.existsById(perfumeId)) {
             throw new AppException(ErrorCode.PERFUME_NOT_EXISTED);
         }
@@ -135,9 +150,8 @@ public class PerfumeServiceImpl implements PerfumeService {
         perfumeRepository.updateFlashSaleStatus(perfumeId, isFlashSale);
     }
 
-    public PageResponse<PerfumeGetAllResponse> getFlashSalePerfumes(int page, int size){
-        Pageable pageable = PageRequest.of(page - 1, size,
-                Sort.by("createdAt").descending());
+    public PageResponse<PerfumeGetAllResponse> getFlashSalePerfumes(int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt").descending());
 
         Page<Perfume> pageData = perfumeRepository.findAllByFlashSale(pageable);
 
@@ -145,13 +159,14 @@ public class PerfumeServiceImpl implements PerfumeService {
                 .pageSize(pageData.getSize())
                 .totalPages(pageData.getTotalPages())
                 .totalElements(pageData.getTotalElements())
-                .Data(pageData.getContent().stream().map(perfumeMapper::toGetAllPerfumeResponse).toList())
+                .Data(pageData.getContent().stream()
+                        .map(perfumeMapper::toGetAllPerfumeResponse)
+                        .toList())
                 .build();
     }
 
-    public PageResponse<PerfumeGetAllResponse> getPerfumesByTypeName(String typeName, int page, int size){
-        Pageable pageable = PageRequest.of(page - 1, size,
-                Sort.by("createdAt").descending());
+    public PageResponse<PerfumeGetAllResponse> getPerfumesByTypeName(String typeName, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt").descending());
 
         Page<Perfume> pageData = perfumeRepository.findAllByTypeName(typeName, pageable);
 
@@ -159,12 +174,14 @@ public class PerfumeServiceImpl implements PerfumeService {
                 .pageSize(pageData.getSize())
                 .totalPages(pageData.getTotalPages())
                 .totalElements(pageData.getTotalElements())
-                .Data(pageData.getContent().stream().map(perfumeMapper::toGetAllPerfumeResponse).toList())
+                .Data(pageData.getContent().stream()
+                        .map(perfumeMapper::toGetAllPerfumeResponse)
+                        .toList())
                 .build();
     }
-    public PageResponse<PerfumeGetAllResponse> getPerfumesByGender(String gender, int page, int size){
-        Pageable pageable = PageRequest.of(page - 1, size,
-                Sort.by("createdAt").descending());
+
+    public PageResponse<PerfumeGetAllResponse> getPerfumesByGender(String gender, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt").descending());
 
         Page<Perfume> pageData = perfumeRepository.findAllByGender(gender, pageable);
 
@@ -172,13 +189,14 @@ public class PerfumeServiceImpl implements PerfumeService {
                 .pageSize(pageData.getSize())
                 .totalPages(pageData.getTotalPages())
                 .totalElements(pageData.getTotalElements())
-                .Data(pageData.getContent().stream().map(perfumeMapper::toGetAllPerfumeResponse).toList())
+                .Data(pageData.getContent().stream()
+                        .map(perfumeMapper::toGetAllPerfumeResponse)
+                        .toList())
                 .build();
     }
 
-    public PageResponse<PerfumeGetAllResponse> getPerfumesByCountry(Integer countryId, int page, int size){
-        Pageable pageable = PageRequest.of(page - 1, size,
-                Sort.by("createdAt").descending());
+    public PageResponse<PerfumeGetAllResponse> getPerfumesByCountry(Integer countryId, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt").descending());
 
         Page<Perfume> pageData = perfumeRepository.findAllByCountryId(countryId, pageable);
 
@@ -186,13 +204,14 @@ public class PerfumeServiceImpl implements PerfumeService {
                 .pageSize(pageData.getSize())
                 .totalPages(pageData.getTotalPages())
                 .totalElements(pageData.getTotalElements())
-                .Data(pageData.getContent().stream().map(perfumeMapper::toGetAllPerfumeResponse).toList())
+                .Data(pageData.getContent().stream()
+                        .map(perfumeMapper::toGetAllPerfumeResponse)
+                        .toList())
                 .build();
     }
 
-    public PageResponse<PerfumeGetAllResponse> getPerfumesByBrand(Integer brandId, int page, int size){
-        Pageable pageable = PageRequest.of(page - 1, size,
-                Sort.by("createdAt").descending());
+    public PageResponse<PerfumeGetAllResponse> getPerfumesByBrand(Integer brandId, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt").descending());
 
         Page<Perfume> pageData = perfumeRepository.findAllByBrandId(brandId, pageable);
 
@@ -200,13 +219,14 @@ public class PerfumeServiceImpl implements PerfumeService {
                 .pageSize(pageData.getSize())
                 .totalPages(pageData.getTotalPages())
                 .totalElements(pageData.getTotalElements())
-                .Data(pageData.getContent().stream().map(perfumeMapper::toGetAllPerfumeResponse).toList())
+                .Data(pageData.getContent().stream()
+                        .map(perfumeMapper::toGetAllPerfumeResponse)
+                        .toList())
                 .build();
     }
 
-    public PageResponse<PerfumeGetAllResponse> getPerfumesByScrentFamily(Integer screntFamilyId, int page, int size){
-        Pageable pageable = PageRequest.of(page - 1, size,
-                Sort.by("createdAt").descending());
+    public PageResponse<PerfumeGetAllResponse> getPerfumesByScrentFamily(Integer screntFamilyId, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt").descending());
 
         Page<Perfume> pageData = perfumeRepository.findAllByScrentFamilyId(screntFamilyId, pageable);
 
@@ -214,13 +234,14 @@ public class PerfumeServiceImpl implements PerfumeService {
                 .pageSize(pageData.getSize())
                 .totalPages(pageData.getTotalPages())
                 .totalElements(pageData.getTotalElements())
-                .Data(pageData.getContent().stream().map(perfumeMapper::toGetAllPerfumeResponse).toList())
+                .Data(pageData.getContent().stream()
+                        .map(perfumeMapper::toGetAllPerfumeResponse)
+                        .toList())
                 .build();
     }
 
     public PageResponse<PerfumeGetAllResponse> searchPerfumesByName(String name, int page, int size) {
-        Pageable pageable = PageRequest.of(page - 1, size,
-                Sort.by("createdAt").descending());
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt").descending());
 
         Page<Perfume> pageData = perfumeRepository.searchByName(name, pageable);
 
@@ -232,7 +253,9 @@ public class PerfumeServiceImpl implements PerfumeService {
                 .pageSize(pageData.getSize())
                 .totalPages(pageData.getTotalPages())
                 .totalElements(pageData.getTotalElements())
-                .Data(pageData.getContent().stream().map(perfumeMapper::toGetAllPerfumeResponse).toList())
+                .Data(pageData.getContent().stream()
+                        .map(perfumeMapper::toGetAllPerfumeResponse)
+                        .toList())
                 .build();
     }
 }

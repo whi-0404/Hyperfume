@@ -1,13 +1,15 @@
 package com.Hyperfume.Backend.mapper.impl;
 
+import org.springframework.stereotype.Component;
+
 import com.Hyperfume.Backend.dto.request.PerfumeVariantRequest;
 import com.Hyperfume.Backend.dto.response.PerfumeVariantResponse;
 import com.Hyperfume.Backend.entity.Perfume;
 import com.Hyperfume.Backend.entity.PerfumeVariant;
-import com.Hyperfume.Backend.mapper.impl.utils.PerfumeVariantUtil;
 import com.Hyperfume.Backend.mapper.PerfumeVariantMapper;
+import com.Hyperfume.Backend.mapper.impl.utils.PerfumeVariantUtil;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
@@ -34,7 +36,8 @@ public class PerfumeVariantMapperImpl implements PerfumeVariantMapper {
         if (variant == null) {
             return null;
         } else {
-            PerfumeVariantResponse.PerfumeVariantResponseBuilder perfumeVariantResponse = PerfumeVariantResponse.builder();
+            PerfumeVariantResponse.PerfumeVariantResponseBuilder perfumeVariantResponse =
+                    PerfumeVariantResponse.builder();
             perfumeVariantResponse.perfumeId(this.variantPerfumeId(variant));
             perfumeVariantResponse.id(variant.getId());
             perfumeVariantResponse.name(variant.getName());

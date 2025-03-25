@@ -1,7 +1,5 @@
 package com.Hyperfume.Backend.repository;
 
-import com.Hyperfume.Backend.dto.response.PerfumeGetAllResponse;
-import com.Hyperfume.Backend.entity.Perfume;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.Hyperfume.Backend.entity.Perfume;
 
 @Repository
 public interface PerfumeRepository extends JpaRepository<Perfume, Integer>, JpaSpecificationExecutor<Perfume> {
@@ -43,5 +41,4 @@ public interface PerfumeRepository extends JpaRepository<Perfume, Integer>, JpaS
 
     @Query("SELECT p FROM Perfume p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%'))")
     Page<Perfume> searchByName(@Param("name") String name, Pageable pageable);
-
 }

@@ -1,11 +1,10 @@
 package com.Hyperfume.Backend.dto.response;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @Builder
@@ -18,5 +17,5 @@ public class PageResponse<T> {
     long totalElements;
 
     @Builder.Default
-    List<T> Data= Collections.emptyList();
+    List<T> Data = Collections.emptyList();
 }

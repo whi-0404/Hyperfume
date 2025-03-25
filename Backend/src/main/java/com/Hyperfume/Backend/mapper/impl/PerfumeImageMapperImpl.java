@@ -1,12 +1,14 @@
 package com.Hyperfume.Backend.mapper.impl;
 
+import org.springframework.stereotype.Component;
+
 import com.Hyperfume.Backend.dto.request.PerfumeImageRequest;
 import com.Hyperfume.Backend.dto.response.PerfumeImageResponse;
 import com.Hyperfume.Backend.entity.Perfume;
 import com.Hyperfume.Backend.entity.PerfumeImage;
 import com.Hyperfume.Backend.mapper.PerfumeImageMapper;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor

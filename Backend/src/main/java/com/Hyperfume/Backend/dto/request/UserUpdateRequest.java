@@ -1,16 +1,15 @@
 package com.Hyperfume.Backend.dto.request;
 
-import com.Hyperfume.Backend.dto.response.RoleResponse;
+import java.time.LocalDate;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDate;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level= AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserUpdateRequest {
     String password;
     String email;

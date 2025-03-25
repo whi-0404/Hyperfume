@@ -1,5 +1,9 @@
 package com.Hyperfume.Backend.mapper.impl;
 
+import java.math.BigDecimal;
+
+import org.springframework.stereotype.Component;
+
 import com.Hyperfume.Backend.dto.request.CartRequest;
 import com.Hyperfume.Backend.dto.response.CartResponse;
 import com.Hyperfume.Backend.entity.*;
@@ -8,10 +12,8 @@ import com.Hyperfume.Backend.exception.ErrorCode;
 import com.Hyperfume.Backend.mapper.CartMapper;
 import com.Hyperfume.Backend.mapper.impl.utils.CartUtil;
 import com.Hyperfume.Backend.repository.PerfumeImageRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
@@ -134,7 +136,7 @@ public class CartMapperImpl implements CartMapper {
         }
     }
 
-    private String CartImageData(Cart cart){
+    private String CartImageData(Cart cart) {
         if (cart == null) {
             return null;
         } else {
@@ -146,7 +148,8 @@ public class CartMapperImpl implements CartMapper {
                 if (perfume == null) {
                     return null;
                 } else {
-                    PerfumeImage perfumeImage = perfumeImageRepository.findByPerfumeIdAndIsThumbnailTrue(perfume.getId())
+                    PerfumeImage perfumeImage = perfumeImageRepository
+                            .findByPerfumeIdAndIsThumbnailTrue(perfume.getId())
                             .orElseThrow(() -> new AppException(ErrorCode.IMAGE_NOT_FOUND));
 
                     return perfumeImage.getImageUrl();

@@ -1,11 +1,12 @@
 package com.Hyperfume.Backend.mapper;
 
-import com.Hyperfume.Backend.dto.request.OrderRequest;
-import com.Hyperfume.Backend.dto.response.OrderResponse;
-import com.Hyperfume.Backend.entity.Order;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+
+import com.Hyperfume.Backend.dto.request.OrderRequest;
+import com.Hyperfume.Backend.dto.response.OrderResponse;
+import com.Hyperfume.Backend.entity.Order;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface OrderMapper {
@@ -19,6 +20,4 @@ public interface OrderMapper {
     @Mapping(target = "shippingMethodId", source = "shippingMethod.id")
     @Mapping(target = "paymentMethodId", source = "paymentMethod.id")
     OrderResponse toResponse(Order order);
-
-
 }

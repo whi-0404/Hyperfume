@@ -1,10 +1,11 @@
 package com.Hyperfume.Backend.entity.serializable;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Embeddable;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.io.Serializable;
 
 @Data
 @Builder

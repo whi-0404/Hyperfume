@@ -1,5 +1,21 @@
 package com.Hyperfume.Backend.service.impl;
 
+import java.text.ParseException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.StringJoiner;
+import java.util.UUID;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.Hyperfume.Backend.dto.request.AuthenticationRequest;
 import com.Hyperfume.Backend.dto.request.IntrospectRequest;
 import com.Hyperfume.Backend.dto.request.LogoutRequest;
@@ -18,22 +34,9 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import java.text.ParseException;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.StringJoiner;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = @__(@Autowired))
@@ -46,35 +49,29 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Value("${jwt.signerKey}")
     private String SIGNER_KEY;
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request, HttpServletResponse response)
-    {
-        var user=userRepository.findByUsername(request.getUsername())
-                .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
+    public AuthenticationResponse authenticate(AuthenticationRequest request, HttpServletResponse response) {
+        var user = userRepository
+                .findByUsername(request.getUsername())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        PasswordEncoder passwordEncoder= new BCryptPasswordEncoder(10);
-        boolean authenticated= passwordEncoder.matches(request.getPassword(),
-                user.getPassword());
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
-        if(!authenticated)
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        if (!authenticated) throw new AppException(ErrorCode.UNAUTHENTICATED);
 
         var token = generateToken(user);
 
         Cookie cookie = new Cookie("jwt", token);
         cookie.setHttpOnly(true);
-        cookie.setMaxAge(24*60*60);
+        cookie.setMaxAge(24 * 60 * 60);
         cookie.setPath("/");
         response.addCookie(cookie);
 
-        return AuthenticationResponse.builder()
-                .authenticated(true)
-                .token(token)
-                .build();
+        return AuthenticationResponse.builder().authenticated(true).token(token).build();
     }
 
-    public IntrospectResponse introspect(IntrospectRequest request)
-            throws JOSEException, ParseException {
-        var token=request.getToken();
+    public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
+        var token = request.getToken();
         boolean isvalid = true;
         try {
             verifyToken(token);
@@ -82,39 +79,35 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             isvalid = false;
         }
 
-        return IntrospectResponse.builder()
-                .valid(isvalid)
-                .build();
+        return IntrospectResponse.builder().valid(isvalid).build();
     }
+
     public void logout(LogoutRequest request) throws ParseException, JOSEException {
         var signToken = verifyToken(request.getToken());
 
         String jit = signToken.getJWTClaimsSet().getJWTID();
         Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
 
-        InvalidatedToken invalidatedToken = InvalidatedToken.builder()
-                .id(jit)
-                .expiryTime(expiryTime)
-                .build();
+        InvalidatedToken invalidatedToken =
+                InvalidatedToken.builder().id(jit).expiryTime(expiryTime).build();
 
         invalidatedTokenRepository.save(invalidatedToken);
     }
 
     private SignedJWT verifyToken(String token) throws JOSEException, ParseException {
-        //Get SIGNER_KEY
+        // Get SIGNER_KEY
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
 
         SignedJWT signedJWT = SignedJWT.parse(token);
 
-        //Get ExpirationTime
-        Date expiryTime=signedJWT.getJWTClaimsSet().getExpirationTime();
+        // Get ExpirationTime
+        Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
 
-        //Check SIGNER_KEY
-        var verified =signedJWT.verify(verifier);
-        if(!(verified&&expiryTime.after(new Date())))
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        // Check SIGNER_KEY
+        var verified = signedJWT.verify(verifier);
+        if (!(verified && expiryTime.after(new Date()))) throw new AppException(ErrorCode.UNAUTHENTICATED);
 
-        //Check logout
+        // Check logout
         if (invalidatedTokenRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
             throw new AppException(ErrorCode.UNAUTHENTICATED);
 
@@ -127,44 +120,36 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var jit = signedJWT.getJWTClaimsSet().getJWTID();
         var expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
 
-        InvalidatedToken invalidatedToken = InvalidatedToken.builder()
-                .id(jit)
-                .expiryTime(expiryTime)
-                .build();
+        InvalidatedToken invalidatedToken =
+                InvalidatedToken.builder().id(jit).expiryTime(expiryTime).build();
 
         invalidatedTokenRepository.save(invalidatedToken);
 
         var username = signedJWT.getJWTClaimsSet().getSubject();
 
-        var user = userRepository.findByUsername(username).orElseThrow(
-                () -> new AppException(ErrorCode.UNAUTHENTICATED)
-        );
+        var user =
+                userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
 
-        var token=generateToken(user);
+        var token = generateToken(user);
 
-        return AuthenticationResponse.builder()
-                .authenticated(true)
-                .build();
+        return AuthenticationResponse.builder().authenticated(true).build();
     }
 
-    private String generateToken(User user)
-    {
-        //header of token
-        JWSHeader header=new JWSHeader(JWSAlgorithm.HS512);
-        //payload of token
-        JWTClaimsSet jwtClaimsSet=new JWTClaimsSet.Builder()
+    private String generateToken(User user) {
+        // header of token
+        JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
+        // payload of token
+        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getUsername())
                 .issuer("hyperfume.com")
                 .issueTime(new Date())
-                .expirationTime(new Date(
-                        Instant.now().plus(1, ChronoUnit.DAYS).toEpochMilli()
-                ))
+                .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.DAYS).toEpochMilli()))
                 .jwtID(UUID.randomUUID().toString())
-                .claim("scope",buildScope(user))
+                .claim("scope", buildScope(user))
                 .build();
 
-        Payload payload=new Payload(jwtClaimsSet.toJSONObject());
-        JWSObject jwsObject= new JWSObject(header, payload);
+        Payload payload = new Payload(jwtClaimsSet.toJSONObject());
+        JWSObject jwsObject = new JWSObject(header, payload);
 
         try {
             jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
@@ -175,13 +160,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
     }
 
-    private String buildScope(User user){
-        StringJoiner stringJoiner= new StringJoiner(" ");
+    private String buildScope(User user) {
+        StringJoiner stringJoiner = new StringJoiner(" ");
 
-        if(user.getRole() != null){
-                stringJoiner.add(user.getRole().getName());
+        if (user.getRole() != null) {
+            stringJoiner.add(user.getRole().getName());
         }
         return stringJoiner.toString();
     }
-
 }

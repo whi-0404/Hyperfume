@@ -1,8 +1,9 @@
 package com.Hyperfume.Backend.configuration;
 
-import com.Hyperfume.Backend.dto.request.IntrospectRequest;
-import com.Hyperfume.Backend.service.impl.AuthenticationServiceImpl;
-import com.nimbusds.jose.JOSEException;
+import java.text.ParseException;
+import java.util.Objects;
+import javax.crypto.spec.SecretKeySpec;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -12,9 +13,9 @@ import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.spec.SecretKeySpec;
-import java.text.ParseException;
-import java.util.Objects;
+import com.Hyperfume.Backend.dto.request.IntrospectRequest;
+import com.Hyperfume.Backend.service.impl.AuthenticationServiceImpl;
+import com.nimbusds.jose.JOSEException;
 
 @Component
 public class CustomJwtDecoder implements JwtDecoder {

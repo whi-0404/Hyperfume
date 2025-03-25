@@ -1,5 +1,12 @@
 package com.Hyperfume.Backend.service.impl;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
 import com.Hyperfume.Backend.dto.request.OrderItemRequest;
 import com.Hyperfume.Backend.dto.request.OrderRequest;
 import com.Hyperfume.Backend.dto.response.OrderItemResponse;
@@ -17,21 +24,16 @@ import com.Hyperfume.Backend.repository.OrderRepository;
 import com.Hyperfume.Backend.repository.PerfumeVariantRepository;
 import com.Hyperfume.Backend.repository.UserRepository;
 import com.Hyperfume.Backend.service.OrderService;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@FieldDefaults(level= AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class OrderServiceImpl implements OrderService {
     OrderRepository orderRepository;
     OrderMapper orderMapper;
@@ -44,8 +46,7 @@ public class OrderServiceImpl implements OrderService {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
 
-        User user = userRepository.findByUsername(name)
-                .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
+        User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         // Kiểm tra tồn kho
         for (OrderItemRequest itemRequest : orderItemRequests) {
@@ -64,12 +65,13 @@ public class OrderServiceImpl implements OrderService {
                     OrderItem orderItem = orderItemMapper.toEntity(orderItemRequest);
                     orderItem.setOrder(orderSaved);
 
-
-                    PerfumeVariant perfumeVariant = perfumeVariantRepository.findById(orderItemRequest.getPerfumeVariantId())
+                    PerfumeVariant perfumeVariant = perfumeVariantRepository
+                            .findById(orderItemRequest.getPerfumeVariantId())
                             .orElseThrow(() -> new AppException(ErrorCode.VARIANT_NOT_FOUND));
                     int updatedStock = perfumeVariant.getPerfume_stock_quantity() - orderItemRequest.getQuantity();
                     if (updatedStock < 0) {
-                        throw new IllegalArgumentException("Số lượng tồn kho không đủ cho sản phẩm ID: " + orderItemRequest.getPerfumeVariantId());
+                        throw new IllegalArgumentException(
+                                "Số lượng tồn kho không đủ cho sản phẩm ID: " + orderItemRequest.getPerfumeVariantId());
                     }
                     perfumeVariant.setPerfume_stock_quantity(updatedStock);
                     perfumeVariantRepository.save(perfumeVariant);
@@ -80,9 +82,8 @@ public class OrderServiceImpl implements OrderService {
 
         orderItemRepository.saveAll(orderItems);
 
-        List<OrderItemResponse> orderItemResponses = orderItems.stream()
-                .map(orderItemMapper::toResponse)
-                .collect(Collectors.toList());
+        List<OrderItemResponse> orderItemResponses =
+                orderItems.stream().map(orderItemMapper::toResponse).collect(Collectors.toList());
 
         OrderResponse orderResponse = orderMapper.toResponse(orderSaved);
         orderResponse.setOrderItemResponses(orderItemResponses);
@@ -92,9 +93,9 @@ public class OrderServiceImpl implements OrderService {
 
         return orderResponse;
     }
+
     private BigDecimal calculateTotalPriceOrder(OrderResponse orderResponse) {
-        return orderResponse.getOrderItemResponses()
-                .stream()
+        return orderResponse.getOrderItemResponses().stream()
                 .map(OrderItemResponse::getTotalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }

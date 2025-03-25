@@ -1,10 +1,11 @@
 package com.Hyperfume.Backend.entity;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.*;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.math.BigDecimal;
 
 @Entity
 @Data
@@ -12,7 +13,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name="order_items")
+@Table(name = "order_items")
 public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -31,5 +32,4 @@ public class OrderItem {
 
     @Column(name = "quantity")
     int quantity;
-
 }

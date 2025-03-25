@@ -1,22 +1,22 @@
 package com.Hyperfume.Backend.mapper.impl;
 
+import org.springframework.stereotype.Component;
+
 import com.Hyperfume.Backend.dto.request.RateRequest;
 import com.Hyperfume.Backend.dto.response.RateResponse;
 import com.Hyperfume.Backend.entity.Perfume;
 import com.Hyperfume.Backend.entity.Rate;
 import com.Hyperfume.Backend.entity.User;
-import com.Hyperfume.Backend.exception.AppException;
-import com.Hyperfume.Backend.exception.ErrorCode;
 import com.Hyperfume.Backend.mapper.RateMapper;
 import com.Hyperfume.Backend.repository.PerfumeRepository;
-import com.Hyperfume.Backend.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
 public class RateMapperImpl implements RateMapper {
     PerfumeRepository perfumeRepository;
+
     public Rate toEntity(RateRequest request) {
         if (request == null) {
             return null;
@@ -42,11 +42,12 @@ public class RateMapperImpl implements RateMapper {
             return rateResponse.build();
         }
     }
-    public void updateRate(Rate rate, RateRequest request){
-        if(request.getRateContext()!=null){
+
+    public void updateRate(Rate rate, RateRequest request) {
+        if (request.getRateContext() != null) {
             rate.setRateContext(request.getRateContext());
         }
-        if(request.getRateStar() !=null){
+        if (request.getRateStar() != null) {
             rate.setRateStar(request.getRateStar());
         }
     }

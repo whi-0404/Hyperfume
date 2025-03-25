@@ -1,12 +1,13 @@
 package com.Hyperfume.Backend.entity;
 
-import com.Hyperfume.Backend.entity.serializable.RateKey;
+import java.time.LocalDate;
+
 import jakarta.persistence.*;
+
+import com.Hyperfume.Backend.entity.serializable.RateKey;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name="rates")
+@Table(name = "rates")
 public class Rate {
     @EmbeddedId
     RateKey id;
@@ -37,8 +38,9 @@ public class Rate {
 
     @Column(name = "rate_datetime", updatable = false)
     private LocalDate rateDatetime;
+
     @PrePersist
-    protected void onCreate(){
+    protected void onCreate() {
         this.rateDatetime = LocalDate.now();
     }
 }

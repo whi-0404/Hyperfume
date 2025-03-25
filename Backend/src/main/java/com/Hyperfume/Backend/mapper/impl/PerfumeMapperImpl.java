@@ -1,5 +1,13 @@
 package com.Hyperfume.Backend.mapper.impl;
 
+import static java.util.Collections.max;
+import static java.util.Collections.min;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Component;
+
 import com.Hyperfume.Backend.dto.request.PerfumeRequest;
 import com.Hyperfume.Backend.dto.response.PerfumeGetAllResponse;
 import com.Hyperfume.Backend.dto.response.PerfumeImageResponse;
@@ -10,15 +18,9 @@ import com.Hyperfume.Backend.exception.AppException;
 import com.Hyperfume.Backend.exception.ErrorCode;
 import com.Hyperfume.Backend.mapper.PerfumeMapper;
 import com.Hyperfume.Backend.repository.PerfumeImageRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static java.util.Collections.max;
-import static java.util.Collections.min;
 
 @Component
 @RequiredArgsConstructor
@@ -81,14 +83,14 @@ public class PerfumeMapperImpl implements PerfumeMapper {
             perfumeGetAllResponse.sale(perfume.isSale());
             perfumeGetAllResponse.flash_sale(perfume.isFlash_sale());
             perfumeGetAllResponse.discount(perfume.getDiscount());
-            perfumeGetAllResponse.max_price(max(perfume.getVariants().stream()
-                                                                    .map(PerfumeVariant::getPrice)
-                                                                    .toList()));
-            perfumeGetAllResponse.min_price(min(perfume.getVariants().stream()
-                                                                    .map(PerfumeVariant::getPrice)
-                                                                    .toList()));
-            perfumeGetAllResponse.ThumbnailImageUrl(perfumeImageRepository.findByPerfumeIdAndIsThumbnailTrue(perfume.getId())
-                    .orElseThrow(()->new AppException(ErrorCode.THUMBNAIL_NOT_FOUND)).getImageUrl());
+            perfumeGetAllResponse.max_price(max(
+                    perfume.getVariants().stream().map(PerfumeVariant::getPrice).toList()));
+            perfumeGetAllResponse.min_price(min(
+                    perfume.getVariants().stream().map(PerfumeVariant::getPrice).toList()));
+            perfumeGetAllResponse.ThumbnailImageUrl(perfumeImageRepository
+                    .findByPerfumeIdAndIsThumbnailTrue(perfume.getId())
+                    .orElseThrow(() -> new AppException(ErrorCode.THUMBNAIL_NOT_FOUND))
+                    .getImageUrl());
             return perfumeGetAllResponse.build();
         }
     }
@@ -117,9 +119,9 @@ public class PerfumeMapperImpl implements PerfumeMapper {
                 perfume.middle_notes(request.getMiddle_notes());
                 perfume.base_notes(request.getBase_notes());
 
-                if(request.getDiscount() == null){
+                if (request.getDiscount() == null) {
                     perfume.discount(0.0);
-                }else {
+                } else {
                     perfume.discount(request.getDiscount());
                     perfume.sale(true);
                 }
@@ -132,7 +134,8 @@ public class PerfumeMapperImpl implements PerfumeMapper {
         }
     }
 
-    public void updateEntity(Perfume perfume, PerfumeRequest request, Brand brand, ScrentFamily screntFamily, Country country) {
+    public void updateEntity(
+            Perfume perfume, PerfumeRequest request, Brand brand, ScrentFamily screntFamily, Country country) {
         if (request != null || brand != null || screntFamily != null || country != null) {
             if (request != null) {
                 if (request.getName() != null) {
@@ -204,10 +207,9 @@ public class PerfumeMapperImpl implements PerfumeMapper {
                 perfume.setCountry(country);
             }
 
-            if(request.getDiscount() != null && request.getDiscount() >0){
+            if (request.getDiscount() != null && request.getDiscount() > 0) {
                 perfume.setSale(true);
             }
-
         }
     }
 
@@ -257,17 +259,13 @@ public class PerfumeMapperImpl implements PerfumeMapper {
         if (variants == null) {
             return null;
         }
-        return variants.stream()
-                .map(perfumeVariantMapper::toResponse)
-                .collect(Collectors.toList());
+        return variants.stream().map(perfumeVariantMapper::toResponse).collect(Collectors.toList());
     }
 
     private List<PerfumeImageResponse> mapImagesToResponses(List<PerfumeImage> images) {
         if (images == null) {
             return null;
         }
-        return images.stream()
-                .map(perfumeImageMapper::toResponse)
-                .collect(Collectors.toList());
+        return images.stream().map(perfumeImageMapper::toResponse).collect(Collectors.toList());
     }
 }

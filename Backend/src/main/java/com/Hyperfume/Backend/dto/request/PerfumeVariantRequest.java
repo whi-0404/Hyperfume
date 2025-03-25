@@ -1,12 +1,12 @@
 package com.Hyperfume.Backend.dto.request;
 
-import jakarta.validation.constraints.DecimalMax;
+import java.math.BigDecimal;
+
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.math.BigDecimal;
 
 @Data
 @Builder

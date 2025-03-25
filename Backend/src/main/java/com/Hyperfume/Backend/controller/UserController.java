@@ -1,20 +1,22 @@
 package com.Hyperfume.Backend.controller;
 
+import java.util.List;
+import java.util.Set;
+
+import jakarta.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
 import com.Hyperfume.Backend.dto.request.UserCreationRequest;
 import com.Hyperfume.Backend.dto.request.UserUpdateRequest;
 import com.Hyperfume.Backend.dto.response.ApiResponse;
 import com.Hyperfume.Backend.dto.response.PerfumeResponse;
 import com.Hyperfume.Backend.dto.response.UserResponse;
 import com.Hyperfume.Backend.service.UserService;
-import com.Hyperfume.Backend.service.impl.UserServiceImpl;
-import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/users")
@@ -25,16 +27,14 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request)
-    {
+    ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.createUser(request))
                 .build();
     }
 
     @GetMapping
-    ApiResponse<List<UserResponse>> getUsers()
-    {
+    ApiResponse<List<UserResponse>> getUsers() {
 
         return ApiResponse.<List<UserResponse>>builder()
                 .result(userService.getUsers())
@@ -42,31 +42,29 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    ApiResponse<UserResponse> getUser(@PathVariable("userId") Integer userId)
-    {
+    ApiResponse<UserResponse> getUser(@PathVariable("userId") Integer userId) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.getUser(userId))
                 .build();
     }
 
     @GetMapping(value = "/my-info")
-    ApiResponse<UserResponse> getMyInfo()
-    {
+    ApiResponse<UserResponse> getMyInfo() {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.getMyInfo())
                 .build();
     }
 
     @PutMapping("/{userId}")
-    ApiResponse<UserResponse> updateUser(@PathVariable("userId") Integer userId, @RequestBody UserUpdateRequest request)
-    {
+    ApiResponse<UserResponse> updateUser(
+            @PathVariable("userId") Integer userId, @RequestBody UserUpdateRequest request) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateUser(userId, request))
                 .build();
     }
 
     @DeleteMapping("/{userId}")
-    ApiResponse<String> deleteUser(@PathVariable Integer userId){
+    ApiResponse<String> deleteUser(@PathVariable Integer userId) {
         userService.deactivateUser(userId);
         return ApiResponse.<String>builder()
                 .result("User has been deactivated successfully.")
@@ -74,16 +72,15 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/favorites/{perfumeId}")
-    ApiResponse<String> addPerfumeToFavorites(@PathVariable("userId") Integer userId, @PathVariable("perfumeId") Integer perfumeId) {
+    ApiResponse<String> addPerfumeToFavorites(
+            @PathVariable("userId") Integer userId, @PathVariable("perfumeId") Integer perfumeId) {
         userService.addPerfumeToFavorites(userId, perfumeId);
 
-        return ApiResponse.<String>builder()
-                .result("Successfully")
-                .build();
+        return ApiResponse.<String>builder().result("Successfully").build();
     }
 
     @GetMapping("/{userId}/favorites")
-    ApiResponse<Set<PerfumeResponse>> getFavoritesPerfumes(@PathVariable("userId") Integer userId){
+    ApiResponse<Set<PerfumeResponse>> getFavoritesPerfumes(@PathVariable("userId") Integer userId) {
         return ApiResponse.<Set<PerfumeResponse>>builder()
                 .result(userService.getFavoritePerfumes(userId))
                 .build();

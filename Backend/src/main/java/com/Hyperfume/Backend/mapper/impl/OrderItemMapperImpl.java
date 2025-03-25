@@ -1,5 +1,9 @@
 package com.Hyperfume.Backend.mapper.impl;
 
+import java.math.BigDecimal;
+
+import org.springframework.stereotype.Component;
+
 import com.Hyperfume.Backend.dto.request.OrderItemRequest;
 import com.Hyperfume.Backend.dto.response.OrderItemResponse;
 import com.Hyperfume.Backend.entity.*;
@@ -9,11 +13,10 @@ import com.Hyperfume.Backend.mapper.OrderItemMapper;
 import com.Hyperfume.Backend.mapper.impl.utils.PerfumeVariantUtil;
 import com.Hyperfume.Backend.repository.PerfumeImageRepository;
 import com.Hyperfume.Backend.repository.PerfumeVariantRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -26,17 +29,18 @@ public class OrderItemMapperImpl implements OrderItemMapper {
         if (request == null) {
             return null;
         } else {
-            int variantId= request.getPerfumeVariantId();
-            PerfumeVariant perfumeVariant = perfumeVariantRepository.findById(variantId)
-                    .orElseThrow(() ->new AppException(ErrorCode.VARIANT_NOT_FOUND));
+            int variantId = request.getPerfumeVariantId();
+            PerfumeVariant perfumeVariant = perfumeVariantRepository
+                    .findById(variantId)
+                    .orElseThrow(() -> new AppException(ErrorCode.VARIANT_NOT_FOUND));
             Integer quantity = request.getQuantity();
 
             OrderItem.OrderItemBuilder orderItem = OrderItem.builder();
             orderItem.perfumeVariant(perfumeVariant);
-            orderItem.totalPrice(perfumeVariantUtil.calculateDiscountedPrice(perfumeVariant)
-                    .multiply(BigDecimal.valueOf(quantity)));
+            orderItem.totalPrice(
+                    perfumeVariantUtil.calculateDiscountedPrice(perfumeVariant).multiply(BigDecimal.valueOf(quantity)));
             orderItem.quantity(quantity);
-            return  orderItem.build();
+            return orderItem.build();
         }
     }
 
@@ -116,7 +120,7 @@ public class OrderItemMapperImpl implements OrderItemMapper {
         }
     }
 
-    private String orderItemImageData(OrderItem orderItem){
+    private String orderItemImageData(OrderItem orderItem) {
         if (orderItem == null) {
             return null;
         } else {
@@ -128,7 +132,8 @@ public class OrderItemMapperImpl implements OrderItemMapper {
                 if (perfume == null) {
                     return null;
                 } else {
-                    PerfumeImage perfumeImage = perfumeImageRepository.findByPerfumeIdAndIsThumbnailTrue(perfume.getId())
+                    PerfumeImage perfumeImage = perfumeImageRepository
+                            .findByPerfumeIdAndIsThumbnailTrue(perfume.getId())
                             .orElseThrow(() -> new AppException(ErrorCode.IMAGE_NOT_FOUND));
 
                     return perfumeImage.getImageUrl();
@@ -137,7 +142,7 @@ public class OrderItemMapperImpl implements OrderItemMapper {
         }
     }
 
-    private BigDecimal orderItemVariantDiscountPrice(OrderItem orderItem){
+    private BigDecimal orderItemVariantDiscountPrice(OrderItem orderItem) {
         if (orderItem == null) {
             return null;
         } else {

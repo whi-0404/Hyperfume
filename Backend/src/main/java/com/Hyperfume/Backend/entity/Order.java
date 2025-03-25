@@ -1,12 +1,13 @@
 package com.Hyperfume.Backend.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+
+import jakarta.persistence.*;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Data
@@ -14,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name="orders")
+@Table(name = "orders")
 public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -35,7 +36,7 @@ public class Order {
     LocalDate orderDate;
 
     @PrePersist
-    protected void onCreate(){
+    protected void onCreate() {
         this.orderDate = LocalDate.now();
     }
 
@@ -59,5 +60,5 @@ public class Order {
     @JoinColumn(name = "order_id")
     List<OrderItem> orderItemList;
 
-//    boolean active;
+    //    boolean active;
 }

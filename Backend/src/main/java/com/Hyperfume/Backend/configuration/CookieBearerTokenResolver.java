@@ -1,10 +1,8 @@
 package com.Hyperfume.Backend.configuration;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
+
 import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
 public class CookieBearerTokenResolver implements BearerTokenResolver {
 
