@@ -28,6 +28,7 @@ public class SecurityConfig {
         "/auth/token",
         "/auth/introspect",
         "/auth/logout",
+            "/auth/outbound/authentication",
         "/perfumes/**",
         "/brands/**",
         "/countries/**",

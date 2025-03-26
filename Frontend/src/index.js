@@ -9,7 +9,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <>
     <UserProvider> {/* Bọc toàn bộ ứng dụng trong UserProvider */}
-      <BrowserRouter>
+      <BrowserRouter basename="/">
         <RouterCustom></RouterCustom>
       </BrowserRouter>
     </UserProvider>

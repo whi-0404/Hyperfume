@@ -7,19 +7,22 @@ import java.util.Date;
 import java.util.StringJoiner;
 import java.util.UUID;
 
+import com.Hyperfume.Backend.dto.request.*;
+import com.Hyperfume.Backend.entity.Role;
+import com.Hyperfume.Backend.repository.RoleRepository;
+import com.Hyperfume.Backend.repository.httpClient.OutboundIdentityClient;
+import com.Hyperfume.Backend.repository.httpClient.OutboundUserClient;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.Hyperfume.Backend.dto.request.AuthenticationRequest;
-import com.Hyperfume.Backend.dto.request.IntrospectRequest;
-import com.Hyperfume.Backend.dto.request.LogoutRequest;
-import com.Hyperfume.Backend.dto.request.RefreshRequest;
 import com.Hyperfume.Backend.dto.response.AuthenticationResponse;
 import com.Hyperfume.Backend.dto.response.IntrospectResponse;
 import com.Hyperfume.Backend.entity.InvalidatedToken;
@@ -39,15 +42,35 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@RequiredArgsConstructor(onConstructor_ = @__(@Autowired))
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 @Slf4j
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-    private final UserRepository userRepository;
-    private final InvalidatedTokenRepository invalidatedTokenRepository;
+    UserRepository userRepository;
+    InvalidatedTokenRepository invalidatedTokenRepository;
+    OutboundIdentityClient outboundIdentityClient;
+    OutboundUserClient outboundUserClient;
+    RoleRepository roleRepository;
 
+    @NonFinal
     @Value("${jwt.signerKey}")
-    private String SIGNER_KEY;
+    protected String SIGNER_KEY;
+
+    @NonFinal
+    @Value("${outbound.identity.client-id}")
+    protected String CLIENT_ID;
+
+    @NonFinal
+    @Value("${outbound.identity.client-secret}")
+    protected String CLIENT_SECRET;
+
+    @NonFinal
+    @Value("${outbound.identity.redirect-uri}")
+    protected String REDIRECT_URI;
+
+    @NonFinal
+    protected String GRANT_TYPE = "authorization_code";
 
     public AuthenticationResponse authenticate(AuthenticationRequest request, HttpServletResponse response) {
         var user = userRepository
@@ -68,6 +91,31 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         response.addCookie(cookie);
 
         return AuthenticationResponse.builder().authenticated(true).token(token).build();
+    }
+
+    public AuthenticationResponse outboundAuthenticate(String code){
+        var response = outboundIdentityClient.exchangeToken(ExchangeTokenRequest.builder()
+                        .clientId(CLIENT_ID)
+                        .clientSecret(CLIENT_SECRET)
+                        .redirectUri(REDIRECT_URI)
+                        .code(code)
+                        .grantType(GRANT_TYPE)
+                .build());
+
+        var userInfo = outboundUserClient.getUserInfo("json", response.getAccessToken());
+
+        User user = userRepository.findByUsername(userInfo.getEmail()).orElseGet(
+                () -> userRepository.save(User.builder()
+                                .username(userInfo.getEmail())
+                                .email(userInfo.getEmail())
+                                .role(roleRepository.findByName("USER")
+                                        .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED)))
+                        .build())
+        );
+
+        return AuthenticationResponse.builder()
+                .token(response.getAccessToken())
+                .build();
     }
 
     public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {

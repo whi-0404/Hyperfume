@@ -26,15 +26,12 @@ public class User {
     @Column(name = "user_name", nullable = false, unique = true)
     String username;
 
-    @Column(nullable = false)
     String password;
 
-    @Column(nullable = false, unique = true)
     String email;
 
     String fullname;
 
-    @Column(nullable = false)
     String phone;
 
     String address;

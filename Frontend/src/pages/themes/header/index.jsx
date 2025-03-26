@@ -147,7 +147,7 @@ const Header = () => {
               </div>
             { !user ? 
               (<span className="login-text">
-                <NavLink to="/Sign-in">ĐĂNG NHẬP</NavLink>
+                <NavLink to="/Sign-In">ĐĂNG NHẬP</NavLink>
               </span>
               ) : (
                 <div className="user-profile">
