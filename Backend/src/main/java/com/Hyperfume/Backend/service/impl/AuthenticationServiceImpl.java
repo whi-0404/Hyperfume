@@ -104,6 +104,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         var userInfo = outboundUserClient.getUserInfo("json", response.getAccessToken());
 
+        //Onboarding user
         User user = userRepository.findByUsername(userInfo.getEmail()).orElseGet(
                 () -> userRepository.save(User.builder()
                                 .username(userInfo.getEmail())
@@ -113,8 +114,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         .build())
         );
 
+        String tokenFromUserGG = generateToken(user);
+
         return AuthenticationResponse.builder()
-                .token(response.getAccessToken())
+                .token(tokenFromUserGG)
                 .build();
     }
 
