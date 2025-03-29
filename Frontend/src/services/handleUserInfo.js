@@ -11,3 +11,14 @@ export const UserInfo = async () => {
         throw error; // quăng lỗi để xử lý ở component gọi service
     }
 }
+
+export const updateUserInfo = async (userId, request) => {
+    try {
+        const response = await api.put(`/users/${userId}`, request); // trả về dữ liệu từ API
+        return response.data;
+
+    } catch (error) {
+        console.error('Error update user:', error);
+        throw error; // quăng lỗi để xử lý ở component gọi service
+    }
+}

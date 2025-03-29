@@ -1,6 +1,7 @@
 package com.Hyperfume.Backend.service.impl;
 
 import java.text.ParseException;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -13,6 +14,7 @@ import com.Hyperfume.Backend.repository.RoleRepository;
 import com.Hyperfume.Backend.repository.httpClient.OutboundIdentityClient;
 import com.Hyperfume.Backend.repository.httpClient.OutboundUserClient;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import lombok.AccessLevel;
@@ -72,6 +74,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @NonFinal
     protected String GRANT_TYPE = "authorization_code";
 
+    protected static final int MAX_AGE_AT_COOKIE = 60*60;
+    protected static final int MAX_AGE_RT_COOKIE = 7 * 24 * 60 * 60;
+
     public AuthenticationResponse authenticate(AuthenticationRequest request, HttpServletResponse response) {
         var user = userRepository
                 .findByUsername(request.getUsername())
@@ -82,18 +87,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         if (!authenticated) throw new AppException(ErrorCode.UNAUTHENTICATED);
 
-        var token = generateToken(user);
+        var token = generateToken(user, false);
+        var tokenRefresh = generateToken(user, true);
 
-        Cookie cookie = new Cookie("jwt", token);
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(24 * 60 * 60);
-        cookie.setPath("/");
-        response.addCookie(cookie);
+        setTokenToCookie(token, false, response);
+        setTokenToCookie(token, true, response);
 
-        return AuthenticationResponse.builder().authenticated(true).token(token).build();
+        return AuthenticationResponse.builder()
+                .token(token)
+                .refreshToken(tokenRefresh)
+                .build();
     }
 
-    public AuthenticationResponse outboundAuthenticate(String code){
+    public AuthenticationResponse outboundAuthenticate(String code, HttpServletResponse httpServletResponse){
         var response = outboundIdentityClient.exchangeToken(ExchangeTokenRequest.builder()
                         .clientId(CLIENT_ID)
                         .clientSecret(CLIENT_SECRET)
@@ -114,10 +120,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         .build())
         );
 
-        String tokenFromUserGG = generateToken(user);
+        String tokenFromUserGG = generateToken(user, false);
+        String tokenRefresh = generateToken(user, true);
+
+        setTokenToCookie(tokenFromUserGG, false, httpServletResponse);
+        setTokenToCookie(tokenRefresh, true, httpServletResponse);
 
         return AuthenticationResponse.builder()
                 .token(tokenFromUserGG)
+                .refreshToken(tokenRefresh)
                 .build();
     }
 
@@ -133,8 +144,23 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return IntrospectResponse.builder().valid(isvalid).build();
     }
 
-    public void logout(LogoutRequest request) throws ParseException, JOSEException {
-        var signToken = verifyToken(request.getToken());
+    public void logout(HttpServletRequest request, HttpServletResponse response)
+            throws ParseException, JOSEException {
+        String token = null;
+
+        Cookie[] cookies = request.getCookies();
+
+        if(cookies != null){
+            for(Cookie cookie : cookies){
+                if(cookie.getName().equals("jwt")){
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
+        if(token == null) throw new AppException(ErrorCode.TOKEN_NOT_FOUND_IN_COOKIES);
+
+        var signToken = verifyToken(token);
 
         String jit = signToken.getJWTClaimsSet().getJWTID();
         Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
@@ -143,6 +169,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 InvalidatedToken.builder().id(jit).expiryTime(expiryTime).build();
 
         invalidatedTokenRepository.save(invalidatedToken);
+
+        Cookie logoutCookie = new Cookie("jwt", null);
+        logoutCookie.setHttpOnly(true);
+        logoutCookie.setPath("/");
+        logoutCookie.setMaxAge(0);
+        response.addCookie(logoutCookie);
     }
 
     private SignedJWT verifyToken(String token) throws JOSEException, ParseException {
@@ -165,15 +197,37 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return signedJWT;
     }
 
-    public AuthenticationResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException {
-        var signedJWT = verifyToken(request.getToken());
+    public AuthenticationResponse refreshToken(HttpServletRequest request, HttpServletResponse response) throws ParseException, JOSEException {
+        Cookie[] cookies = request.getCookies();
+        String refreshToken = null;
+
+        if(cookies!=null){
+            for(Cookie cookie: cookies){
+                if(cookie.getName().equals("refresh_jwt")){
+                    refreshToken = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+        if(refreshToken == null) throw new AppException(ErrorCode.UNAUTHENTICATED);
+
+        var signedJWT = verifyToken(refreshToken);
 
         var jit = signedJWT.getJWTClaimsSet().getJWTID();
         var expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
 
-        InvalidatedToken invalidatedToken =
-                InvalidatedToken.builder().id(jit).expiryTime(expiryTime).build();
+        //Check blackList
+        if(invalidatedTokenRepository.existsById(jit)){
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
 
+        InvalidatedToken invalidatedToken =
+                InvalidatedToken.builder()
+                        .id(jit).
+                        expiryTime(expiryTime)
+                        .build();
+        //Save into blackList
         invalidatedTokenRepository.save(invalidatedToken);
 
         var username = signedJWT.getJWTClaimsSet().getSubject();
@@ -181,12 +235,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var user =
                 userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
 
-        var token = generateToken(user);
+        var newAccessToken = generateToken(user, false);
+        var newRefreshToken = generateToken(user, true);
 
-        return AuthenticationResponse.builder().authenticated(true).build();
+        setTokenToCookie(newRefreshToken, true, response);
+
+
+        return AuthenticationResponse.builder()
+                .token(newAccessToken)
+                .refreshToken(newRefreshToken)
+                .build();
     }
 
-    private String generateToken(User user) {
+    private String generateToken(User user, boolean isRefresh) {
         // header of token
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
         // payload of token
@@ -194,7 +255,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .subject(user.getUsername())
                 .issuer("hyperfume.com")
                 .issueTime(new Date())
-                .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.DAYS).toEpochMilli()))
+                .expirationTime(Date.from(Instant.now().plus(isRefresh ? Duration.ofDays(7) : Duration.ofHours(1))))
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
                 .build();
@@ -218,5 +279,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             stringJoiner.add(user.getRole().getName());
         }
         return stringJoiner.toString();
+    }
+
+    private void setTokenToCookie(String token, boolean isRefresh, HttpServletResponse response){
+        Cookie cookie = new Cookie(isRefresh ? "refresh_jwt" : "jwt", token);
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(isRefresh ? MAX_AGE_RT_COOKIE : MAX_AGE_AT_COOKIE);
+        cookie.setPath("/");
+        response.addCookie(cookie);
     }
 }

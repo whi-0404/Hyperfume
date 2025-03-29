@@ -2,6 +2,7 @@ package com.Hyperfume.Backend.controller;
 
 import java.text.ParseException;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +29,8 @@ public class AuthenticationController {
     AuthenticationService authenticationService;
 
     @PostMapping("/outbound/authentication")
-    ApiResponse<AuthenticationResponse> outboundAuthenticate(@RequestParam("code") String code){
-        var result = authenticationService.outboundAuthenticate(code);
+    ApiResponse<AuthenticationResponse> outboundAuthenticate(@RequestParam("code") String code, HttpServletResponse response){
+        var result = authenticationService.outboundAuthenticate(code, response);
         return ApiResponse.<AuthenticationResponse>builder().result(result).build();
     }
 
@@ -49,16 +50,16 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh")
-    ApiResponse<AuthenticationResponse> refresh(@RequestBody RefreshRequest request)
+    ApiResponse<AuthenticationResponse> refresh(HttpServletRequest request, HttpServletResponse response)
             throws ParseException, JOSEException {
-        var result = authenticationService.refreshToken(request);
+        var result = authenticationService.refreshToken(request, response);
 
         return ApiResponse.<AuthenticationResponse>builder().result(result).build();
     }
 
     @PostMapping("/logout")
-    ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
-        authenticationService.logout(request);
+    ApiResponse<Void> logout(HttpServletRequest request, HttpServletResponse response) throws ParseException, JOSEException {
+        authenticationService.logout(request, response);
 
         return ApiResponse.<Void>builder().build();
     }

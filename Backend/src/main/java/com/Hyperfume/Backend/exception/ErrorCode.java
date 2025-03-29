@@ -59,7 +59,9 @@ public enum ErrorCode {
 
     NO_FOUND_BY_SEARCH_NAME(1036, "don't find anything", HttpStatus.BAD_REQUEST),
     RATE_EXISTED(1037, "rate existed", HttpStatus.BAD_REQUEST),
-    RATE_NOT_EXISTED(1038, "rate not existed", HttpStatus.BAD_REQUEST);
+    RATE_NOT_EXISTED(1038, "rate not existed", HttpStatus.BAD_REQUEST),
+
+    TOKEN_NOT_FOUND_IN_COOKIES(1039, "token not found in cookie", HttpStatus.BAD_REQUEST);
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

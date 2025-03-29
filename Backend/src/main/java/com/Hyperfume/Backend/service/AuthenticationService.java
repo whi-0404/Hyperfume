@@ -2,6 +2,7 @@ package com.Hyperfume.Backend.service;
 
 import java.text.ParseException;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import com.Hyperfume.Backend.dto.request.AuthenticationRequest;
@@ -17,9 +18,9 @@ public interface AuthenticationService {
 
     IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException;
 
-    void logout(LogoutRequest request) throws ParseException, JOSEException;
+    void logout(HttpServletRequest request, HttpServletResponse response) throws ParseException, JOSEException;
 
-    AuthenticationResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException;
+    AuthenticationResponse refreshToken(HttpServletRequest request, HttpServletResponse response) throws ParseException, JOSEException;
 
-    AuthenticationResponse outboundAuthenticate(String code);
+    AuthenticationResponse outboundAuthenticate(String code, HttpServletResponse httpServletResponse);
 }

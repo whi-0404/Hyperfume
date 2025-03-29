@@ -17,15 +17,14 @@
 
 import api from './axiosConfig';
 
-export const login = async (username, password) => {
+export const logout = async () => {
     try {
-        const response = await api.post('/auth/token', {
-            username,
-            password
-        });
+        const response = await api.post('/auth/logout');
         return response.data;
     } catch (error) {
-        console.error('Error logging in:', error);
+        console.error('Error logout:', error);
         throw error;
     }
 }
+
+

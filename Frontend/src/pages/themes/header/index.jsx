@@ -161,7 +161,7 @@ const Header = () => {
                     </NavLink>
                   </div>
                   <span className="login-text">
-                    <NavLink to="/Profile">{user.fullname}</NavLink>
+                    <NavLink to="/Profile">{user.username}</NavLink>
                   </span>
                 </div>
                 )}

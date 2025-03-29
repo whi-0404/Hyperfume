@@ -15,6 +15,7 @@ public class UserUpdateRequest {
     String email;
     String fullname;
     String phone;
+    String gender;
     String address;
     LocalDate dob;
 }

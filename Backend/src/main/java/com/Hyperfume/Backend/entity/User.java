@@ -34,6 +34,8 @@ public class User {
 
     String phone;
 
+    String gender;
+
     String address;
 
     @Column(name = "created_at", updatable = false)
