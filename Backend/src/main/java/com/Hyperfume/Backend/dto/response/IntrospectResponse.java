@@ -1,5 +1,6 @@
 package com.Hyperfume.Backend.dto.response;
 
+import com.Hyperfume.Backend.exception.ErrorCode;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -10,4 +11,5 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class IntrospectResponse {
     boolean valid;
+    ErrorCode errorCode;
 }

@@ -45,10 +45,8 @@ public class RateServiceImpl implements RateService {
         if (!perfumeRepository.existsById(request.getPerfumeId()))
             throw new AppException(ErrorCode.PERFUME_NOT_EXISTED);
 
-        // Tạo khóa chính cho Rate
         RateKey rateKey = new RateKey(user.getId(), request.getPerfumeId());
 
-        // Kiểm tra nếu đánh giá đã tồn tại
         if (rateRepository.existsById(rateKey)) {
             throw new AppException(ErrorCode.RATE_EXISTED);
         }

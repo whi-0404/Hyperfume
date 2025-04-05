@@ -4,6 +4,9 @@ import java.text.ParseException;
 import java.util.Objects;
 import javax.crypto.spec.SecretKeySpec;
 
+import com.Hyperfume.Backend.exception.AppException;
+import com.Hyperfume.Backend.exception.JwtAuthenticationException;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -18,6 +21,7 @@ import com.Hyperfume.Backend.service.impl.AuthenticationServiceImpl;
 import com.nimbusds.jose.JOSEException;
 
 @Component
+@Log4j2
 public class CustomJwtDecoder implements JwtDecoder {
     @Value("${jwt.signerKey}")
     private String signerKey;
@@ -34,7 +38,9 @@ public class CustomJwtDecoder implements JwtDecoder {
             var response = authenticationService.introspect(
                     IntrospectRequest.builder().token(token).build());
 
-            if (!response.isValid()) throw new JwtException("Token invalid");
+            if (!response.isValid()) {
+                throw new JwtAuthenticationException(response.getErrorCode());
+            }
         } catch (JOSEException | ParseException e) {
             throw new JwtException(e.getMessage());
         }

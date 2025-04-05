@@ -27,14 +27,14 @@ public class ApplicationInitConfig {
     @Bean
     ApplicationRunner applicationRunner(UserRepository userRepository, RoleRepository roleRepository) {
         return args -> {
-            if (userRepository.findByUsername("admin").isEmpty()) {
+            if (userRepository.findByUsername("Admin123").isEmpty()) {
 
                 com.Hyperfume.Backend.entity.Role adminrole = roleRepository
                         .findByName("ADMIN")
                         .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
                 User user = User.builder()
-                        .username("admin")
-                        .password(passwordEncoder.encode("admin12345"))
+                        .username("Admin123")
+                        .password(passwordEncoder.encode("12345678"))
                         .email("admin@gmail.com")
                         .phone("010101")
                         .role(adminrole)

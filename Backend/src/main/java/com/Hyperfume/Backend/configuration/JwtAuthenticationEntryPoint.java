@@ -2,6 +2,7 @@ package com.Hyperfume.Backend.configuration;
 
 import java.io.IOException;
 
+import com.Hyperfume.Backend.exception.JwtAuthenticationException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,6 +23,15 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             throws IOException, ServletException {
 
         ErrorCode errorCode = ErrorCode.UNAUTHENTICATED;
+
+        Throwable cause = authException;
+        while (cause != null) {
+            if (cause instanceof JwtAuthenticationException) {
+                errorCode = ((JwtAuthenticationException) cause).getErrorCode();
+                break;
+            }
+            cause = cause.getCause();
+        }
 
         response.setStatus(errorCode.getStatusCode().value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);

@@ -20,7 +20,7 @@ public interface AuthenticationService {
 
     void logout(HttpServletRequest request, HttpServletResponse response) throws ParseException, JOSEException;
 
-    AuthenticationResponse refreshToken(HttpServletRequest request, HttpServletResponse response) throws ParseException, JOSEException;
+    AuthenticationResponse refreshToken(String refreshToken, HttpServletRequest request, HttpServletResponse response) throws ParseException, JOSEException;
 
     AuthenticationResponse outboundAuthenticate(String code, HttpServletResponse httpServletResponse);
 }

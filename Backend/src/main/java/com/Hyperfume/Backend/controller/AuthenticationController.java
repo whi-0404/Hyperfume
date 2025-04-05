@@ -50,9 +50,9 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh")
-    ApiResponse<AuthenticationResponse> refresh(HttpServletRequest request, HttpServletResponse response)
+    ApiResponse<AuthenticationResponse> refresh(@CookieValue("refresh_jwt") String refreshToken, HttpServletRequest request, HttpServletResponse response)
             throws ParseException, JOSEException {
-        var result = authenticationService.refreshToken(request, response);
+        var result = authenticationService.refreshToken(refreshToken, request, response);
 
         return ApiResponse.<AuthenticationResponse>builder().result(result).build();
     }

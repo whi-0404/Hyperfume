@@ -3,13 +3,11 @@ package com.Hyperfume.Backend.service.impl;
 import java.text.ParseException;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.StringJoiner;
 import java.util.UUID;
 
 import com.Hyperfume.Backend.dto.request.*;
-import com.Hyperfume.Backend.entity.Role;
 import com.Hyperfume.Backend.repository.RoleRepository;
 import com.Hyperfume.Backend.repository.httpClient.OutboundIdentityClient;
 import com.Hyperfume.Backend.repository.httpClient.OutboundUserClient;
@@ -91,7 +89,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var tokenRefresh = generateToken(user, true);
 
         setTokenToCookie(token, false, response);
-        setTokenToCookie(token, true, response);
+        setTokenToCookie(tokenRefresh, true, response);
 
         return AuthenticationResponse.builder()
                 .token(token)
@@ -134,33 +132,25 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
         var token = request.getToken();
+        ErrorCode errorCode = null;
         boolean isvalid = true;
         try {
             verifyToken(token);
         } catch (AppException e) {
             isvalid = false;
+            errorCode = e.getErrorCode();
         }
 
-        return IntrospectResponse.builder().valid(isvalid).build();
+        return IntrospectResponse.builder()
+                .valid(isvalid)
+                .errorCode(errorCode)
+                .build();
     }
 
     public void logout(HttpServletRequest request, HttpServletResponse response)
-            throws ParseException, JOSEException {
-        String token = null;
+            throws ParseException{
 
-        Cookie[] cookies = request.getCookies();
-
-        if(cookies != null){
-            for(Cookie cookie : cookies){
-                if(cookie.getName().equals("jwt")){
-                    token = cookie.getValue();
-                    break;
-                }
-            }
-        }
-        if(token == null) throw new AppException(ErrorCode.TOKEN_NOT_FOUND_IN_COOKIES);
-
-        var signToken = verifyToken(token);
+        var signToken = SignedJWT.parse(request.getHeader("Authorization").substring(7));
 
         String jit = signToken.getJWTClaimsSet().getJWTID();
         Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
@@ -170,11 +160,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         invalidatedTokenRepository.save(invalidatedToken);
 
-        Cookie logoutCookie = new Cookie("jwt", null);
-        logoutCookie.setHttpOnly(true);
-        logoutCookie.setPath("/");
-        logoutCookie.setMaxAge(0);
-        response.addCookie(logoutCookie);
+        removeCookie("jwt", "/", response);
+        removeCookie("refresh_jwt", "/", response);
     }
 
     private SignedJWT verifyToken(String token) throws JOSEException, ParseException {
@@ -188,8 +175,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         // Check SIGNER_KEY
         var verified = signedJWT.verify(verifier);
-        if (!(verified && expiryTime.after(new Date()))) throw new AppException(ErrorCode.UNAUTHENTICATED);
+        if (!(verified))
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
 
+        if(!(expiryTime.after(new Date()))){
+            throw new AppException(ErrorCode.EXPIRED_TOKEN);
+        }
         // Check logout
         if (invalidatedTokenRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
             throw new AppException(ErrorCode.UNAUTHENTICATED);
@@ -197,20 +188,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return signedJWT;
     }
 
-    public AuthenticationResponse refreshToken(HttpServletRequest request, HttpServletResponse response) throws ParseException, JOSEException {
-        Cookie[] cookies = request.getCookies();
-        String refreshToken = null;
-
-        if(cookies!=null){
-            for(Cookie cookie: cookies){
-                if(cookie.getName().equals("refresh_jwt")){
-                    refreshToken = cookie.getValue();
-                    break;
-                }
-            }
-        }
-
-        if(refreshToken == null) throw new AppException(ErrorCode.UNAUTHENTICATED);
+    public AuthenticationResponse refreshToken(String refreshToken, HttpServletRequest request, HttpServletResponse response)
+            throws ParseException, JOSEException {
 
         var signedJWT = verifyToken(refreshToken);
 
@@ -239,7 +218,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var newRefreshToken = generateToken(user, true);
 
         setTokenToCookie(newRefreshToken, true, response);
-
+        setTokenToCookie(newAccessToken, false, response);
 
         return AuthenticationResponse.builder()
                 .token(newAccessToken)
@@ -255,7 +234,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .subject(user.getUsername())
                 .issuer("hyperfume.com")
                 .issueTime(new Date())
-                .expirationTime(Date.from(Instant.now().plus(isRefresh ? Duration.ofDays(7) : Duration.ofHours(1))))
+                .expirationTime(Date.from(Instant.now().plus(isRefresh ? Duration.ofDays(7) : Duration.ofSeconds(10))))
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
                 .build();
@@ -285,7 +264,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         Cookie cookie = new Cookie(isRefresh ? "refresh_jwt" : "jwt", token);
         cookie.setHttpOnly(true);
         cookie.setMaxAge(isRefresh ? MAX_AGE_RT_COOKIE : MAX_AGE_AT_COOKIE);
+        cookie.setDomain("localhost");
         cookie.setPath("/");
+        response.addCookie(cookie);
+    }
+
+    private void removeCookie(String name, String path, HttpServletResponse response) {
+        Cookie cookie = new Cookie(name, null);
+        cookie.setHttpOnly(true);
+        cookie.setPath(path);
+        cookie.setMaxAge(0);
         response.addCookie(cookie);
     }
 }

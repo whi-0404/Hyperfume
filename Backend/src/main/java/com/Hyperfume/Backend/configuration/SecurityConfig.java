@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,35 +24,94 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+    public static final String BASE_URL = "/hyperfume";
 
-    private final String[] PUBLIC_ENDPOINTS = {
-        "/users/**",
-        "/auth/token",
-        "/auth/introspect",
-        "/auth/logout",
+    public static final String[] AUTH_ENDPOINTS = {
+            "/auth/token",
+            "/auth/introspect",
+            "/auth/refresh",
             "/auth/outbound/authentication",
-        "/perfumes/**",
-        "/brands/**",
-        "/countries/**",
-        "/screntFamilies/**"
+    };
+
+    public static final String[] PUBLIC_GET_ENDPOINTS = {
+            "/brands",
+            "/countries",
+            "/screntFamilies",
+            "/perfumes",
+            "/perfumes/{perfumeId}",
+            "/perfumes/{perfumeId}/variants",
+            "/perfumes/{perfumeId}/rates",
+            "/payment_method",
+            "/shipping_methods"
+    };
+
+    public static final String[] PUBLIC_POST_ENDPOINTS = {
+            "/users"
     };
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+    @Order(1)
+    public SecurityFilterChain publicSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .authorizeHttpRequests(request -> request.requestMatchers(PUBLIC_ENDPOINTS)
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated())
+                .securityMatcher(request -> {
+                    String path = request.getRequestURI();
+
+                    for (String authPath : AUTH_ENDPOINTS) {
+                        if (path.matches(convertToRegex(BASE_URL + authPath))) {
+                            return true;
+                        }
+                    }
+
+                    if (request.getMethod().equals(HttpMethod.GET.name())) {
+                        for (String getPath : PUBLIC_GET_ENDPOINTS) {
+                            if (path.matches(convertToRegex(BASE_URL + getPath))) {
+                                return true;
+                            }
+                        }
+                    }
+
+                    if (request.getMethod().equals(HttpMethod.POST.name())) {
+                        for (String postPath : PUBLIC_POST_ENDPOINTS) {
+                            if (path.matches(convertToRegex(BASE_URL + postPath))) {
+                                return true;
+                            }
+                        }
+                    }
+
+                    return false;
+                })
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+
+        return httpSecurity.build();
+    }
+
+    @Bean
+    @Order(2)
+    public SecurityFilterChain securedSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity
+                .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .addFilterBefore(new JwtCookieFilter(), BearerTokenAuthenticationFilter.class)
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer
                                 .decoder(customJwtDecoder())
                                 .jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                        .bearerTokenResolver(cookieBearerTokenResolver()))
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .addFilterBefore(new JwtCookieFilter(), BearerTokenAuthenticationFilter.class);
+                        .bearerTokenResolver(cookieBearerTokenResolver())
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint()))
+                .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(jwtAuthenticationEntryPoint()));
 
         return httpSecurity.build();
+    }
+
+    private String convertToRegex(String path) {
+        return "^" + path.replaceAll("\\{[^/]+\\}", "[^/]+") + "$";
+    }
+
+    @Bean
+    public JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint() {
+        return new JwtAuthenticationEntryPoint();
     }
 
     @Bean

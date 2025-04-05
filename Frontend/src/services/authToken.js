@@ -27,4 +27,14 @@ export const logout = async () => {
     }
 }
 
+export const refreshToken = async () => {
+    try {
+        const response = await api.post('/auth/refresh');
+        return response.data;
+    } catch (error) {
+        console.error('Error refresh token:', error);
+        throw error;
+    }
+}
+
 
