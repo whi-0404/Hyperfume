@@ -1,6 +1,7 @@
 package com.Hyperfume.Backend.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -76,7 +77,7 @@ public class User {
             name = "favor_perfumes",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "perfume_id"))
-    Set<Perfume> favoritePerfumes = new HashSet<>();
+    List<Perfume> favoritePerfumes = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")

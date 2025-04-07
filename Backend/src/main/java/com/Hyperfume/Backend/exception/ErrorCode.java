@@ -62,7 +62,9 @@ public enum ErrorCode {
     RATE_NOT_EXISTED(1038, "rate not existed", HttpStatus.BAD_REQUEST),
 
     TOKEN_NOT_FOUND_IN_COOKIES(1039, "token not found in cookie", HttpStatus.BAD_REQUEST),
-    EXPIRED_TOKEN(1040, "token has expired", HttpStatus.UNAUTHORIZED);
+    EXPIRED_TOKEN(1040, "token has expired", HttpStatus.UNAUTHORIZED),
+
+    PERFUME_NOT_IN_FAVORITES(1041, "perfume not in favorites", HttpStatus.BAD_REQUEST);
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

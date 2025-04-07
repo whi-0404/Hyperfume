@@ -3,14 +3,20 @@
 }
 
 .body-section {
-  margin-left: 150px;
-  margin-right: 150px;
+  margin-left: 100px;
+  margin-right: 100px;
   font-size: 32px;
 
   .row {
     box-sizing: border-box;
     padding-bottom: 50px;
     display: flex;
+    align-items: flex-start; // Align items at the top
+  }
+  
+  @media (max-width: 1400px) {
+    margin-left: 50px;
+    margin-right: 50px;
   }
 }
 
@@ -21,9 +27,10 @@ ul {
 .nav {
   margin-right: 40px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 
   ul {
+    margin-top: 92px; // Added to align with the detail-section
     li {
       margin-bottom: 10px;
       text-align: center;
@@ -35,12 +42,17 @@ ul {
       &:hover {
         background-color: rgb(223, 184, 86);
       }
+      
+      &.active {
+        background-color: rgb(223, 184, 86);
+        font-weight: bold;
+      }
     }
   }
 }
 
 .main {
-  margin-left: 100px;
+  margin-left: 50px;
 
   .title {
     text-align: center;
@@ -53,7 +65,7 @@ ul {
     flex-wrap: wrap;
     background: #fff;
     padding: 30px;
-    width: 1000px;
+    width: 1200px;
     border-radius: 30px;
 
     .detail-profile {
@@ -171,6 +183,352 @@ ul {
         background-color: #c01c22;
       }
     }
+    
+    // Placeholder for sections under development
+    .section-placeholder {
+      width: 100%;
+      text-align: center;
+      padding: 50px 0;
+      color: #898889;
+      font-style: italic;
+    }
+    
+    // Add styles for favorites section
+    &.favorites-section {
+      width: 100%;
+      box-sizing: border-box;
+      overflow: hidden;
+      max-width: 1200px;
+      padding: 20px;
+      
+      .favorites-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 15px;
+        margin-bottom: 30px;
+        width: 100%;
+        box-sizing: border-box;
+        
+        @media (max-width: 1400px) {
+          grid-template-columns: repeat(4, 1fr);
+        }
+        
+        @media (max-width: 1200px) {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        
+        @media (max-width: 992px) {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        
+        @media (max-width: 576px) {
+          grid-template-columns: repeat(1, 1fr);
+        }
+        
+        /* Individual cards styling */
+        > * {
+          width: 100%;
+          margin-bottom: 0;
+          box-sizing: border-box;
+        }
+      }
+      
+      .favorites-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 20px;
+        padding: 10px 0;
+        box-sizing: border-box;
+        
+        .total-favorites {
+          font-size: 22px;
+          
+          strong {
+            color: #d72229;
+          }
+        }
+      }
+      
+      .selection-controls {
+        margin-bottom: 20px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      
+      .favorites-actions {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-bottom: 20px;
+      }
+      
+      .selection-info {
+        margin-bottom: 10px;
+        font-size: 22px;
+        color: #333;
+      }
+      
+      .selection-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 15px;
+        
+        button {
+          padding: 10px 15px;
+          border-radius: 8px;
+          border: none;
+          font-size: 18px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          transition: all 0.2s ease;
+          
+          &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+          }
+          
+          svg {
+            font-size: 16px;
+          }
+        }
+        
+        .select-all-btn {
+          background-color: #f8f9fa;
+          color: #333;
+          
+          &:hover:not(:disabled) {
+            background-color: #e9ecef;
+          }
+        }
+        
+        .clear-selection-btn {
+          background-color: #e9ecef;
+          color: #333;
+          
+          &:hover:not(:disabled) {
+            background-color: #dee2e6;
+          }
+        }
+        
+        .remove-selected-btn {
+          background-color: #dc3545;
+          color: white;
+          
+          &:hover:not(:disabled) {
+            background-color: #c82333;
+          }
+        }
+        
+        .cancel-selection-btn {
+          background-color: #6c757d;
+          color: white;
+          
+          &:hover {
+            background-color: #5a6268;
+          }
+        }
+      }
+      
+      .select-mode-btn {
+        padding: 8px 15px;
+        border-radius: 8px;
+        background-color: rgb(245, 210, 121);
+        border: none;
+        font-size: 18px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        
+        &:hover {
+          background-color: rgb(223, 184, 86);
+        }
+      }
+      
+      .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        padding: 10px 0;
+        align-items: center;
+        clear: both;
+        width: 100%;
+        box-sizing: border-box;
+        flex-wrap: wrap;
+        
+        .page-btn, .page-number {
+          min-width: 38px;
+          height: 38px;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: #f5f1eb;
+          border: 1px solid #ddd;
+          cursor: pointer;
+          font-size: 16px;
+          transition: all 0.3s;
+          margin: 0 2px;
+          
+          &:hover:not(:disabled) {
+            background-color: rgb(245, 210, 121);
+          }
+          
+          &.active {
+            background-color: rgb(223, 184, 86);
+            color: #000;
+            font-weight: bold;
+          }
+          
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+        }
+        
+        .pagination-dots {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 30px;
+          height: 38px;
+          font-size: 16px;
+          color: #6c757d;
+        }
+        
+        .first-page, .last-page, .prev-page, .next-page {
+          font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+          .page-btn, .page-number {
+            min-width: 30px;
+            height: 30px;
+            font-size: 14px;
+          }
+        }
+      }
+      
+      .product-card-wrapper {
+        position: relative;
+        border-radius: 10px;
+        transition: all 0.2s ease;
+        padding: 8px;
+        box-sizing: border-box;
+        max-width: 100%;
+        margin: 0;
+        
+        &.selection-mode {
+          cursor: pointer;
+          
+          &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+          }
+          
+          &.selected {
+            border: 2px solid rgb(245, 210, 121);
+            background-color: rgba(245, 210, 121, 0.1);
+          }
+        }
+        
+        .product-checkbox {
+          position: absolute;
+          top: 10px;
+          left: 10px;
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          background-color: white;
+          border: 2px solid rgb(245, 210, 121);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 2;
+          cursor: pointer;
+          
+          svg {
+            color: rgb(245, 210, 121);
+            font-size: 14px;
+          }
+        }
+        
+        .remove-favorite-btn {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          background-color: rgba(255, 255, 255, 0.9);
+          border: none;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          z-index: 2;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+          opacity: 0;
+          transition: opacity 0.2s ease;
+          
+          svg {
+            color: #dc3545;
+            font-size: 16px;
+          }
+          
+          &:hover {
+            background-color: rgba(255, 255, 255, 1);
+          }
+        }
+        
+        &:hover .remove-favorite-btn {
+          opacity: 1;
+        }
+        
+        /* Điều chỉnh kích thước ProductCard bên trong */
+        > div {
+          width: 100%;
+          height: 100%;
+          box-sizing: border-box;
+          
+          img {
+            object-fit: cover;
+            width: 100%;
+            max-height: 180px;
+          }
+          
+          h3, h5 {
+            font-size: 90%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin: 5px 0;
+          }
+          
+          .product-brand {
+            font-size: 85%;
+          }
+          
+          .product-price {
+            font-size: 85%;
+          }
+        }
+      }
+    }
+    
+    &.favorites-wrapper {
+      padding: 20px;
+    }
+    
+    // Style for favorites horizontal scroll hint
+    .favorites-scroll-hint {
+      display: none; // Ẩn thay vì xóa hoàn toàn để tránh lỗi
+    }
   }
 }
 
@@ -269,6 +627,7 @@ ul {
       gap: 10px;
       width: 100%;
       padding: 0;
+      margin-top: 0; // Reset margin top for mobile view
       
       li {
         margin-bottom: 0;
@@ -285,5 +644,4 @@ ul {
       font-size: 28px;
     }
   }
-
 }

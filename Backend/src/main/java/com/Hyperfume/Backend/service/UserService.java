@@ -5,6 +5,8 @@ import java.util.Set;
 
 import com.Hyperfume.Backend.dto.request.UserCreationRequest;
 import com.Hyperfume.Backend.dto.request.UserUpdateRequest;
+import com.Hyperfume.Backend.dto.response.PageResponse;
+import com.Hyperfume.Backend.dto.response.PerfumeGetAllResponse;
 import com.Hyperfume.Backend.dto.response.PerfumeResponse;
 import com.Hyperfume.Backend.dto.response.UserResponse;
 
@@ -23,7 +25,11 @@ public interface UserService {
 
     void deactivateUser(Integer userId);
 
-    void addPerfumeToFavorites(Integer userId, Integer perfumeId);
+    void addPerfumeToFavorites(Integer perfumeId);
 
-    Set<PerfumeResponse> getFavoritePerfumes(Integer userId);
+    void removePerfumeFromFavorites(Integer perfumeId);
+
+    PageResponse<PerfumeGetAllResponse> getFavoritePerfumes(int page, int size);
+
+    boolean isPerfumeInFavorites(Integer perfumeId);
 }

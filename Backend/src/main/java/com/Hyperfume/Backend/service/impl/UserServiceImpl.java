@@ -4,6 +4,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.Hyperfume.Backend.dto.response.PageResponse;
+import com.Hyperfume.Backend.dto.response.PerfumeGetAllResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -101,9 +106,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional
-    public void addPerfumeToFavorites(Integer userId, Integer perfumeId) {
+    public void addPerfumeToFavorites(Integer perfumeId) {
+
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
         User user = userRepository
-                .findByIdWithFavorites(userId)
+                .findByNameWithFavorites(name)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         Perfume perfume = perfumeRepository
@@ -118,14 +127,55 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    @Transactional(readOnly = true)
-    public Set<PerfumeResponse> getFavoritePerfumes(Integer userId) {
+    @Transactional
+    public void removePerfumeFromFavorites(Integer perfumeId) {
+
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
         User user = userRepository
-                .findByIdWithFavorites(userId)
+                .findByNameWithFavorites(name)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        Set<Perfume> perfumes = user.getFavoritePerfumes();
+        Perfume perfume = perfumeRepository
+                .findById(perfumeId)
+                .orElseThrow(() -> new AppException(ErrorCode.PERFUME_NOT_EXISTED));
 
-        return perfumes.stream().map(perfumeMapper::toResponse).collect(Collectors.toSet());
+        if(!user.getFavoritePerfumes().contains(perfume)){
+            throw new AppException(ErrorCode.PERFUME_NOT_IN_FAVORITES);
+        }
+
+        user.getFavoritePerfumes().remove(perfume);
+        userRepository.save(user);
+    }
+
+    @Transactional(readOnly = true)
+    public PageResponse<PerfumeGetAllResponse> getFavoritePerfumes(int page, int size) {
+        var context = SecurityContextHolder.getContext();
+        String username = context.getAuthentication().getName();
+
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        Page<Perfume> pageData = userRepository.findFavoritePerfumesByUsername(username, pageable);
+
+        return PageResponse.<PerfumeGetAllResponse>builder()
+                .pageSize(pageData.getSize())
+                .totalPages(pageData.getTotalPages())
+                .totalElements(pageData.getTotalElements())
+                .Data(pageData.getContent().stream()
+                        .map(perfumeMapper::toGetAllPerfumeResponse)
+                        .toList())
+                .build();
+    }
+
+    public boolean isPerfumeInFavorites(Integer perfumeId){
+        var context = SecurityContextHolder.getContext();
+        String username = context.getAuthentication().getName();
+
+        if (username == null || username.equals("anonymousUser")) {
+            return false;
+        }
+
+        return userRepository.checkFavoritePerfumeByUsername(username, perfumeId);
     }
 }

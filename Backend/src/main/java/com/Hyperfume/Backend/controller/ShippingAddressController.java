@@ -38,14 +38,6 @@ public class ShippingAddressController {
                 .build();
     }
 
-    //    @GetMapping("/{paymentId}")
-    //    ApiResponse<PaymentMethodResponse> getPaymentMethod(@PathVariable("paymentId") Integer paymentId)
-    //    {
-    //        return ApiResponse.<PaymentMethodResponse>builder()
-    //                .result(paymentMethodService.getPaymentMethod(paymentId))
-    //                .build();
-    //    }
-
     @PutMapping("/{shippingAddressId}")
     ApiResponse<ShippingAddressResponse> updateShippingAddress(
             @PathVariable("shippingAddressId") Integer shippingAddressId,

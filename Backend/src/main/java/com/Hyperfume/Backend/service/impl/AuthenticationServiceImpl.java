@@ -234,7 +234,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .subject(user.getUsername())
                 .issuer("hyperfume.com")
                 .issueTime(new Date())
-                .expirationTime(Date.from(Instant.now().plus(isRefresh ? Duration.ofDays(7) : Duration.ofSeconds(10))))
+                .expirationTime(Date.from(Instant.now().plus(isRefresh ? Duration.ofDays(7) : Duration.ofHours(1))))
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
                 .build();

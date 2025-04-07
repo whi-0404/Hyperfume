@@ -108,34 +108,74 @@ hr {
       overflow: visible;
       height: auto;
 
-      .product-title {
-        display: inline-block;
-        font-size: 48px;
-        font-weight: bold;
-        position: relative;
-        padding-right: 10px;
-        margin: 0px;
-        height: 48px;
+      .row.product-title-gender {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
 
-        // Đường thẳng dọc
-        &::after {
-          content: "";
-          display: block;
-          position: absolute;
-          top: 0;
-          right: 0;
-          width: 1px;
-          height: 100%;
-          background-color: black;
+        .product-title {
+          font-size: 28px;
+          margin-bottom: 10px;
+          font-weight: bold;
+        }
+
+        .gender-favorite-container {
+          display: flex;
+          align-items: center;
+          
+          .gender {
+            font-style: italic;
+            color: #666;
+            margin-right: 15px;
+            font-size: 25px;
+          }
+          
+          .favorite-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            transition: transform 0.2s ease;
+
+            &:hover {
+              transform: scale(1.1);
+            }
+
+            .heart-icon {
+              font-size: 24px;
+              color: #888;
+              transition: all 0.2s ease;
+
+              &:hover {
+                color: #ff4d4d;
+              }
+
+              &.filled {
+                color: #ff4d4d !important;
+                animation: heartBeat 0.3s ease-in-out;
+              }
+            }
+
+            .loading-indicator {
+              font-size: 24px;
+              color: #888;
+              animation: pulse 1s infinite;
+            }
+
+            &:disabled {
+              cursor: wait;
+              opacity: 0.7;
+            }
+          }
         }
       }
 
-      .gender {
-        margin: 0 0 0 10px; // tạo khoảng cách giữa đường thẳng và từ "Nam"
-        font-size: 32px;
-        height: 32px;
-        color: #888;
-        padding: 16px 0 0 0;
+      .rating-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
       }
 
       .product-highlight-info {
@@ -435,10 +475,9 @@ hr {
       }
     }
   }
-
-
 }
-  // Review Modal Styles
+
+// Review Modal Styles
 .review-modal-overlay {
   position: fixed;
   top: 0;
@@ -599,6 +638,104 @@ hr {
   }
 }
 
+// Login Prompt Modal Styles
+.login-prompt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.login-prompt-modal {
+  background-color: #fff;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  
+  .login-prompt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e0e0e0;
+    
+    h3 {
+      font-size: 36px;
+      margin: 0;
+      color: #000080;
+    }
+    
+    .close-button {
+      background: none;
+      border: none;
+      font-size: 36px;
+      cursor: pointer;
+      color: #888;
+      
+      &:hover {
+        color: #000;
+      }
+    }
+  }
+  
+  .login-prompt-content {
+    padding: 30px;
+    text-align: center;
+    
+    .login-icon {
+      margin-bottom: 20px;
+      color: #ff4d4d;
+    }
+    
+    p {
+      font-size: 28px;
+      margin-bottom: 30px;
+      color: #333;
+    }
+    
+    .login-prompt-actions {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      
+      button {
+        padding: 12px 30px;
+        font-size: 24px;
+        border-radius: 6px;
+        cursor: pointer;
+        
+        &.cancel-button {
+          background-color: #f8f9fa;
+          border: 1px solid #ddd;
+          color: #333;
+          
+          &:hover {
+            background-color: #e2e6ea;
+          }
+        }
+        
+        &.login-button {
+          background-color: #000080;
+          color: white;
+          border: none;
+          font-weight: bold;
+          
+          &:hover {
+            background-color: #00005a;
+          }
+        }
+      }
+    }
+  }
+}
+
 // Style for avatar placeholder
 .avatar-placeholder {
   width: 60px;
@@ -612,3 +749,29 @@ hr {
   font-weight: bold;
   color: #666;
 }
+
+@keyframes heartBeat {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+// Add a pulse animation for the loading indicator
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
