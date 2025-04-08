@@ -50,7 +50,7 @@ public class ShippingAddressServiceImpl implements ShippingAddressService {
         return shippingAddressMapper.toResponse(shippingAddressRepository.save(shippingAddress));
     }
 
-    public List<ShippingAddressResponse> getUserShippingAddress() {
+    public List<ShippingAddressResponse> getUserShippingAddresses() {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
 
@@ -68,12 +68,27 @@ public class ShippingAddressServiceImpl implements ShippingAddressService {
                 .orElseThrow(() -> new AppException(ErrorCode.SHIPPING_ADDRESS_NOT_EXISTED)));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public ShippingAddressResponse updateShippingAddress(Integer shippingAddressId, ShippingAddressRequest request) {
         ShippingAddress shippingAddress = shippingAddressRepository
                 .findById(shippingAddressId)
                 .orElseThrow(() -> new AppException(ErrorCode.SHIPPING_ADDRESS_NOT_EXISTED));
+
+        if(request.getIsDefault() != null && request.getIsDefault()){
+            var context = SecurityContextHolder.getContext();
+            String name = context.getAuthentication().getName();
+
+
+            User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+
+            ShippingAddress shippingAddressDefault = shippingAddressRepository.findByUserIdAndIsDefaultTrue(user.getId())
+                    .orElseThrow(()-> new AppException(ErrorCode.SHIPPING_ADDRESS_NOT_EXISTED));
+
+            shippingAddressDefault.setIsDefault(false);
+            shippingAddressRepository.save(shippingAddressDefault);
+        }
+
         shippingAddressMapper.updateShippingAddress(shippingAddress, request);
 
         return shippingAddressMapper.toResponse(shippingAddressRepository.save(shippingAddress));
@@ -98,8 +113,24 @@ public class ShippingAddressServiceImpl implements ShippingAddressService {
         shippingAddressRepository.setDefaultAddress(shippingAddressId);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
     public void deleteShippingAddress(Integer shippingAddressId) {
-        shippingAddressRepository.deleteById(shippingAddressId);
+       ShippingAddress addressToDelete = shippingAddressRepository.findById(shippingAddressId)
+               .orElseThrow(() -> new AppException(ErrorCode.SHIPPING_ADDRESS_NOT_EXISTED));
+
+       boolean wasDefault = addressToDelete.getIsDefault();
+
+       shippingAddressRepository.delete(addressToDelete);
+
+       if(wasDefault){
+           User user = addressToDelete.getUser();
+
+           List<ShippingAddress> addresses = shippingAddressRepository.findByUserId(user.getId());
+           if(!addresses.isEmpty()){
+               ShippingAddress newDefaultAddress = addresses.getFirst();
+               newDefaultAddress.setIsDefault(true);
+               shippingAddressRepository.save(newDefaultAddress);
+           }
+       }
     }
 }

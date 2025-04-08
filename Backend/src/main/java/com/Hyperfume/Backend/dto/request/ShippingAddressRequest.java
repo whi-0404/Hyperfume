@@ -14,4 +14,6 @@ public class ShippingAddressRequest {
     String phone;
 
     String shipAddress;
+
+    Boolean isDefault;
 }

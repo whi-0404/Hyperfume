@@ -1,16 +1,13 @@
-"use client"
-
-import { memo, useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
-import ProductRating from "../../components/rating"
-import ProductActions from "../../components/productActions"
-import { AiFillStar, AiOutlineStar, AiOutlineHeart, AiFillHeart } from "react-icons/ai"
-import "./style.scss"
-import getProductDetail from "../../services/getProductDetail"
-import { addRate, getRates } from "../../services/handleRate"
-import { addToFavorite, removeFromFavorite, checkFavoritePerfume } from "../../services/handleFavorite"
-import { useUser } from "../../utils/userContext"
-import { toast } from "react-hot-toast"
+import { memo, useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import ProductRating from "../../components/rating";
+import ProductActions from "../../components/productActions";
+import { AiFillStar, AiOutlineStar, AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import "./style.scss";
+import getProductDetail from "../../services/getProductDetail";
+import { addRate, getRates } from "../../services/handleRate";
+import { addToFavorite, removeFromFavorite, checkFavoritePerfume } from "../../services/handleFavorite";
+import { useUser } from "../../utils/userContext";
 
 const suggestProducts = [
   {
@@ -41,330 +38,339 @@ const suggestProducts = [
     image: require("../../assets/productImages/diesel/diesel-fuel.png"),
     url: "#",
   },
-]
+];
 
 const ProductDetail = () => {
-  const { id } = useParams()
-  const [currentPage, setCurrentPage] = useState(1)
-  const [products, setProducts] = useState(null)
-  const [selectedPrice, setSelectedPrice] = useState(null)
-  const [mainImage, setMainImage] = useState(null)
-  const [selectedVariantId, setSelectedVariantId] = useState(null)
-  const [ratings, setRatings] = useState([])
-  const [averageRating, setAverageRating] = useState(0)
-  const [isFavorite, setIsFavorite] = useState(false)
-  const [loadingFavorite, setLoadingFavorite] = useState(false)
-  const [showLoginPrompt, setShowLoginPrompt] = useState(false)
+  const { id } = useParams();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [products, setProducts] = useState(null);
+  const [selectedPrice, setSelectedPrice] = useState(null);
+  const [mainImage, setMainImage] = useState(null);
+  const [selectedVariantId, setSelectedVariantId] = useState(null);
+  const [ratings, setRatings] = useState([]);
+  const [averageRating, setAverageRating] = useState(0);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [loadingFavorite, setLoadingFavorite] = useState(false);
 
-  const [showReviewForm, setShowReviewForm] = useState(false)
-  const [reviewText, setReviewText] = useState("")
-  const [reviewRating, setReviewRating] = useState(0)
-  const [reviewSubmitting, setReviewSubmitting] = useState(false)
-  const [reviewError, setReviewError] = useState("")
-  const [reviewSuccess, setReviewSuccess] = useState(false)
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [reviewText, setReviewText] = useState("");
+  const [reviewRating, setReviewRating] = useState(0);
+  const [reviewSubmitting, setReviewSubmitting] = useState(false);
+  const [reviewError, setReviewError] = useState("");
+  const [reviewSuccess, setReviewSuccess] = useState(false);
 
-  const { user } = useUser() // Get user from context
+  const { user } = useUser(); // Get user from context
 
   // Function to determine if image is base64 or URL
   const getImageSource = (imageUrl) => {
-    if (typeof imageUrl === "string" && imageUrl.startsWith("data:image")) {
-      return imageUrl // Base64 image
-    } else if (typeof imageUrl === "string" && imageUrl.includes("/")) {
+    if (typeof imageUrl === 'string' && imageUrl.startsWith('data:image')) {
+      return imageUrl; // Base64 image
+    } else if (typeof imageUrl === 'string' && imageUrl.includes('/')) {
       // Image is a URL path
       try {
-        return require(`../../assets/productImages/${imageUrl}`)
+        return require(`../../assets/productImages/${imageUrl}`);
       } catch (e) {
         // If the require fails, might be a full URL
-        return imageUrl
+        return imageUrl;
       }
     } else {
       // Directly decode if it's base64 without proper formatting
-      return imageUrl
+      return imageUrl;
     }
-  }
+  };
 
   const handleVariantClick = (variantId, price) => {
-    setSelectedPrice(price)
-    setSelectedVariantId(variantId)
-  }
+    setSelectedPrice(price);
+    setSelectedVariantId(variantId);
+  };
 
   const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber)
-  }
+    setCurrentPage(pageNumber);
+  };
 
   const handleThumbnailClick = (imageUrl) => {
-    setMainImage(imageUrl)
-  }
+    setMainImage(imageUrl);
+  };
 
   // Check if the product is in user's favorites
   const checkIsFavorite = async () => {
-    // Nếu không có thông tin người dùng hoặc id sản phẩm, trả về false và không gửi request
-    if (!user || !id) {
-      setIsFavorite(false)
-      return
-    }
-
+    if (!user || !id) return;
+    
     try {
-      setLoadingFavorite(true)
-      const response = await checkFavoritePerfume(id)
-
+      setLoadingFavorite(true);
+      console.log("Checking if perfume is in favorites:", id);
+      const response = await checkFavoritePerfume(id);
+      
+      console.log("Response from checkFavoritePerfume:", response);
+      
       if (response && response.code === 1000) {
+        console.log("Favorite status:", response.result);
         if (response.result === "is Favorite Perfume") {
-          setIsFavorite(true)
+          setIsFavorite(true);
+          console.log("Setting isFavorite to true");
         } else {
-          setIsFavorite(false)
+          setIsFavorite(false);
+          console.log("Setting isFavorite to false");
         }
-      } else if (response && response.code === 1026) {
-        // Mã 1026 là "Perfume already in favorites"
-        setIsFavorite(true)
       } else {
-        setIsFavorite(false)
+        console.log("Invalid response from checkFavoritePerfume:", response);
+        // Kiểm tra mã code khác
+        if (response && response.code === 1026) {
+          // Mã 1026 có thể là "Perfume already in favorites"
+          setIsFavorite(true);
+          console.log("Product already in favorites (code 1026), setting isFavorite to true");
+        }
       }
     } catch (error) {
-      console.error("Error checking favorite status:", error)
-      let isAlreadyFavorite = false
-
-      // Kiểm tra lỗi từ server
+      console.error("Error checking favorite status:", error);
+      let isAlreadyFavorite = false;
       if (error.response && error.response.data) {
-        console.log("Error response data:", error.response.data)
-
-        // Nếu lỗi là "Perfume already in favorites"
+        console.log("Error response data:", error.response.data);
+        // Kiểm tra xem lỗi có phải là "sản phẩm đã yêu thích" không
         if (error.response.data.code === 1026) {
-          setIsFavorite(true)
-          isAlreadyFavorite = true
+          setIsFavorite(true);
+          isAlreadyFavorite = true;
+          console.log("Product already in favorites (from error), setting isFavorite to true");
         }
       }
-
-      // Nếu không phải lỗi "sản phẩm đã yêu thích" thì set false
       if (!isAlreadyFavorite) {
-        setIsFavorite(false)
+        setIsFavorite(false);
       }
     } finally {
-      setLoadingFavorite(false)
+      setLoadingFavorite(false);
     }
-  }
+  };
 
   // Handle favorite toggle
   const handleFavoriteToggle = async () => {
     if (!user) {
-      // Show login prompt modal
-      setShowLoginPrompt(true)
-      return
-    }
-    
-    if (!products || !products.result || !products.result.id) {
-      return
+      alert("Vui lòng đăng nhập để thêm vào danh sách yêu thích");
+      return;
     }
     
     try {
-      setLoadingFavorite(true)
+      setLoadingFavorite(true);
       
       if (isFavorite) {
-        const response = await removeFromFavorite(products.result.id)
-        
-        if (response && (response.status === 200 || response.statusCode === 200 || response.code === 1000)) {
-          setIsFavorite(false)
-        } else {
-          toast.error("Không thể xóa sản phẩm khỏi danh sách yêu thích!")
+        // Remove from favorites
+        const response = await removeFromFavorite(id);
+        console.log("Remove favorite response:", response);
+        if (response && response.code === 1000) {
+          setIsFavorite(false);
+          alert("Đã xóa khỏi danh sách yêu thích");
+        } else if (response && response.message) {
+          alert(response.message);
         }
       } else {
-        const response = await addToFavorite(products.result.id)
-        
-        if (response && (response.status === 201 || response.statusCode === 201 || response.code === 1000)) {
-          setIsFavorite(true)
-          toast.success("Đã thêm sản phẩm vào danh sách yêu thích!")
-        } else {
-          toast.error("Không thể thêm sản phẩm vào danh sách yêu thích!")
+        // Add to favorites
+        const response = await addToFavorite(id);
+        console.log("Add favorite response:", response);
+        if (response && response.code === 1000) {
+          setIsFavorite(true);
+          alert("Đã thêm vào danh sách yêu thích");
+        } else if (response && response.code === 1026) {
+          alert("Sản phẩm đã có trong danh sách yêu thích");
+          setIsFavorite(true); // Đảm bảo set isFavorite=true dù sản phẩm đã có trong danh sách
+        } else if (response && response.message) {
+          alert(response.message);
         }
       }
     } catch (error) {
-      console.error("Error toggling favorite status:", error)
-      
-      // Check if error is "already in favorites"
-      if (error.response && error.response.data && error.response.data.code === 1026) {
-        setIsFavorite(true)
-        toast.info("Sản phẩm đã có trong danh sách yêu thích!")
+      console.error("Error toggling favorite status:", error);
+      if (error.response && error.response.data) {
+        console.log("Error response data:", error.response.data);
+        
+        // Kiểm tra lỗi "Perfume already in favorites"
+        if (error.response.data.code === 1026) {
+          alert("Sản phẩm đã có trong danh sách yêu thích");
+          setIsFavorite(true); // Đảm bảo set trạng thái yêu thích thành true
+        } else if (error.response.data.message) {
+          alert(error.response.data.message);
+        } else {
+          alert("Có lỗi xảy ra, vui lòng thử lại sau");
+        }
       } else {
-        toast.error("Đã xảy ra lỗi khi cập nhật danh sách yêu thích!")
+        alert("Có lỗi xảy ra, vui lòng thử lại sau");
       }
     } finally {
-      setLoadingFavorite(false)
+      setLoadingFavorite(false);
+      
+      // Gọi lại checkIsFavorite để đảm bảo trạng thái được cập nhật đúng
+      if (user && id) {
+        setTimeout(() => {
+          checkIsFavorite();
+        }, 500);
+      }
     }
-  }
-
-  // Handle login button click
-  const handleLoginClick = () => {
-    // Redirect to login page
-    window.location.href = "/Sign-in"
-    setShowLoginPrompt(false)
-  }
-
-  // Handle close login prompt
-  const closeLoginPrompt = () => {
-    setShowLoginPrompt(false)
-  }
+  };
 
   // Calculate the average rating from ratings data
   const calculateAverageRating = (ratingData) => {
-    if (!ratingData) return 0
-    const totalStars = ratingData.reduce((acc, rate) => acc + rate.rateStar, 0)
-    return totalStars / ratingData.length
-  }
-
+    if (!ratingData ) return 0;
+    const totalStars = ratingData.reduce((acc, rate) => acc + rate.rateStar, 0);
+    return totalStars / ratingData.length;
+  };
+  
   const openReviewForm = () => {
-    if (!user) {
-      // Show login prompt modal
-      setShowLoginPrompt(true)
-      return
-    }
-    setShowReviewForm(true)
-    setReviewText("")
-    setReviewRating(0)
-    setReviewError("")
-    setReviewSuccess(false)
-  }
+    setShowReviewForm(true);
+    setReviewText("");
+    setReviewRating(0);
+    setReviewError("");
+    setReviewSuccess(false);
+  };
 
   const closeReviewForm = () => {
-    setShowReviewForm(false)
-  }
+    setShowReviewForm(false);
+  };
 
   const handleStarClick = (starRating) => {
-    setReviewRating(starRating)
-  }
+    setReviewRating(starRating);
+  };
 
   const handleReviewTextChange = (e) => {
-    setReviewText(e.target.value)
-  }
+    setReviewText(e.target.value);
+  };
 
   const handleReviewSubmit = async (e) => {
-    e.preventDefault()
-
+    e.preventDefault();
+    
     // Validate form
     if (reviewRating === 0) {
-      setReviewError("Vui lòng chọn số sao đánh giá")
-      return
+      setReviewError("Vui lòng chọn số sao đánh giá");
+      return;
     }
-
+    
     if (reviewText.trim() === "") {
-      setReviewError("Vui lòng nhập nội dung đánh giá")
-      return
+      setReviewError("Vui lòng nhập nội dung đánh giá");
+      return;
     }
-
-    setReviewSubmitting(true)
-    setReviewError("")
-
+    
+    setReviewSubmitting(true);
+    setReviewError("");
+    
     try {
       // Prepare request body
       const rateRequest = {
         perfumeId: id,
         rateStar: reviewRating,
-        rateContext: reviewText,
-      }
-
+        rateContext: reviewText
+      };
+      
       // Call API to add rate
-      const response = await addRate(id, rateRequest)
-
+      const response = await addRate(id, rateRequest);
+      
       if (response && response.code === 1000) {
         // Success - update the ratings list
-        setReviewSuccess(true)
-
+        setReviewSuccess(true);
+        
         // Refresh ratings after successful submission
-        getRates(id).then((response) => {
-          if (response && response.code === 1000 && response.result) {
-            setRatings(response.result)
-            setAverageRating(calculateAverageRating(response.result))
-
-            // Reset form after short delay
-            setTimeout(() => {
-              setShowReviewForm(false)
-              setReviewSuccess(false)
-            }, 350)
-          }
-        })
-      } else {
-        setReviewError("Có lỗi xảy ra khi gửi đánh giá")
+        getRates(id)
+          .then((response) => {
+            if (response && response.code === 1000 && response.result) {
+              setRatings(response.result);
+              setAverageRating(calculateAverageRating(response.result));
+              
+              // Reset form after short delay
+              setTimeout(() => {
+                setShowReviewForm(false);
+                setReviewSuccess(false);
+              }, 350);
+            }
+          });
+      } 
+      else {
+        setReviewError("Có lỗi xảy ra khi gửi đánh giá");
       }
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.code === 1037) {
-        setReviewError("Bạn chỉ được đánh giá sản phẩm một lần")
-      } else {
-        console.error("Error submitting review:", error)
-        setReviewError("Có lỗi xảy ra khi gửi đánh giá")
+       if( error.response.data.code === 1037) {
+        setReviewError("Bạn chỉ được đánh giá sản phẩm một lần");
+      }
+      else{
+      console.error("Error submitting review:", error);
+       setReviewError("Có lỗi xảy ra khi gửi đánh giá");
       }
     } finally {
-      setReviewSubmitting(false)
+      setReviewSubmitting(false);
     }
-  }
+  };
 
-  // Tải thông tin sản phẩm và đánh giá khi component mount hoặc id thay đổi
   useEffect(() => {
     // Fetch product details
     getProductDetail(id)
       .then((response) => {
-        setProducts(response)
-
+        setProducts(response);
+        
         // Initialize with first variant if available
-        if (response.result.perfumeVariantResponseList && response.result.perfumeVariantResponseList.length > 0) {
-          const firstVariant = response.result.perfumeVariantResponseList[0]
-          setSelectedVariantId(firstVariant.id)
-          setSelectedPrice(firstVariant.price)
+        if (response.result.perfumeVariantResponseList && 
+            response.result.perfumeVariantResponseList.length > 0) {
+          const firstVariant = response.result.perfumeVariantResponseList[0];
+          setSelectedVariantId(firstVariant.id);
+          setSelectedPrice(firstVariant.price);
         }
-
+        
         // Set main image
-        const thumbnailImage = response.result.perfumeImageResponseList.find((image) => image.thumbnail === true)
-
+        const thumbnailImage = response.result.perfumeImageResponseList.find(
+          (image) => image.thumbnail === true
+        );
+        
         if (thumbnailImage) {
-          setMainImage(thumbnailImage.imageUrl)
+          setMainImage(thumbnailImage.imageUrl);
         }
       })
       .catch((error) => {
-        console.error("Error fetching product details:", error)
-      })
-
+        console.error("Error fetching product details:", error);
+      });
+      
     // Fetch ratings for this product
     getRates(id)
       .then((response) => {
         if (response && response.code === 1000 && response.result) {
-          setRatings(response.result)
-          setAverageRating(calculateAverageRating(response.result))
+          setRatings(response.result);
+          setAverageRating(calculateAverageRating(response.result));
         }
       })
       .catch((error) => {
-        console.error("Error fetching ratings:", error)
-      })
-  }, [id])
+        console.error("Error fetching ratings:", error);
+      });
+  }, [id]);
 
-  // Kiểm tra trạng thái yêu thích khi người dùng hoặc id sản phẩm thay đổi
+  // Check if product is in favorites when user data is available or changes
   useEffect(() => {
-    console.log("User or product id changed - checking favorite status")
-    console.log("User:", user ? "Logged in" : "Not logged in")
-    console.log("Product ID:", id)
-
     if (user && id) {
-      // If user is logged in, check favorite status
-      checkIsFavorite()
+      checkIsFavorite();
     } else {
-      // If user is not logged in, set default state
-      setIsFavorite(false)
-      console.log("User not logged in, setting isFavorite to false")
+      // Reset favorite status if user is not logged in
+      setIsFavorite(false);
     }
-  }, [user, id])
+  }, [user, id]);
+
+  // Kiểm tra lại trạng thái yêu thích ngay khi component mount
+  useEffect(() => {
+    const checkFavoriteStatus = async () => {
+      if (user && id) {
+        console.log("Initial favorite check for perfume:", id);
+        await checkIsFavorite();
+      }
+    };
+    
+    checkFavoriteStatus();
+  }, []);
 
   // Theo dõi thay đổi của state isFavorite
   useEffect(() => {
-    console.log("isFavorite state changed:", isFavorite)
-  }, [isFavorite])
+    console.log("isFavorite state changed:", isFavorite);
+  }, [isFavorite]);
 
   if (!products) {
-    return <div>Product not found</div>
+    return <div>Product not found</div>;
   }
 
   // Get current page ratings
-  const itemsPerPage = 2
-  const indexOfLastItem = currentPage * itemsPerPage
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage
-  const currentRatings = ratings.slice(indexOfFirstItem, indexOfLastItem)
-  const totalPages = Math.ceil(ratings.length / itemsPerPage)
+  const itemsPerPage = 2;
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentRatings = ratings.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(ratings.length / itemsPerPage);
 
   return (
     <div className="detail-product-container">
@@ -386,7 +392,11 @@ const ProductDetail = () => {
           <div className="product-images">
             <div className="image-preview">
               {mainImage && (
-                <img id="main-image" src={getImageSource(mainImage) || "/placeholder.svg"} alt={products.result.name} />
+                <img
+                  id="main-image"
+                  src={getImageSource(mainImage)}
+                  alt={products.result.name}
+                />
               )}
             </div>
 
@@ -395,7 +405,7 @@ const ProductDetail = () => {
                 <img
                   key={index}
                   className="thumbnail"
-                  src={getImageSource(image.imageUrl) || "/placeholder.svg"}
+                  src={getImageSource(image.imageUrl)}
                   alt={`thumbnail-${index}`}
                   onClick={() => handleThumbnailClick(image.imageUrl)}
                 />
@@ -409,16 +419,14 @@ const ProductDetail = () => {
                 <h2 className="product-title">{products.result.name}</h2>
                 <div className="gender-favorite-container">
                   <p className="gender">{products.result.perfume_gender}</p>
-                  <button
+                  <button 
                     className="favorite-button"
                     onClick={handleFavoriteToggle}
                     aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
                     disabled={loadingFavorite}
                   >
-                    {loadingFavorite ? (
-                      <span className="loading-indicator">...</span>
-                    ) : isFavorite ? (
-                      <AiFillHeart className="heart-icon filled" style={{ color: "#ff4d4d" }} />
+                    {isFavorite ? (
+                      <AiFillHeart className="heart-icon filled" style={{color: '#ff4d4d'}} />
                     ) : (
                       <AiOutlineHeart className="heart-icon" />
                     )}
@@ -431,7 +439,9 @@ const ProductDetail = () => {
               </div>
               <ul className="product-highlight-info">
                 <li>Thương hiệu: {products.result.brandName}</li>
-                {products.result.flash_sale && <li className="flash-sale">Flash Sale!</li>}
+                {products.result.flash_sale && (
+                  <li className="flash-sale">Flash Sale!</li>
+                )}
               </ul>
             </div>
 
@@ -440,20 +450,19 @@ const ProductDetail = () => {
                 <button
                   key={variant.id}
                   className={`custom-button ${selectedVariantId === variant.id ? "selected" : ""}`}
-                  onClick={() => handleVariantClick(variant.id, variant.price)}
-                >
+                  onClick={() => handleVariantClick(variant.id, variant.price)}>
                   {variant.name}
                 </button>
               ))}
             </div>
 
-            <ProductActions
-              price={selectedPrice}
-              variantId={selectedVariantId}
+            <ProductActions 
+              price={selectedPrice} 
+              variantId={selectedVariantId} 
               discount={products.result.discount}
               discountedPrice={
                 selectedVariantId && products.result.perfumeVariantResponseList
-                  ? products.result.perfumeVariantResponseList.find((v) => v.id === selectedVariantId)?.discountedPrice
+                  ? products.result.perfumeVariantResponseList.find(v => v.id === selectedVariantId)?.discountedPrice
                   : null
               }
             />
@@ -466,11 +475,13 @@ const ProductDetail = () => {
           <div className="col-6">
             <div className="product-description">
               <h2 className="title">MÔ TẢ SẢN PHẨM</h2>
-              <p className="about-product">{products.result.perfume_description}</p>
+              <p className="about-product">
+                {products.result.perfume_description}
+              </p>
               {products.result.perfumeImageResponseList.length > 1 && (
                 <img
                   className="about-product-img"
-                  src={getImageSource(products.result.perfumeImageResponseList[1].imageUrl) || "/placeholder.svg"}
+                  src={getImageSource(products.result.perfumeImageResponseList[1].imageUrl)}
                   alt="product"
                 />
               )}
@@ -583,9 +594,7 @@ const ProductDetail = () => {
         <section className="sec-4">
           <div className="review-header">
             <h2 className="review-title">Đánh giá và nhận xét</h2>
-            <button className="review-button" onClick={openReviewForm}>
-              Viết đánh giá
-            </button>
+            <button className="review-button" onClick={openReviewForm}>Viết đánh giá</button>
           </div>
           <hr></hr>
           <div className="review-body">
@@ -594,9 +603,9 @@ const ProductDetail = () => {
                 <div key={rating.id} className="review-article">
                   <div className="review-user-account">
                     <div className="avatar">
-                      <div className="avatar-placeholder">{rating.userName ? rating.userName.charAt(0) : "U"}</div>
+                      <div className="avatar-placeholder">{rating.userName ? rating.userName.charAt(0) : 'U'}</div>
                     </div>
-                    <div className="user-name">{rating.userName || "Anonymous"}</div>
+                    <div className="user-name">{rating.userName || 'Anonymous'}</div>
                   </div>
                   <div className="review-star">
                     {Array.from({ length: 5 }, (_, index) =>
@@ -604,7 +613,7 @@ const ProductDetail = () => {
                         <AiFillStar key={index} className="star filled" />
                       ) : (
                         <AiOutlineStar key={index} className="star" />
-                      ),
+                      )
                     )}
                   </div>
                   <div className="review-time">{rating.rateDatetime}</div>
@@ -616,7 +625,7 @@ const ProductDetail = () => {
               <div className="no-reviews">Chưa có đánh giá nào cho sản phẩm này</div>
             )}
           </div>
-
+          
           {ratings.length > 0 && (
             <div className="review-pagination">
               {Array.from({ length: totalPages }, (_, index) => (
@@ -639,9 +648,15 @@ const ProductDetail = () => {
           <h2 className="title">SẢN PHẨM LIÊN QUAN</h2>
           <div className="products-container">
             {suggestProducts.map((product) => (
-              <a href={product.url} key={product.id} className="product-card" target="_blank" rel="noopener noreferrer">
+              <a
+                href={product.url}
+                key={product.id}
+                className="product-card"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <div className="image-container">
-                  <img src={product.image || "/placeholder.svg"} alt={product.name} />
+                  <img src={product.image} alt={product.name} />
                 </div>
                 <div className="product-info">
                   <h3 className="product-name">{product.name}</h3>
@@ -659,17 +674,19 @@ const ProductDetail = () => {
           <div className="review-modal">
             <div className="review-modal-header">
               <h3>Viết đánh giá</h3>
-              <button className="close-button" onClick={closeReviewForm}>
-                ×
-              </button>
+              <button className="close-button" onClick={closeReviewForm}>×</button>
             </div>
-
+            
             <form onSubmit={handleReviewSubmit} className="review-form">
               <div className="star-rating-selector">
                 <p>Chọn số sao đánh giá:</p>
                 <div className="star-container">
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <span key={star} onClick={() => handleStarClick(star)} className="star-selector">
+                    <span 
+                      key={star} 
+                      onClick={() => handleStarClick(star)}
+                      className="star-selector"
+                    >
                       {star <= reviewRating ? (
                         <AiFillStar className="star filled" />
                       ) : (
@@ -679,10 +696,10 @@ const ProductDetail = () => {
                   ))}
                 </div>
               </div>
-
+              
               <div className="review-text-container">
                 <label htmlFor="review-text">Nội dung đánh giá:</label>
-                <textarea
+                <textarea 
                   id="review-text"
                   value={reviewText}
                   onChange={handleReviewTextChange}
@@ -690,52 +707,32 @@ const ProductDetail = () => {
                   rows={5}
                 />
               </div>
-
+              
               {reviewError && <div className="review-error">{reviewError}</div>}
               {reviewSuccess && <div className="review-success">Đánh giá của bạn đã được gửi thành công!</div>}
-
+              
               <div className="review-submit-container">
-                <button type="button" className="cancel-button" onClick={closeReviewForm} disabled={reviewSubmitting}>
+                <button 
+                  type="button" 
+                  className="cancel-button"
+                  onClick={closeReviewForm}
+                  disabled={reviewSubmitting}
+                >
                   Hủy bỏ
                 </button>
-                <button type="submit" className="submit-button" disabled={reviewSubmitting}>
-                  {reviewSubmitting ? "Đang gửi..." : "Gửi đánh giá"}
+                <button 
+                  type="submit" 
+                  className="submit-button"
+                  disabled={reviewSubmitting}
+                >
+                  {reviewSubmitting ? 'Đang gửi...' : 'Gửi đánh giá'}
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
-
-      {/* Login Prompt Modal */}
-      {showLoginPrompt && (
-        <div className="login-prompt-overlay">
-          <div className="login-prompt-modal">
-            <div className="login-prompt-header">
-              <h3>Đăng nhập</h3>
-              <button className="close-button" onClick={closeLoginPrompt}>
-                ×
-              </button>
-            </div>
-            <div className="login-prompt-content">
-              <div className="login-icon">
-                <AiOutlineHeart className="heart-icon" style={{ fontSize: "48px" }} />
-              </div>
-              <p>Vui lòng đăng nhập để tiếp tục!</p>
-              <div className="login-prompt-actions">
-                <button className="cancel-button" onClick={closeLoginPrompt}>
-                  Đóng
-                </button>
-                <button className="login-button" onClick={handleLoginClick}>
-                  Đăng nhập
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
-  )
-}
-
-export default memo(ProductDetail)
+  );
+};
+export default memo(ProductDetail);

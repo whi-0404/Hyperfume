@@ -8,7 +8,7 @@ import com.Hyperfume.Backend.dto.response.ShippingAddressResponse;
 public interface ShippingAddressService {
     ShippingAddressResponse createShippingAddress(ShippingAddressRequest request);
 
-    List<ShippingAddressResponse> getUserShippingAddress();
+    List<ShippingAddressResponse> getUserShippingAddresses();
 
     ShippingAddressResponse getShippingAddress(Integer shippingAddressId);
 

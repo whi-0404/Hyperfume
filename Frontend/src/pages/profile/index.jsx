@@ -6,6 +6,7 @@ import { UserInfo, updateUserInfo } from "../../services/handleUserInfo";
 import { logout } from "../../services/authToken";
 import { listFavorites, removeFromFavorite } from "../../services/handleFavorite";
 import ProductCard from "../../components/productCard";
+import MyShippingAddress from "../../components/myAddress";
 
 const Profile = () => {
   const [user, setUser] = useState([]);
@@ -337,14 +338,12 @@ const Profile = () => {
             )}
           </div>
         );
-      case "address":
-        return (
-          <div className="detail-section">
-            <p className="section-placeholder">
-              Chức năng đang trong quá trình phát triển
-            </p>
-          </div>
-        );
+        case "address":
+          return (
+            <div className="detail-section">
+              <MyShippingAddress />
+            </div>
+          );
       case "orders":
         return (
           <div className="detail-section">

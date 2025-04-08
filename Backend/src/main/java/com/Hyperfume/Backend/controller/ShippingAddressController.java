@@ -32,9 +32,9 @@ public class ShippingAddressController {
     }
 
     @GetMapping
-    ApiResponse<List<ShippingAddressResponse>> getUserShippingAddress() {
+    ApiResponse<List<ShippingAddressResponse>> getUserShippingAddresses() {
         return ApiResponse.<List<ShippingAddressResponse>>builder()
-                .result(shippingAddressService.getUserShippingAddress())
+                .result(shippingAddressService.getUserShippingAddresses())
                 .build();
     }
 
@@ -55,7 +55,7 @@ public class ShippingAddressController {
                 .build();
     }
 
-    @PutMapping("/settingDefault/{shippingAddressId}")
+    @PutMapping("/setDefault/{shippingAddressId}")
     ApiResponse<String> setDefaultShippingAddress(@PathVariable("shippingAddressId") Integer shippingAddressId) {
         shippingAddressService.setDefaultShippingAddress(shippingAddressId);
 
