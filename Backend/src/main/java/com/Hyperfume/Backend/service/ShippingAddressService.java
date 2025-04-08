@@ -14,5 +14,7 @@ public interface ShippingAddressService {
 
     ShippingAddressResponse updateShippingAddress(Integer shippingAddressId, ShippingAddressRequest request);
 
+    void setDefaultShippingAddress(Integer shippingAddressId);
+
     void deleteShippingAddress(Integer shippingAddressId);
 }

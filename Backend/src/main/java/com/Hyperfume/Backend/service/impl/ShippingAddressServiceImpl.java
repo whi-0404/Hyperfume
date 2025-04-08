@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import com.Hyperfume.Backend.dto.request.ShippingAddressRequest;
 import com.Hyperfume.Backend.dto.response.ShippingAddressResponse;
 import com.Hyperfume.Backend.entity.ShippingAddress;
@@ -41,6 +41,12 @@ public class ShippingAddressServiceImpl implements ShippingAddressService {
         ShippingAddress shippingAddress = shippingAddressMapper.toEntity(request);
         shippingAddress.setUser(user);
 
+        boolean hasDefaultAddress = shippingAddressRepository
+                .findByUserIdAndIsDefaultTrue(user.getId())
+                .isPresent();
+
+        shippingAddress.setIsDefault(!hasDefaultAddress);
+
         return shippingAddressMapper.toResponse(shippingAddressRepository.save(shippingAddress));
     }
 
@@ -63,6 +69,7 @@ public class ShippingAddressServiceImpl implements ShippingAddressService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
     public ShippingAddressResponse updateShippingAddress(Integer shippingAddressId, ShippingAddressRequest request) {
         ShippingAddress shippingAddress = shippingAddressRepository
                 .findById(shippingAddressId)
@@ -70,6 +77,25 @@ public class ShippingAddressServiceImpl implements ShippingAddressService {
         shippingAddressMapper.updateShippingAddress(shippingAddress, request);
 
         return shippingAddressMapper.toResponse(shippingAddressRepository.save(shippingAddress));
+    }
+
+    @Transactional
+    public void setDefaultShippingAddress(Integer shippingAddressId) {
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+
+        User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+
+        ShippingAddress shippingAddressDefault = shippingAddressRepository.findByUserIdAndIsDefaultTrue(user.getId())
+                .orElseThrow(()-> new AppException(ErrorCode.SHIPPING_ADDRESS_NOT_EXISTED));
+
+        shippingAddressDefault.setIsDefault(false);
+
+        shippingAddressRepository.save(shippingAddressDefault);
+
+        shippingAddressRepository.setDefaultAddress(shippingAddressId);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

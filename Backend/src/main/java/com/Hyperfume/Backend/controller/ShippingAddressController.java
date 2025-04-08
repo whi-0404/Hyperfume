@@ -54,4 +54,13 @@ public class ShippingAddressController {
                 .result("Shipping Address has been deleted")
                 .build();
     }
+
+    @PutMapping("/settingDefault/{shippingAddressId}")
+    ApiResponse<String> setDefaultShippingAddress(@PathVariable("shippingAddressId") Integer shippingAddressId) {
+        shippingAddressService.setDefaultShippingAddress(shippingAddressId);
+
+        return ApiResponse.<String>builder()
+                .result("Shipping Address has been set as default")
+                .build();
+    }
 }
