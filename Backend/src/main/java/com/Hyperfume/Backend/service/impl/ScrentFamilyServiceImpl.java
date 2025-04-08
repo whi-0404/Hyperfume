@@ -19,6 +19,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -53,6 +54,7 @@ public class ScrentFamilyServiceImpl implements ScrentFamilyService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
     public ScrentFamilyResponse updateScrentFamily(Integer screntFamilyId, ScrentFamilyRequest request) {
         ScrentFamily screntFamily = screntFamilyRepository
                 .findById(screntFamilyId)

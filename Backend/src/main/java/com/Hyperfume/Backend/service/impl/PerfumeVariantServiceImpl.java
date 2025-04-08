@@ -56,6 +56,7 @@ public class PerfumeVariantServiceImpl implements PerfumeVariantService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
     public PerfumeVariantResponse updateVariant(Integer variantId, PerfumeVariantRequest request) {
         PerfumeVariant existingVariant = perfumeVariantRepository
                 .findById(variantId)

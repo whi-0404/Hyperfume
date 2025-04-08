@@ -19,6 +19,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -52,6 +53,7 @@ public class PaymentMethodServiceImpl implements PaymentMethodService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
     public PaymentMethodResponse updatePaymentMethod(Integer paymentMethodId, PaymentMethodRequest request) {
         PaymentMethod paymentMethod = paymentMethodRepository
                 .findById(paymentMethodId)

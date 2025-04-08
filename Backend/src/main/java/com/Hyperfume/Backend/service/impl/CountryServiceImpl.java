@@ -19,6 +19,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +52,7 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
     public CountryResponse updateCountry(Integer countryId, CountryRequest request) {
         Country country = countryRepository
                 .findById(countryId)
