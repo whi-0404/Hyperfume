@@ -21,7 +21,7 @@ public class FlashSaleItemResponse {
 
     BigDecimal originalMinPrice;
 
-    double discountedPrice;
+    BigDecimal discountedPrice;
 
     int quantityLimit;
 
