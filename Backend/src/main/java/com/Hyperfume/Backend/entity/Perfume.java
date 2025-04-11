@@ -90,4 +90,8 @@ public class Perfume {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "perfume_id")
     List<PerfumeVariant> variants;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "perfume_id")
+    List<FlashSaleItem> flashSaleItems;
 }
