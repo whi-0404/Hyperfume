@@ -29,5 +29,4 @@ public class FlashSaleItemResponse {
 
     double specialDiscountPercentage;
 
-    boolean active;
 }

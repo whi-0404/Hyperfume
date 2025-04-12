@@ -33,6 +33,6 @@ public class FlashSaleItem {
     @Column(name = "special_discount_percentage")
     Double specialDiscountPercentage;
 
-    @Column(name = "is_active", nullable = false)
-    boolean active;
+    @Column(name = "is_active")
+    boolean isActive;
 }
