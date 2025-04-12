@@ -64,7 +64,14 @@ public enum ErrorCode {
     TOKEN_NOT_FOUND_IN_COOKIES(1039, "token not found in cookie", HttpStatus.BAD_REQUEST),
     EXPIRED_TOKEN(1040, "token has expired", HttpStatus.UNAUTHORIZED),
 
-    PERFUME_NOT_IN_FAVORITES(1041, "perfume not in favorites", HttpStatus.BAD_REQUEST);
+    PERFUME_NOT_IN_FAVORITES(1041, "perfume not in favorites", HttpStatus.BAD_REQUEST),
+
+    ACTIVE_FLASH_SALE_NOT_EXISTED(1042, "active flash sale not existed", HttpStatus.BAD_REQUEST),
+    FLASH_SALE_NOT_EXISTED(1043, "flash sale not existed", HttpStatus.BAD_REQUEST),
+    ACTIVE_FLASH_SALE_EXISTED(1044, "active flash sale has been existed", HttpStatus.BAD_REQUEST),
+    PERFUME_ALREADY_IN_FLASH_SALE(1045, "perfume has been in flash sale", HttpStatus.BAD_REQUEST),
+    FLASH_SALE_ITEM_NOT_EXISTED(1046, "flash sale item not existed", HttpStatus.BAD_REQUEST),
+    FLASH_SALE_ITEM_NOT_IN_FLASH_SALE(1047, "flash sale item not in flash sale", HttpStatus.BAD_REQUEST);
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;
