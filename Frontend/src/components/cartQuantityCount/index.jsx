@@ -1,8 +1,8 @@
 import React from "react";
 
-const TotalQuantity = ({ items }) => {
+const CartQuantityCount = ({ items }) => {
     if (!items || items.length === 0) {
-        return <span>0 sản phẩm</span>; // Xử lý khi không có sản phẩm
+        return 0; // Return just the number for better integration with the parent component
     }
 
     const calculateTotalQuantity = (items) => {
@@ -11,11 +11,7 @@ const TotalQuantity = ({ items }) => {
 
     const totalQuantity = calculateTotalQuantity(items);
 
-    return (
-        <span>
-            {totalQuantity}
-        </span>
-    );
+    return totalQuantity;
 };
 
-export default TotalQuantity;
+export default CartQuantityCount;

@@ -8,4 +8,6 @@ import com.Hyperfume.Backend.dto.response.OrderResponse;
 
 public interface OrderService {
     OrderResponse createOrder(OrderRequest orderRequest, List<OrderItemRequest> orderItemRequests);
+
+    List<OrderResponse> getAllOrders();
 }

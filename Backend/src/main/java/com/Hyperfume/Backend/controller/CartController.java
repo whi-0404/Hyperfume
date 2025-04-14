@@ -26,9 +26,12 @@ public class CartController {
     CartService cartService;
 
     @PostMapping
-    public ApiResponse<Void> addCart(@RequestBody @Valid CartRequest request) {
+    public ApiResponse<String> addCart(@RequestBody @Valid CartRequest request) {
         cartService.addToCart(request);
-        return ApiResponse.<Void>builder().build();
+        return ApiResponse
+                .<String>builder()
+                .result("Successful !!")
+                .build();
     }
 
     @GetMapping
@@ -47,6 +50,7 @@ public class CartController {
 
     @DeleteMapping("/{cartId}")
     public ApiResponse<String> deleteCart(@PathVariable("cartId") Integer cartId) {
+        cartService.deleteCart(cartId);
         return ApiResponse.<String>builder().result("Cart has been deleted").build();
     }
 }

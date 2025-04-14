@@ -14,8 +14,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CreateOrderRequest {
     @Valid
-    private OrderRequest orderRequest;
+    OrderRequest orderRequest;
 
     @Valid
-    private List<OrderItemRequest> orderItemRequests;
+    List<OrderItemRequest> orderItemRequests;
 }

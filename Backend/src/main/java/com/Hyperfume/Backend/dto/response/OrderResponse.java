@@ -1,5 +1,6 @@
 package com.Hyperfume.Backend.dto.response;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import lombok.*;
@@ -20,6 +21,10 @@ public class OrderResponse {
     Integer shippingMethodId;
 
     Integer paymentMethodId;
+
+    BigDecimal totalMoney;
+
+    BigDecimal shipCost;
 
     List<OrderItemResponse> orderItemResponses;
 }

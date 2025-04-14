@@ -2,8 +2,12 @@ package com.Hyperfume.Backend.service.impl;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.Hyperfume.Backend.entity.*;
+import com.Hyperfume.Backend.repository.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -11,24 +15,17 @@ import com.Hyperfume.Backend.dto.request.OrderItemRequest;
 import com.Hyperfume.Backend.dto.request.OrderRequest;
 import com.Hyperfume.Backend.dto.response.OrderItemResponse;
 import com.Hyperfume.Backend.dto.response.OrderResponse;
-import com.Hyperfume.Backend.entity.Order;
-import com.Hyperfume.Backend.entity.OrderItem;
-import com.Hyperfume.Backend.entity.PerfumeVariant;
-import com.Hyperfume.Backend.entity.User;
 import com.Hyperfume.Backend.exception.AppException;
 import com.Hyperfume.Backend.exception.ErrorCode;
 import com.Hyperfume.Backend.mapper.OrderItemMapper;
 import com.Hyperfume.Backend.mapper.OrderMapper;
-import com.Hyperfume.Backend.repository.OrderItemRepository;
-import com.Hyperfume.Backend.repository.OrderRepository;
-import com.Hyperfume.Backend.repository.PerfumeVariantRepository;
-import com.Hyperfume.Backend.repository.UserRepository;
 import com.Hyperfume.Backend.service.OrderService;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -41,17 +38,31 @@ public class OrderServiceImpl implements OrderService {
     OrderItemMapper orderItemMapper;
     PerfumeVariantRepository perfumeVariantRepository;
     UserRepository userRepository;
+    ShippingMethodRepository shippingMethodRepository;
 
+    @Transactional
     public OrderResponse createOrder(OrderRequest orderRequest, List<OrderItemRequest> orderItemRequests) {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
 
         User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        // Kiểm tra tồn kho
-        for (OrderItemRequest itemRequest : orderItemRequests) {
-            int stockQuantity = perfumeVariantRepository.findStockByPerfumeVariantId(itemRequest.getPerfumeVariantId());
-            if (itemRequest.getQuantity() > stockQuantity) {
+        List<Integer> variantIds = orderItemRequests.stream()
+                .map(OrderItemRequest :: getPerfumeVariantId)
+                .toList();
+
+
+        Map<Integer, PerfumeVariant> variantMaps = perfumeVariantRepository.findAllById(variantIds).stream()
+                .collect(Collectors.toMap(PerfumeVariant::getId, Function.identity()));
+
+
+        for(OrderItemRequest itemRequest: orderItemRequests){
+            PerfumeVariant perfumeVariant = variantMaps.get(itemRequest.getPerfumeVariantId());
+
+            if(perfumeVariant == null)
+                throw new AppException(ErrorCode.VARIANT_NOT_FOUND);
+
+            if(itemRequest.getQuantity() > perfumeVariant.getPerfume_stock_quantity()){
                 throw new AppException(ErrorCode.OUT_OF_STOCK);
             }
         }
@@ -60,41 +71,72 @@ public class OrderServiceImpl implements OrderService {
         order.setUser(user);
         Order orderSaved = orderRepository.save(order);
 
+
         List<OrderItem> orderItems = orderItemRequests.stream()
                 .map(orderItemRequest -> {
                     OrderItem orderItem = orderItemMapper.toEntity(orderItemRequest);
                     orderItem.setOrder(orderSaved);
 
-                    PerfumeVariant perfumeVariant = perfumeVariantRepository
-                            .findById(orderItemRequest.getPerfumeVariantId())
-                            .orElseThrow(() -> new AppException(ErrorCode.VARIANT_NOT_FOUND));
-                    int updatedStock = perfumeVariant.getPerfume_stock_quantity() - orderItemRequest.getQuantity();
-                    if (updatedStock < 0) {
-                        throw new IllegalArgumentException(
-                                "Số lượng tồn kho không đủ cho sản phẩm ID: " + orderItemRequest.getPerfumeVariantId());
-                    }
-                    perfumeVariant.setPerfume_stock_quantity(updatedStock);
-                    perfumeVariantRepository.save(perfumeVariant);
+                    PerfumeVariant variant = variantMaps.get(orderItemRequest.getPerfumeVariantId());
+                    variant.setPerfume_stock_quantity(variant.getPerfume_stock_quantity() - orderItemRequest.getQuantity());
 
                     return orderItem;
                 })
-                .collect(Collectors.toList());
+                .toList();
+
+        perfumeVariantRepository.saveAll(variantMaps.values());
 
         orderItemRepository.saveAll(orderItems);
 
-        List<OrderItemResponse> orderItemResponses =
-                orderItems.stream().map(orderItemMapper::toResponse).collect(Collectors.toList());
+        List<OrderItemResponse> orderItemResponses = orderItems.stream()
+                .map(orderItemMapper::toResponse)
+                .toList();
 
         OrderResponse orderResponse = orderMapper.toResponse(orderSaved);
         orderResponse.setOrderItemResponses(orderItemResponses);
 
-        orderSaved.setTotalMoney(calculateTotalPriceOrder(orderResponse));
+        BigDecimal itemsTotal = calculateTotalPriceItemOrder(orderResponse);
+
+        // Calculate shipping cost and total
+        ShippingMethod shippingMethod = shippingMethodRepository.findById(orderRequest.getShippingMethodId())
+                .orElseThrow(() -> new AppException(ErrorCode.SHIPPING_NOT_EXISTED));
+
+        BigDecimal finalTotal = itemsTotal;
+
+        if(shippingMethod.getShipCost() != null && shippingMethod.getShipCost().compareTo(BigDecimal.ZERO) > 0){
+            finalTotal = itemsTotal.add(shippingMethod.getShipCost());
+        }
+
+        orderSaved.setTotalMoney(finalTotal);
         orderRepository.save(orderSaved);
+        orderResponse.setTotalMoney(finalTotal);
 
         return orderResponse;
     }
 
-    private BigDecimal calculateTotalPriceOrder(OrderResponse orderResponse) {
+    public List<OrderResponse> getAllOrders(){
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        List<Order> orders = orderRepository.findAllByUserId(user.getId());
+
+        return orders.stream()
+                .map(order -> {
+                    List<OrderItemResponse> orderItemResponse =  order.getOrderItemList().stream()
+                            .map(orderItemMapper::toResponse)
+                            .toList();
+
+                    OrderResponse orderResponse = orderMapper.toResponse(order);
+                    orderResponse.setOrderItemResponses(orderItemResponse);
+
+                    return orderResponse;
+                })
+                .toList();
+    }
+
+    private BigDecimal calculateTotalPriceItemOrder(OrderResponse orderResponse) {
         return orderResponse.getOrderItemResponses().stream()
                 .map(OrderItemResponse::getTotalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);

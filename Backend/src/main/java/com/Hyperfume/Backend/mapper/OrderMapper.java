@@ -19,5 +19,6 @@ public interface OrderMapper {
     @Mapping(target = "shippingAddressId", source = "shippingAddress.id")
     @Mapping(target = "shippingMethodId", source = "shippingMethod.id")
     @Mapping(target = "paymentMethodId", source = "paymentMethod.id")
+    @Mapping(target = "shipCost", source = "shippingMethod.shipCost")
     OrderResponse toResponse(Order order);
 }

@@ -71,7 +71,8 @@ public enum ErrorCode {
     ACTIVE_FLASH_SALE_EXISTED(1044, "active flash sale has been existed", HttpStatus.BAD_REQUEST),
     PERFUME_ALREADY_IN_FLASH_SALE(1045, "perfume has been in flash sale", HttpStatus.BAD_REQUEST),
     FLASH_SALE_ITEM_NOT_EXISTED(1046, "flash sale item not existed", HttpStatus.BAD_REQUEST),
-    FLASH_SALE_ITEM_NOT_IN_FLASH_SALE(1047, "flash sale item not in flash sale", HttpStatus.BAD_REQUEST);
+    FLASH_SALE_ITEM_NOT_IN_FLASH_SALE(1047, "flash sale item not in flash sale", HttpStatus.BAD_REQUEST),
+    VARIANT_ALREADY_IN_CART(1048, "variant has been in cart", HttpStatus.BAD_REQUEST);
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

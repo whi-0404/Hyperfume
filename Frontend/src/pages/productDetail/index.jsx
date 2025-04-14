@@ -47,10 +47,14 @@ const ProductDetail = () => {
   const [selectedPrice, setSelectedPrice] = useState(null);
   const [mainImage, setMainImage] = useState(null);
   const [selectedVariantId, setSelectedVariantId] = useState(null);
+  const [selectedStockQuantity, setSelectedStockQuantity] = useState(0);
   const [ratings, setRatings] = useState([]);
   const [averageRating, setAverageRating] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
   const [loadingFavorite, setLoadingFavorite] = useState(false);
+
+  const [quantity, setQuantity] = useState(1);
+  const [quantityError, setQuantityError] = useState("");
 
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [reviewText, setReviewText] = useState("");
@@ -62,6 +66,17 @@ const ProductDetail = () => {
   const { user } = useUser(); // Get user from context
 
   // Function to determine if image is base64 or URL
+  const handleQuantityChange = (newQuantity) => {
+    if (newQuantity > selectedStockQuantity) {
+      setQuantityError(`Số lượng vượt quá hàng còn (${selectedStockQuantity})`);
+      return false;
+    } else {
+      setQuantityError("");
+      setQuantity(newQuantity);
+      return true;
+    }
+  };
+
   const getImageSource = (imageUrl) => {
     if (typeof imageUrl === 'string' && imageUrl.startsWith('data:image')) {
       return imageUrl; // Base64 image
@@ -82,6 +97,17 @@ const ProductDetail = () => {
   const handleVariantClick = (variantId, price) => {
     setSelectedPrice(price);
     setSelectedVariantId(variantId);
+    
+    // Find the selected variant and update stock quantity
+    if (products && products.result.perfumeVariantResponseList) {
+      const selectedVariant = products.result.perfumeVariantResponseList.find(
+        variant => variant.id === variantId
+      );
+      
+      if (selectedVariant) {
+        setSelectedStockQuantity(selectedVariant.perfume_stock_quantity);
+      }
+    }
   };
 
   const handlePageChange = (pageNumber) => {
@@ -206,7 +232,7 @@ const ProductDetail = () => {
 
   // Calculate the average rating from ratings data
   const calculateAverageRating = (ratingData) => {
-    if (!ratingData ) return 0;
+    if (!ratingData || ratingData.length === 0) return 0;
     const totalStars = ratingData.reduce((acc, rate) => acc + rate.rateStar, 0);
     return totalStars / ratingData.length;
   };
@@ -282,12 +308,12 @@ const ProductDetail = () => {
         setReviewError("Có lỗi xảy ra khi gửi đánh giá");
       }
     } catch (error) {
-       if( error.response.data.code === 1037) {
+       if (error.response && error.response.data && error.response.data.code === 1037) {
         setReviewError("Bạn chỉ được đánh giá sản phẩm một lần");
       }
-      else{
-      console.error("Error submitting review:", error);
-       setReviewError("Có lỗi xảy ra khi gửi đánh giá");
+      else {
+        console.error("Error submitting review:", error);
+        setReviewError("Có lỗi xảy ra khi gửi đánh giá");
       }
     } finally {
       setReviewSubmitting(false);
@@ -306,6 +332,7 @@ const ProductDetail = () => {
           const firstVariant = response.result.perfumeVariantResponseList[0];
           setSelectedVariantId(firstVariant.id);
           setSelectedPrice(firstVariant.price);
+          setSelectedStockQuantity(firstVariant.perfume_stock_quantity);
         }
         
         // Set main image
@@ -362,7 +389,10 @@ const ProductDetail = () => {
   }, [isFavorite]);
 
   if (!products) {
-    return <div>Product not found</div>;
+    return <div className="loading-container">
+      <div className="loading-spinner"></div>
+      <p>Đang tải thông tin sản phẩm...</p>
+    </div>;
   }
 
   // Get current page ratings
@@ -371,6 +401,17 @@ const ProductDetail = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentRatings = ratings.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(ratings.length / itemsPerPage);
+
+  // Format the stock indicator based on quantity
+  const getStockIndicator = (quantity) => {
+    if (quantity <= 0) {
+      return <span className="stock-indicator out-of-stock">Hết hàng</span>;
+    } else if (quantity < 5) {
+      return <span className="stock-indicator low-stock">Còn ít hàng ({quantity})</span>;
+    } else {
+      return <span className="stock-indicator in-stock">Còn hàng ({quantity})</span>;
+    }
+  };
 
   return (
     <div className="detail-product-container">
@@ -404,7 +445,7 @@ const ProductDetail = () => {
               {products.result.perfumeImageResponseList.map((image, index) => (
                 <img
                   key={index}
-                  className="thumbnail"
+                  className={`thumbnail ${mainImage === image.imageUrl ? 'active' : ''}`}
                   src={getImageSource(image.imageUrl)}
                   alt={`thumbnail-${index}`}
                   onClick={() => handleThumbnailClick(image.imageUrl)}
@@ -418,7 +459,6 @@ const ProductDetail = () => {
               <div className="row product-title-gender">
                 <h2 className="product-title">{products.result.name}</h2>
                 <div className="gender-favorite-container">
-                  <p className="gender">{products.result.perfume_gender}</p>
                   <button 
                     className="favorite-button"
                     onClick={handleFavoriteToggle}
@@ -431,6 +471,7 @@ const ProductDetail = () => {
                       <AiOutlineHeart className="heart-icon" />
                     )}
                   </button>
+                  <p className="gender">{products.result.perfume_gender}</p>
                 </div>
               </div>
               {/* Product rating container */}
@@ -438,7 +479,11 @@ const ProductDetail = () => {
                 <ProductRating rating={averageRating} totalReviews={ratings.length} />
               </div>
               <ul className="product-highlight-info">
-                <li>Thương hiệu: {products.result.brandName}</li>
+                <li>Thương hiệu: <span className="highlight">{products.result.brandName}</span></li>
+                <li>Đã bán: <span className="highlight">{products.result.sold}</span></li>
+                <li>
+                   {getStockIndicator(selectedStockQuantity)}
+                </li>
                 {products.result.flash_sale && (
                   <li className="flash-sale">Flash Sale!</li>
                 )}
@@ -465,27 +510,28 @@ const ProductDetail = () => {
                   ? products.result.perfumeVariantResponseList.find(v => v.id === selectedVariantId)?.discountedPrice
                   : null
               }
+              stockQuantity={selectedStockQuantity}
             />
           </div>
         </section>
 
         <hr></hr>
 
-        <section className="sec-3 row">
-          <div className="col-6">
-            <div className="product-description">
-              <h2 className="title">MÔ TẢ SẢN PHẨM</h2>
-              <p className="about-product">
-                {products.result.perfume_description}
-              </p>
-              {products.result.perfumeImageResponseList.length > 1 && (
-                <img
-                  className="about-product-img"
-                  src={getImageSource(products.result.perfumeImageResponseList[1].imageUrl)}
-                  alt="product"
-                />
-              )}
-            </div>
+            <section className="sec-3 row">
+        <div className="col-6">
+          <div className="product-description">
+            <h2 className="title">MÔ TẢ SẢN PHẨM</h2>
+            <p className="about-product">
+              {products.result.perfume_description}
+            </p>
+            {products.result.perfumeImageResponseList.length > 1 && (
+              <img
+                className="about-product-img"
+                src={getImageSource(products.result.perfumeImageResponseList[1].imageUrl)}
+                alt="product"
+              />
+            )}
+          </div>
           </div>
           <div className="col-6">
             <div className="product-detail">
