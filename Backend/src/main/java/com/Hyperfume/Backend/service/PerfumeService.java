@@ -5,6 +5,8 @@ import com.Hyperfume.Backend.dto.response.PageResponse;
 import com.Hyperfume.Backend.dto.response.PerfumeGetAllResponse;
 import com.Hyperfume.Backend.dto.response.PerfumeResponse;
 
+import java.io.IOException;
+
 public interface PerfumeService {
     PageResponse<PerfumeGetAllResponse> getAllPerfumes(
             int page,
@@ -12,11 +14,11 @@ public interface PerfumeService {
             String sortOption,
             String gender,
             String longevity,
-            Integer countryId,
-            Integer brandId,
+            String countryName,
+            String brandName,
             String concentration,
-            Integer screntFamilyId,
-            Long maxPrice);
+            String screntFamilyName,
+            Long maxPrice) throws IOException;
 
     PerfumeResponse getPerfumeById(int id);
 
@@ -34,7 +36,7 @@ public interface PerfumeService {
 
     PageResponse<PerfumeGetAllResponse> getPerfumesByGender(String gender, int page, int size);
 
-    PageResponse<PerfumeGetAllResponse> searchPerfumesByName(String name, int page, int size);
+    PageResponse<PerfumeGetAllResponse> searchPerfumesByNameAndDescription(String name, int page, int size);
 
     PageResponse<PerfumeGetAllResponse> getPerfumesByCountry(Integer countryId, int page, int size);
 

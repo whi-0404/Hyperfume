@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.Hyperfume.Backend.ElasticSearch.ESPerfumeService;
+import com.Hyperfume.Backend.entity.Perfume;
+import com.Hyperfume.Backend.service.PerfumeService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +39,7 @@ public class PerfumeImageServiceImpl implements PerfumeImageService {
     PerfumeImageRepository perfumeImageRepository;
     PerfumeImageMapper perfumeImageMapper;
     PerfumeRepository perfumeRepository;
+    ESPerfumeService esPerfumeService;
 
     private static final long MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 5MB
     private static final int MAX_NORMAL_IMAGE_COUNT = 5;
@@ -45,8 +49,8 @@ public class PerfumeImageServiceImpl implements PerfumeImageService {
 
     @PreAuthorize("hasRole('ADMIN')")
     public PerfumeImageResponse addImageThumbnail(PerfumeImageRequest request) {
-        if (!perfumeRepository.existsById(request.getPerfumeId()))
-            throw new AppException(ErrorCode.PERFUME_NOT_EXISTED);
+        perfumeRepository.findById(request.getPerfumeId())
+                .orElseThrow(()-> new AppException(ErrorCode.PERFUME_NOT_EXISTED));
 
         if (perfumeImageRepository.existsByPerfumeIdAndThumbnailTrue(request.getPerfumeId())) {
             throw new AppException(ErrorCode.DUPLICATE_THUMBNAIL_IMAGE);
@@ -65,7 +69,12 @@ public class PerfumeImageServiceImpl implements PerfumeImageService {
         perfumeImage.setImageUrl(relativePath);
         perfumeImage.setThumbnail(true);
 
-        return perfumeImageMapper.toResponse(perfumeImageRepository.save(perfumeImage));
+        PerfumeImage perfumeImageSaved = perfumeImageRepository.save(perfumeImage);
+
+        esPerfumeService.indexPerfume(perfumeImageSaved.getPerfume());
+
+
+        return perfumeImageMapper.toResponse(perfumeImageSaved);
     }
 
     public List<PerfumeImageResponse> getImagesByPerfumeId(Integer perfumeId) {
@@ -131,7 +140,11 @@ public class PerfumeImageServiceImpl implements PerfumeImageService {
         String relativePath = "images/" + uniqueFileName;
         thumbnail.setImageUrl(relativePath);
 
-        return perfumeImageMapper.toResponse(perfumeImageRepository.save(thumbnail));
+        PerfumeImage perfumeImageSaved = perfumeImageRepository.save(thumbnail);
+
+        esPerfumeService.indexPerfume(perfumeImageSaved.getPerfume());
+
+        return perfumeImageMapper.toResponse(perfumeImageSaved);
     }
 
     private void validateImageSize(MultipartFile file) {

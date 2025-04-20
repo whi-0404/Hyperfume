@@ -1,0 +1,27 @@
+{
+  "analysis": {
+    "analyzer": {
+      "vietnamese": {
+        "tokenizer": "icu_tokenizer",
+        "filter": [
+          "lowercase",
+          "vietnamese_stop",
+          "asciifolding"
+        ]
+      },
+      "autocomplete_search": {
+        "type": "custom",
+        "tokenizer": "standard",
+        "filter": [
+          "lowercase"
+        ]
+      }
+    },
+    "filter": {
+      "vietnamese_stop": {
+        "type": "stop",
+        "stopwords": "_vietnamese_"
+      }
+    }
+  }
+}

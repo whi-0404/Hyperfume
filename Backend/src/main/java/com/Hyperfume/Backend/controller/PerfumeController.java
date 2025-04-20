@@ -1,5 +1,6 @@
 package com.Hyperfume.Backend.controller;
 
+import com.Hyperfume.Backend.ElasticSearch.ESPerfumeService;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
+import java.util.List;
+
 @RestController
 @RequestMapping("/perfumes")
 @RequiredArgsConstructor(onConstructor_ = @__(@Autowired))
@@ -25,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PerfumeController {
 
     PerfumeService perfumeService;
+    ESPerfumeService esPerfumeService;
 
     @GetMapping("/byTypeName/{typeName}")
     public ApiResponse<PageResponse<PerfumeGetAllResponse>> getPerfumesByTypeName(
@@ -81,7 +86,7 @@ public class PerfumeController {
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "15") int size) {
         return ApiResponse.<PageResponse<PerfumeGetAllResponse>>builder()
-                .result(perfumeService.searchPerfumesByName(name, page, size))
+                .result(perfumeService.searchPerfumesByNameAndDescription(name, page, size))
                 .build();
     }
 
@@ -93,11 +98,11 @@ public class PerfumeController {
             @RequestParam(value = "gender", required = false) String gender,
             @RequestParam(value = "sort", defaultValue = "latest") String sortOption,
             @RequestParam(value = "longevity", required = false) String longevity,
-            @RequestParam(value = "countryId", required = false) Integer countryId,
-            @RequestParam(value = "brandId", required = false) Integer brandId,
+            @RequestParam(value = "countryId", required = false) String countryName,
+            @RequestParam(value = "brandId", required = false) String brandName,
             @RequestParam(value = "concentration", required = false) String concentration,
-            @RequestParam(value = "screntFamilyId", required = false) Integer screntFamilyId,
-            @RequestParam(value = "maxPrice", required = false) Long maxPrice) {
+            @RequestParam(value = "screntFamilyId", required = false) String screntFamilyName,
+            @RequestParam(value = "maxPrice", required = false) Long maxPrice) throws IOException {
         return ApiResponse.<PageResponse<PerfumeGetAllResponse>>builder()
                 .result(perfumeService.getAllPerfumes(
                         page,
@@ -105,10 +110,10 @@ public class PerfumeController {
                         sortOption,
                         gender,
                         longevity,
-                        countryId,
-                        brandId,
+                        countryName,
+                        brandName,
                         concentration,
-                        screntFamilyId,
+                        screntFamilyName,
                         maxPrice))
                 .build();
     }
@@ -157,6 +162,17 @@ public class PerfumeController {
             @RequestParam(value = "size", defaultValue = "15") int size) {
         return ApiResponse.<PageResponse<PerfumeGetAllResponse>>builder()
                 .result(perfumeService.getFlashSalePerfumes(page, size))
+                .build();
+    }
+
+    @GetMapping("/suggestions")
+    public ApiResponse<List<String>> getSuggestions(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "5") int maxSuggestions) throws IOException {
+
+        List<String> suggestions = esPerfumeService.autoCompletePerfumeName(keyword, maxSuggestions);
+        return ApiResponse.<List<String>> builder()
+                .result(suggestions)
                 .build();
     }
 }

@@ -38,6 +38,8 @@ public class SecurityConfig {
             "/countries",
             "/screntFamilies",
             "/perfumes",
+            "/perfumes/search",
+            "/perfumes/suggestions",
             "/perfumes/{perfumeId}",
             "/perfumes/{perfumeId}/variants",
             "/perfumes/{perfumeId}/rates",

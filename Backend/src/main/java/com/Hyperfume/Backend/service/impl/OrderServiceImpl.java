@@ -3,9 +3,11 @@ package com.Hyperfume.Backend.service.impl;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.Hyperfume.Backend.ElasticSearch.ESPerfumeService;
 import com.Hyperfume.Backend.entity.*;
 import com.Hyperfume.Backend.repository.*;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,6 +41,7 @@ public class OrderServiceImpl implements OrderService {
     PerfumeVariantRepository perfumeVariantRepository;
     UserRepository userRepository;
     ShippingMethodRepository shippingMethodRepository;
+    ESPerfumeService esPerfumeService;
 
     @Transactional
     public OrderResponse createOrder(OrderRequest orderRequest, List<OrderItemRequest> orderItemRequests) {
@@ -84,7 +87,7 @@ public class OrderServiceImpl implements OrderService {
                 })
                 .toList();
 
-        perfumeVariantRepository.saveAll(variantMaps.values());
+        List<PerfumeVariant> perfumeVariants = perfumeVariantRepository.saveAll(variantMaps.values());
 
         orderItemRepository.saveAll(orderItems);
 
@@ -110,6 +113,12 @@ public class OrderServiceImpl implements OrderService {
         orderSaved.setTotalMoney(finalTotal);
         orderRepository.save(orderSaved);
         orderResponse.setTotalMoney(finalTotal);
+
+        Set<Perfume> perfumeSet = perfumeVariants.stream()
+                .map(PerfumeVariant::getPerfume)
+                .collect(Collectors.toSet());
+
+        esPerfumeService.indexPerfumes(perfumeSet.stream().toList());
 
         return orderResponse;
     }

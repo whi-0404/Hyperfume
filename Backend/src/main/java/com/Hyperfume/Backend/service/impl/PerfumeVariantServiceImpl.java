@@ -3,6 +3,8 @@ package com.Hyperfume.Backend.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.Hyperfume.Backend.ElasticSearch.ESPerfumeService;
+import com.Hyperfume.Backend.entity.Perfume;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,17 +33,21 @@ public class PerfumeVariantServiceImpl implements PerfumeVariantService {
     PerfumeVariantRepository perfumeVariantRepository;
     PerfumeVariantMapper perfumeVariantMapper;
     PerfumeRepository perfumeRepository;
+    ESPerfumeService esPerfumeService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public PerfumeVariantResponse addVariant(PerfumeVariantRequest request) {
 
-        if (!perfumeRepository.existsById(request.getPerfumeId())) {
-            throw new AppException(ErrorCode.PERFUME_NOT_EXISTED);
-        }
+        Perfume perfume = perfumeRepository.findById(request.getPerfumeId())
+                .orElseThrow(()-> new AppException(ErrorCode.PERFUME_NOT_EXISTED));
 
         PerfumeVariant variant = perfumeVariantMapper.toPerfumeVariant(request);
         PerfumeVariant savedVariant = perfumeVariantRepository.save(variant);
+
+        perfume.getVariants().add(savedVariant);
+
+        esPerfumeService.indexPerfume(perfume);
 
         return perfumeVariantMapper.toResponse(savedVariant);
     }
@@ -64,15 +70,24 @@ public class PerfumeVariantServiceImpl implements PerfumeVariantService {
 
         perfumeVariantMapper.updatePerfumeVariant(existingVariant, request);
 
-        return perfumeVariantMapper.toResponse(perfumeVariantRepository.save(existingVariant));
+        PerfumeVariant savedVariant = perfumeVariantRepository.save(existingVariant);
+
+        Perfume perfume = perfumeRepository.findById(request.getPerfumeId())
+                .orElseThrow(()-> new AppException(ErrorCode.PERFUME_NOT_EXISTED));
+
+        esPerfumeService.indexPerfume(perfume);
+
+        return perfumeVariantMapper.toResponse(savedVariant);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteVariant(Integer variantId) {
-        if (!perfumeVariantRepository.existsById(variantId)) {
-            throw new AppException(ErrorCode.VARIANT_NOT_FOUND);
-        }
+        PerfumeVariant variant =  perfumeVariantRepository.findById(variantId)
+                        .orElseThrow(()-> new AppException(ErrorCode.VARIANT_NOT_FOUND));
+
         perfumeVariantRepository.deleteById(variantId);
+
+        esPerfumeService.indexPerfume(variant.getPerfume());
     }
 
     @Transactional
