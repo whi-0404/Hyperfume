@@ -114,12 +114,12 @@ public class ESPerfumeService {
                     .field("longevity.keyword")
                     .value(longevity))));
         }
-        if (countryName != null) {
+        if (countryName != null && !countryName.isBlank()) {
             boolQuery.filter(Query.of(q -> q.term(t -> t
                     .field("countryName.keyword")
                     .value(countryName))));
         }
-        if (brandName != null) {
+        if (brandName != null && !brandName.isBlank()) {
             boolQuery.filter(Query.of(q -> q.term(t -> t
                     .field("brandName.keyword")
                     .value(brandName))));
@@ -129,7 +129,7 @@ public class ESPerfumeService {
                     .field("concentration.keyword")
                     .value(concentration))));
         }
-        if (screntFamilyName != null) {
+        if (screntFamilyName != null && !screntFamilyName.isBlank()) {
             boolQuery.filter(Query.of(q -> q.term(t -> t
                     .field("screntFamilyName.keyword")
                     .value(screntFamilyName))));

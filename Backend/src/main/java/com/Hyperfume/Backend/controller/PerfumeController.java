@@ -98,10 +98,10 @@ public class PerfumeController {
             @RequestParam(value = "gender", required = false) String gender,
             @RequestParam(value = "sort", defaultValue = "latest") String sortOption,
             @RequestParam(value = "longevity", required = false) String longevity,
-            @RequestParam(value = "countryId", required = false) String countryName,
-            @RequestParam(value = "brandId", required = false) String brandName,
+            @RequestParam(value = "countryName", required = false) String countryName,
+            @RequestParam(value = "brandName", required = false) String brandName,
             @RequestParam(value = "concentration", required = false) String concentration,
-            @RequestParam(value = "screntFamilyId", required = false) String screntFamilyName,
+            @RequestParam(value = "screntFamilyName", required = false) String screntFamilyName,
             @RequestParam(value = "maxPrice", required = false) Long maxPrice) throws IOException {
         return ApiResponse.<PageResponse<PerfumeGetAllResponse>>builder()
                 .result(perfumeService.getAllPerfumes(
