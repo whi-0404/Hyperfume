@@ -38,7 +38,6 @@ public class ShippingMethodServiceImpl implements ShippingMethodService {
         return shippingMethodMapper.toResponse(shippingMethodRepository.save(shippingMethod));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     public List<ShippingResponse> getShippingMethods() {
 
         return shippingMethodRepository.findAll().stream()

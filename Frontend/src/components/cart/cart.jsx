@@ -216,6 +216,41 @@ const Cart = ({ initialCartItems }) => {
         });
     };
 
+    const handleCheckout = () => {
+        if (selectedItems.length === 0) {
+          return;
+        }
+        
+        // Save any pending quantity changes before proceeding
+        if (hasUnsavedChanges.current) {
+          saveQuantityChanges().then(() => {
+            // Filter the cart items to only include selected ones with ALL properties
+            const selectedProducts = cartItems.filter(item => 
+              selectedItems.includes(item.perfumeVariant)
+            );
+            
+            // Navigate to checkout with ALL item data
+            navigate('/thanh-toan', { 
+              state: { 
+                selectedProducts: selectedProducts 
+              }
+            });
+          });
+        } else {
+          // No unsaved changes, navigate directly with ALL properties
+          const selectedProducts = cartItems.filter(item => 
+            selectedItems.includes(item.perfumeVariant)
+          );
+          
+          navigate('/thanh-toan', { 
+            state: { 
+              selectedProducts: selectedProducts 
+            }
+          });
+        }
+      };
+      
+
     // Update select all checkbox state when individual selections change
     useEffect(() => {
         setIsAllChecked(selectedItems.length === cartItems.length && cartItems.length > 0);
@@ -356,21 +391,11 @@ const Cart = ({ initialCartItems }) => {
                                     className={`checkout-btn ${selectedItems.length === 0 ? 'disabled' : ''}`}
                                     onClick={(e) => {
                                         e.preventDefault();
-                                        if (selectedItems.length === 0) {
-                                            return;
-                                        }
-                                        
-                                        if (hasUnsavedChanges.current) {
-                                            saveQuantityChanges().then(() => {
-                                                navigate('/thanh-toan');
-                                            });
-                                        } else {
-                                            navigate('/thanh-toan');
-                                        }
+                                        handleCheckout();
                                     }}
-                                >
+                                    >
                                     Thanh toán
-                                </NavLink>
+                                    </NavLink>
                             </div>
                         </div>
                     </>
