@@ -60,5 +60,9 @@ public class Order {
     @JoinColumn(name = "order_id")
     List<OrderItem> orderItemList;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "ship_id")
+    Shipment shipment;
+
     //    boolean active;
 }

@@ -72,7 +72,19 @@ public enum ErrorCode {
     PERFUME_ALREADY_IN_FLASH_SALE(1045, "perfume has been in flash sale", HttpStatus.BAD_REQUEST),
     FLASH_SALE_ITEM_NOT_EXISTED(1046, "flash sale item not existed", HttpStatus.BAD_REQUEST),
     FLASH_SALE_ITEM_NOT_IN_FLASH_SALE(1047, "flash sale item not in flash sale", HttpStatus.BAD_REQUEST),
-    VARIANT_ALREADY_IN_CART(1048, "variant has been in cart", HttpStatus.BAD_REQUEST);
+    VARIANT_ALREADY_IN_CART(1048, "variant has been in cart", HttpStatus.BAD_REQUEST),
+
+    GHN_RETURNED_ERROR(1049, "GHN shipping service returned error", HttpStatus.BAD_REQUEST),
+    FAILED_GET_SHIPPING_FEE(1050, "failed to get shipping fee api", HttpStatus.BAD_REQUEST),
+    FAILED_GET_EXPECTED_DELIVERY_DATE(1051, "failed to get expected delivery date api", HttpStatus.BAD_REQUEST),
+    GHN_NO_DATA_IN_RESPONSE(1052, "data is null or empty in response of GHN service shipping", HttpStatus.BAD_REQUEST),
+    FAILED_GET_SERVICE_LIST(1053, "failed to get shipping service list api", HttpStatus.BAD_REQUEST),
+    FAILED_GET_PROVINCE_ID(1054, "failed to get province id api", HttpStatus.BAD_REQUEST),
+    FAILED_GET_DISTRICT_ID(1055, "failed to get district id api", HttpStatus.BAD_REQUEST),
+    FAIlED_GET_WARD_CODE(1056, "failed to get ward code api", HttpStatus.BAD_REQUEST),
+    DISTRICT_NOT_FOUND(1057, "not found district name consistent", HttpStatus.BAD_REQUEST),
+    PROVINCE_NOT_FOUND(1057, "not found province name consistent", HttpStatus.BAD_REQUEST),
+    WARD_NOT_FOUND(1057, "not found ward name consistent", HttpStatus.BAD_REQUEST);
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

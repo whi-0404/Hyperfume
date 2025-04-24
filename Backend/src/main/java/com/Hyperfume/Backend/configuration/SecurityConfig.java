@@ -44,7 +44,8 @@ public class SecurityConfig {
             "/perfumes/{perfumeId}/variants",
             "/perfumes/{perfumeId}/rates",
             "/payment_method",
-            "/shipping_methods"
+            "/shipping_methods",
+            "/shipments"
     };
 
     public static final String[] PUBLIC_POST_ENDPOINTS = {
