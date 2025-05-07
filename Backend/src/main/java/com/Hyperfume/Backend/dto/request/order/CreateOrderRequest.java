@@ -1,4 +1,4 @@
-package com.Hyperfume.Backend.dto.request;
+package com.Hyperfume.Backend.dto.request.order;
 
 import java.util.List;
 
@@ -18,4 +18,6 @@ public class CreateOrderRequest {
 
     @Valid
     List<OrderItemRequest> orderItemRequests;
+
+    String shipmentToken;
 }

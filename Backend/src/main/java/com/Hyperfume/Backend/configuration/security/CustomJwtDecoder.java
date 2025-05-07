@@ -1,10 +1,9 @@
-package com.Hyperfume.Backend.configuration;
+package com.Hyperfume.Backend.configuration.security;
 
 import java.text.ParseException;
 import java.util.Objects;
 import javax.crypto.spec.SecretKeySpec;
 
-import com.Hyperfume.Backend.exception.AppException;
 import com.Hyperfume.Backend.exception.JwtAuthenticationException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -11,11 +11,17 @@ import java.time.LocalDate;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ShipmentResponse {
+    String shipmentToken;
+
     int fee;
 
     LocalDate expectedDeliveryDate;
 
-    int serviceId;
+    Integer serviceId;
 
     String serviceName;
+
+    Integer shippingAddressId;
+
+    String shippingAddress;
 }

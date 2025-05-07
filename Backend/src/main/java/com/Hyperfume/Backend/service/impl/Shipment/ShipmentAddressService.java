@@ -77,7 +77,7 @@ public class ShipmentAddressService {
                         }
                     }
 
-                    throw new AppException(ErrorCode.PROVINCE_NOT_FOUND);
+                    throw new AppException(ErrorCode.GHN_PROVINCE_NOT_FOUND);
                 } else
                     throw new AppException(ErrorCode.GHN_NO_DATA_IN_RESPONSE);
 
@@ -88,7 +88,7 @@ public class ShipmentAddressService {
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
-            throw new AppException(ErrorCode.FAILED_GET_PROVINCE_ID);
+            throw new AppException(ErrorCode.GHN_FAILED_GET_PROVINCE_ID);
         }
     }
 
@@ -130,7 +130,7 @@ public class ShipmentAddressService {
                         }
                     }
 
-                    throw new AppException(ErrorCode.DISTRICT_NOT_FOUND);
+                    throw new AppException(ErrorCode.GHN_DISTRICT_NOT_FOUND);
                 } else {
                     throw new AppException(ErrorCode.GHN_NO_DATA_IN_RESPONSE);
                 }
@@ -142,7 +142,7 @@ public class ShipmentAddressService {
             throw e;
         } catch (Exception e) {
             log.error("Failed to get district ID for province {}, district name: {}", provinceId, districtName, e);
-            throw new AppException(ErrorCode.FAILED_GET_DISTRICT_ID);
+            throw new AppException(ErrorCode.GHN_FAILED_GET_DISTRICT_ID);
         }
     }
 
@@ -180,7 +180,7 @@ public class ShipmentAddressService {
                             return (String) map.get("WardCode");
                         }
                     }
-                    throw new AppException(ErrorCode.WARD_NOT_FOUND);
+                    throw new AppException(ErrorCode.GHN_WARD_NOT_FOUND);
                 } else {
                     throw new AppException(ErrorCode.GHN_NO_DATA_IN_RESPONSE);
                 }
@@ -191,7 +191,7 @@ public class ShipmentAddressService {
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
-            throw new AppException(ErrorCode.FAIlED_GET_WARD_CODE);
+            throw new AppException(ErrorCode.GHN_FAIlED_GET_WARD_CODE);
         }
     }
 

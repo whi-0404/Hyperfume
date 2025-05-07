@@ -1,4 +1,4 @@
-package com.Hyperfume.Backend.configuration;
+package com.Hyperfume.Backend.configuration.security;
 
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;

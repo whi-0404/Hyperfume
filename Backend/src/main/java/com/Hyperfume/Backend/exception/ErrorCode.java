@@ -75,16 +75,28 @@ public enum ErrorCode {
     VARIANT_ALREADY_IN_CART(1048, "variant has been in cart", HttpStatus.BAD_REQUEST),
 
     GHN_RETURNED_ERROR(1049, "GHN shipping service returned error", HttpStatus.BAD_REQUEST),
-    FAILED_GET_SHIPPING_FEE(1050, "failed to get shipping fee api", HttpStatus.BAD_REQUEST),
-    FAILED_GET_EXPECTED_DELIVERY_DATE(1051, "failed to get expected delivery date api", HttpStatus.BAD_REQUEST),
+    GHN_FAILED_GET_SHIPPING_FEE(1050, "failed to get shipping fee api", HttpStatus.BAD_REQUEST),
+    GHN_FAILED_GET_EXPECTED_DELIVERY_DATE(1051, "failed to get expected delivery date api", HttpStatus.BAD_REQUEST),
     GHN_NO_DATA_IN_RESPONSE(1052, "data is null or empty in response of GHN service shipping", HttpStatus.BAD_REQUEST),
-    FAILED_GET_SERVICE_LIST(1053, "failed to get shipping service list api", HttpStatus.BAD_REQUEST),
-    FAILED_GET_PROVINCE_ID(1054, "failed to get province id api", HttpStatus.BAD_REQUEST),
-    FAILED_GET_DISTRICT_ID(1055, "failed to get district id api", HttpStatus.BAD_REQUEST),
-    FAIlED_GET_WARD_CODE(1056, "failed to get ward code api", HttpStatus.BAD_REQUEST),
-    DISTRICT_NOT_FOUND(1057, "not found district name consistent", HttpStatus.BAD_REQUEST),
-    PROVINCE_NOT_FOUND(1057, "not found province name consistent", HttpStatus.BAD_REQUEST),
-    WARD_NOT_FOUND(1057, "not found ward name consistent", HttpStatus.BAD_REQUEST);
+    GHN_FAILED_GET_SERVICE_LIST(1053, "failed to get shipping service list api", HttpStatus.BAD_REQUEST),
+    GHN_FAILED_GET_PROVINCE_ID(1054, "failed to get province id api", HttpStatus.BAD_REQUEST),
+    GHN_FAILED_GET_DISTRICT_ID(1055, "failed to get district id api", HttpStatus.BAD_REQUEST),
+    GHN_FAIlED_GET_WARD_CODE(1056, "failed to get ward code api", HttpStatus.BAD_REQUEST),
+    GHN_DISTRICT_NOT_FOUND(1057, "not found district name consistent", HttpStatus.BAD_REQUEST),
+    GHN_PROVINCE_NOT_FOUND(1057, "not found province name consistent", HttpStatus.BAD_REQUEST),
+    GHN_WARD_NOT_FOUND(1057, "not found ward name consistent", HttpStatus.BAD_REQUEST),
+
+    GHN_FAILED_CREATE_ORDER(1058, "failed to create order api GHN", HttpStatus.BAD_REQUEST),
+    GHN_FAILED_CANCEL_ORDER(1059, "failed to cancel order api GHN", HttpStatus.BAD_REQUEST),
+    GHN_FAILED_GET_ORDER_STATUS(1060, "failed to get order status api GHN", HttpStatus.BAD_REQUEST),
+    GHN_FAILED_RETURN_ORDER(1061, "failed to return order api GHN", HttpStatus.BAD_REQUEST),
+
+    ORDER_NOT_FOUND(1062, "order not found", HttpStatus.BAD_REQUEST),
+
+    REDIS_SHIPMENT_INFO_NOT_FOUND(1063, "shipment info not found in redis", HttpStatus.BAD_REQUEST),
+    SHIPMENT_TOKEN_INVALID(1064, "shipment token invalid", HttpStatus.BAD_REQUEST),
+    SHIPMENT_CREATION_FAILED(1065, "shipment creation failed", HttpStatus.BAD_REQUEST),
+    SHIPMENT_NOT_EXISTED(1066, "shipment not existed", HttpStatus.BAD_REQUEST),;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

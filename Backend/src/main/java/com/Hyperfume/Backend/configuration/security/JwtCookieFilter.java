@@ -1,4 +1,4 @@
-package com.Hyperfume.Backend.configuration;
+package com.Hyperfume.Backend.configuration.security;
 
 import java.io.IOException;
 import java.util.*;
@@ -10,8 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.servlet.http.HttpServletResponse;
 
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 public class JwtCookieFilter extends OncePerRequestFilter {

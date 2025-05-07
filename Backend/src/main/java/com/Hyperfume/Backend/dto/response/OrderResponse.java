@@ -15,19 +15,15 @@ import lombok.experimental.FieldDefaults;
 public class OrderResponse {
     Integer userId;
 
-    String shippingAddressId;
-
     String notes;
-
-    Integer shippingMethodId;
 
     Integer paymentMethodId;
 
     BigDecimal totalMoney;
 
-    BigDecimal shipCost;
-
     LocalDate orderDate;
 
     List<OrderItemResponse> orderItemResponses;
+
+    ShipmentResponse shipmentResponse;
 }

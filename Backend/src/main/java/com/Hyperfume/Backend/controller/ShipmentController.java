@@ -22,9 +22,10 @@ public class ShipmentController {
     ShipmentService shipmentService;
 
     @GetMapping
-    public ApiResponse<ShipmentResponse> getShipments(@RequestBody @Valid ShipmentRequest request){
+    public ApiResponse<ShipmentResponse> getShipmentInfo(@RequestParam int shippingAddressId,
+                                                         @RequestParam int quantity){
         return ApiResponse.<ShipmentResponse>builder()
-                .result(shipmentService.getShipmentOrderInfos(request))
+                .result(shipmentService.getShipmentOrderInfo(shippingAddressId, quantity))
                 .build();
     }
 }

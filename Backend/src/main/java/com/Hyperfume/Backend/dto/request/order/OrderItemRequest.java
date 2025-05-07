@@ -1,4 +1,4 @@
-package com.Hyperfume.Backend.dto.request;
+package com.Hyperfume.Backend.dto.request.order;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -9,15 +9,10 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class OrderRequest {
+public class OrderItemRequest {
     @NotNull
-    Integer shippingAddressId;
-
-    String notes;
+    Integer PerfumeVariantId;
 
     @NotNull
-    Integer shippingMethodId;
-
-    @NotNull
-    Integer paymentMethodId;
+    Integer quantity;
 }

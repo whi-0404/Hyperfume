@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.Hyperfume.Backend.enums.OrderStatus;
 import jakarta.persistence.*;
 
 import lombok.*;
@@ -25,9 +26,9 @@ public class Order {
     @JoinColumn(name = "user_id")
     User user;
 
-    @ManyToOne
-    @JoinColumn(name = "shipping_address_id")
-    ShippingAddress shippingAddress;
+//    @ManyToOne
+//    @JoinColumn(name = "shipping_address_id")
+//    ShippingAddress shippingAddress;
 
     @Column(name = "notes", columnDefinition = "TEXT")
     String notes;
@@ -35,22 +36,18 @@ public class Order {
     @Column(name = "order_date", updatable = false)
     LocalDate orderDate;
 
-    @PrePersist
-    protected void onCreate() {
-        this.orderDate = LocalDate.now();
-    }
-
-    String status;
+    @Enumerated(EnumType.STRING)
+    OrderStatus status;
 
     @JoinColumn(name = "total_money")
     BigDecimal totalMoney;
 
-    @ManyToOne
-    @JoinColumn(name = "shipping_method_id")
-    ShippingMethod shippingMethod;
+//    @ManyToOne
+//    @JoinColumn(name = "shipping_method_id")
+//    ShippingMethod shippingMethod;
 
-    @JoinColumn(name = "shipping_date")
-    LocalDate shippingDate;
+//    @JoinColumn(name = "shipping_date")
+//    LocalDate shippingDate;
 
     @ManyToOne
     @JoinColumn(name = "pay_id")
@@ -64,5 +61,12 @@ public class Order {
     @JoinColumn(name = "ship_id")
     Shipment shipment;
 
-    //    boolean active;
+    boolean active;
+
+    @PrePersist
+    protected void onCreate() {
+        this.orderDate = LocalDate.now();
+        this.status = OrderStatus.ORDER_CREATED;
+        this.active = true;
+    }
 }

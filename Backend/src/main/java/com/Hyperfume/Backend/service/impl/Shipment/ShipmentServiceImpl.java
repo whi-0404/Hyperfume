@@ -1,13 +1,22 @@
 package com.Hyperfume.Backend.service.impl.Shipment;
 
-import com.Hyperfume.Backend.dto.request.ShipmentRequest;
-import com.Hyperfume.Backend.dto.request.ShippingAddressRequest;
 import com.Hyperfume.Backend.dto.response.ShipmentResponse;
+import com.Hyperfume.Backend.entity.Order;
+import com.Hyperfume.Backend.entity.Shipment;
+import com.Hyperfume.Backend.entity.ShippingAddress;
+import com.Hyperfume.Backend.enums.OrderStatus;
+import com.Hyperfume.Backend.enums.ShipmentStatus;
 import com.Hyperfume.Backend.exception.AppException;
 import com.Hyperfume.Backend.exception.ErrorCode;
+import com.Hyperfume.Backend.repository.OrderRepository;
+import com.Hyperfume.Backend.repository.ShipmentRepository;
+import com.Hyperfume.Backend.repository.ShipmentTrackingRepository;
+import com.Hyperfume.Backend.repository.ShippingAddressRepository;
 import com.Hyperfume.Backend.service.ShipmentService;
+import com.Hyperfume.Backend.service.redis.ShipmentRedisService;
 import com.Hyperfume.Backend.util.ParseAddress;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +29,11 @@ import org.springframework.http.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.Hyperfume.Backend.util.GetIntValue.getIntValue;
 
 @Slf4j
 @Service
@@ -60,11 +70,21 @@ public class ShipmentServiceImpl implements ShipmentService {
     protected String fromAddressKey;
 
 
+    ShipmentRepository shipmentRepository;
+    ShipmentRedisService shipmentRedisService;
     ShipmentAddressService shipmentAddressService;
+    ShippingAddressRepository shippingAddressRepository;
+    ShipmentTrackingRepository shipmentTrackingRepository;
+    ShipmentTrackingServiceImpl shipmentTrackingService;
+    OrderRepository orderRepository;
     RestTemplate restTemplate = new RestTemplate();
 
-    public ShipmentResponse getShipmentOrderInfos(ShipmentRequest request) {
-        Map<String, String> toAddress = ParseAddress.parseAddress(request.getShippingAddressRequest().getShipAddress());
+    public ShipmentResponse getShipmentOrderInfo(int shippingAddressId, int quantity) {
+        ShippingAddress shippingAddress = shippingAddressRepository.findById(shippingAddressId)
+                .orElseThrow(() ->new AppException(ErrorCode.SHIPPING_ADDRESS_NOT_EXISTED));
+
+
+        Map<String, String> toAddress = ParseAddress.parseAddress(shippingAddress.getShipAddress());
         Map<String, String> fromAddress = ParseAddress.parseAddress(fromAddressKey);
 
         int toProvinceId = shipmentAddressService.getProvinceId(toAddress.get("province"));
@@ -75,7 +95,7 @@ public class ShipmentServiceImpl implements ShipmentService {
         int fromDistrictId = shipmentAddressService.getDistrictId(fromProvinceId, fromAddress.get("district"));
         String fromWardCode = shipmentAddressService.getWardCode(fromDistrictId, fromAddress.get("ward"));
 
-        int weight = request.getQuantity() * 350;
+        int weight = quantity * 350;
 
         List<Map<String, Object>> serviceList = getServiceList(fromDistrictId, toDistrictId);
         log.info("Service list: {}", serviceList);
@@ -108,15 +128,85 @@ public class ShipmentServiceImpl implements ShipmentService {
 
         int fee = getFee(serviceId, fromDistrictId, fromWardCode, toDistrictId, toWardCode, weight);
 
-        return ShipmentResponse.builder()
+        ShipmentResponse response =  ShipmentResponse.builder()
                 .serviceId(serviceId)
                 .serviceName(serviceName)
                 .fee(fee)
+                .shippingAddress(shippingAddress.getShipAddress())
+                .shippingAddressId(shippingAddressId)
                 .expectedDeliveryDate(expectedDeliveryDate)
                 .build();
+
+        String shipmentToken = shipmentRedisService.cacheShipmentInfo(response);
+
+        response.setShipmentToken(shipmentToken);
+
+        return response;
     }
 
-    public int getFee(Integer serviceId, int fromDistrictId, String fromWardCode, int toDistrictId, String toWardCode, int weight) {
+    public Shipment createShipment(Order order, String shipmentToken) {
+        if(order.getShipment() != null){
+            return order.getShipment();
+        }
+
+        ShipmentResponse response = shipmentRedisService.getShipmentInfo(shipmentToken);
+
+        if(response == null){
+            throw new AppException(ErrorCode.REDIS_SHIPMENT_INFO_NOT_FOUND);
+        }
+
+        ShippingAddress shippingAddress = shippingAddressRepository.findById(response.getShippingAddressId())
+                .orElseThrow(() -> new AppException(ErrorCode.SHIPPING_ADDRESS_NOT_EXISTED));
+
+        Shipment shipment = Shipment.builder()
+                .serviceId(response.getServiceId())
+                .order(order)
+                .shippingAddress(shippingAddress)
+                .currentLocation("Shop Hyperfume")
+                .expectedDeliveryDate(response.getExpectedDeliveryDate())
+                .name(response.getServiceName())
+                .fee(response.getFee())
+                .build();
+
+        //save shipment to db
+        shipment = shipmentRepository.save(shipment);
+
+        //save order
+        order.setShipment(shipment);
+        orderRepository.save(order);
+
+        //create and save shipment tracking to db
+        shipmentTrackingService.createShipmentTracking(shipment);
+
+        //remove cache from redis
+        shipmentRedisService.deleteShipmentInfo(shipmentToken);
+
+        return shipment;
+    }
+
+
+    @Transactional
+    public Shipment updateShipmentStatus(Shipment shipment, ShipmentStatus status, String location, String description){
+
+        shipment.setStatus(status);
+        if(location!=null && !location.isBlank()){
+            shipment.setCurrentLocation(location);
+        }
+
+        shipmentTrackingService.createShipmentTracking(shipment);
+
+        updateOrderStatusByShipment(shipment);
+
+        //Send Status notification
+        //...
+
+
+        return shipmentRepository.save(shipment);
+    }
+
+
+
+    private int getFee(Integer serviceId, int fromDistrictId, String fromWardCode, int toDistrictId, String toWardCode, int weight) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
@@ -150,11 +240,11 @@ public class ShipmentServiceImpl implements ShipmentService {
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
-            throw new AppException(ErrorCode.FAILED_GET_SHIPPING_FEE);
+            throw new AppException(ErrorCode.GHN_FAILED_GET_SHIPPING_FEE);
         }
     }
 
-    public LocalDate getExpectedDeliveryDate(Integer serviceId, int fromDistrictId, String fromWardCode, int toDistrictId, String toWardCode, int weight) {
+    private LocalDate getExpectedDeliveryDate(Integer serviceId, int fromDistrictId, String fromWardCode, int toDistrictId, String toWardCode, int weight) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
@@ -194,12 +284,12 @@ public class ShipmentServiceImpl implements ShipmentService {
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
-            throw new AppException(ErrorCode.FAILED_GET_EXPECTED_DELIVERY_DATE);
+            throw new AppException(ErrorCode.GHN_FAILED_GET_EXPECTED_DELIVERY_DATE);
         }
     }
 
 
-    public List<Map<String, Object>> getServiceList(int fromDistrictId, int toDistrictId) {
+    private List<Map<String, Object>> getServiceList(int fromDistrictId, int toDistrictId) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
@@ -228,7 +318,52 @@ public class ShipmentServiceImpl implements ShipmentService {
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
-            throw new AppException(ErrorCode.FAILED_GET_SERVICE_LIST);
+            throw new AppException(ErrorCode.GHN_FAILED_GET_SERVICE_LIST);
+        }
+    }
+
+    private void updateOrderStatusByShipment(Shipment shipment) {
+        Order order = shipment.getOrder();
+
+        if(order == null){
+            return;
+        }
+
+        OrderStatus newStatus = mapShipmentStatusToOrderStatus(shipment.getStatus());
+
+        if(!order.getStatus().equals(newStatus)){
+            order.setStatus(newStatus);
+            orderRepository.save(order);
+        }
+    }
+
+    private OrderStatus mapShipmentStatusToOrderStatus(ShipmentStatus shipmentStatus) {
+        switch (shipmentStatus) {
+            case READY_TO_PICK, PICKING -> {
+                return OrderStatus.PROCESSING;
+            }
+            case PICKED, STORING, TRANSPORTING, SORTING -> {
+                return OrderStatus.IN_TRANSIT;
+            }
+
+            case DELIVERING,MONEY_COLLECT_DELIVERING -> {
+                return OrderStatus.DELIVERING;
+            }
+            case DELIVERED -> {
+                return OrderStatus.DELIVERED;
+            }
+
+            case RETURN, RETURN_TRANSPORTING, RETURNING -> {
+                return OrderStatus.RETURNING;
+            }
+
+            case RETURNED -> {
+                return OrderStatus.RETURNED;
+            }
+
+            default -> {
+                return null;
+            }
         }
     }
 
@@ -237,18 +372,5 @@ public class ShipmentServiceImpl implements ShipmentService {
                 .filter(service -> serviceName.equals(service.get("short_name")))
                 .findFirst()
                 .orElse(null);
-    }
-
-    private int getIntValue(Object value) {
-        if (value instanceof Integer) {
-            return (Integer) value;
-        } else if (value instanceof String) {
-            return Integer.parseInt((String) value);
-        } else if (value instanceof Long) {
-            return ((Long) value).intValue();
-        } else if (value instanceof Double) {
-            return ((Double) value).intValue();
-        }
-        throw new IllegalArgumentException("Cannot convert value to int: " + value);
     }
 }

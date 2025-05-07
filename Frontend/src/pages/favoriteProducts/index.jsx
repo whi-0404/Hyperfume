@@ -3,6 +3,11 @@ import "./favoriteProducts.scss";
 import ProductCard from "../../components/productCard";
 import { listFavorites } from "../../services/handleFavorite";
 import Pagination from "../Pagination";
+import SockJS from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
+import api from './axiosConfig'; // Sửa lại import
+import webSocketService from '../services/WebSocketService';
+import { useUser } from '../utils/userContext';
 
 const FavoriteProducts = () => {
   const [favorites, setFavorites] = useState([]);
@@ -12,6 +17,8 @@ const FavoriteProducts = () => {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(8); // Số sản phẩm mỗi trang
+
+  const { user } = useUser();
 
   useEffect(() => {
     const fetchFavorites = async () => {

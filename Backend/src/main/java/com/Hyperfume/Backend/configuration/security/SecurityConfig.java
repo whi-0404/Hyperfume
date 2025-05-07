@@ -1,4 +1,4 @@
-package com.Hyperfume.Backend.configuration;
+package com.Hyperfume.Backend.configuration.security;
 
 import java.util.List;
 
@@ -49,7 +49,8 @@ public class SecurityConfig {
     };
 
     public static final String[] PUBLIC_POST_ENDPOINTS = {
-            "/users"
+            "/users",
+            "/webhook/ghn/status"
     };
 
     @Bean

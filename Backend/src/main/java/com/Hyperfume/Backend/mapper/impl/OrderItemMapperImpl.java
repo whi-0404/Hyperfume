@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import org.springframework.stereotype.Component;
 
-import com.Hyperfume.Backend.dto.request.OrderItemRequest;
+import com.Hyperfume.Backend.dto.request.order.OrderItemRequest;
 import com.Hyperfume.Backend.dto.response.OrderItemResponse;
 import com.Hyperfume.Backend.entity.*;
 import com.Hyperfume.Backend.exception.AppException;

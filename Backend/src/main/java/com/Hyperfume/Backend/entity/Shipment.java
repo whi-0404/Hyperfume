@@ -8,6 +8,8 @@ import org.springframework.cglib.core.Local;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -30,7 +32,7 @@ public class Shipment {
     @Column(columnDefinition = "TEXT")
     String description;
 
-    BigDecimal fee;
+    Integer fee;
 
     @Column(name = "expected_delivery_date")
     LocalDate expectedDeliveryDate;
@@ -39,12 +41,31 @@ public class Shipment {
     LocalDate actualDeliveryDate;
 
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     ShipmentStatus status;
 
+    @Column(name = "service_id")
+    int serviceId;
+
+    @Column(name = "current_location", columnDefinition = "TEXT")
+    String currentLocation;
+    
+    @Column(name = "last_updated")
+    LocalDateTime time;
+
     @ManyToOne
-    @JoinColumn(name = "shipping_method_id")
+    @JoinColumn(name = "shipping_address_id")
     ShippingAddress shippingAddress;
 
     @OneToOne(mappedBy = "shipment")
-    Order oder;
+    Order order;
+    
+    @OneToMany(mappedBy = "shipment", cascade = CascadeType.ALL)
+    List<ShipmentTracking> trackingHistory;
+    
+    @PrePersist
+    protected void onCreate() {
+        this.status = ShipmentStatus.SHIPMENT_PENDING;
+    }
+
 }
