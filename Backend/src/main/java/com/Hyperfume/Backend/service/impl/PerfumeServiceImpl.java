@@ -123,12 +123,12 @@ public class PerfumeServiceImpl implements PerfumeService {
                 .orElseThrow(() -> new AppException(ErrorCode.COUNTRY_NOT_EXISTED));
 
         Perfume perfume = perfumeMapper.toEntity(request, brand, screntFamily, country);
-//        perfume = perfumeRepository.save(perfume);
+        perfume = perfumeRepository.save(perfume);
 
-//        esPerfumeService.indexPerfume(perfume);
+        esPerfumeService.indexPerfume(perfume);
 
-        List<Perfume> perfumeList = perfumeRepository.findAll();
-        esPerfumeService.indexPerfumes(perfumeList);
+//        List<Perfume> perfumeList = perfumeRepository.findAll();
+//        esPerfumeService.indexPerfumes(perfumeList);
 
         return perfumeMapper.toResponse(perfume);
     }

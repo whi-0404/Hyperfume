@@ -1,5 +1,6 @@
 package com.Hyperfume.Backend.repository;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import com.Hyperfume.Backend.entity.Perfume;
@@ -35,4 +36,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("SELECT COUNT(p) > 0 FROM User u JOIN u.favoritePerfumes p WHERE u.username = :username " +
             "AND p.id = :perfumeId")
     boolean checkFavoritePerfumeByUsername(@Param("username") String username, @Param("perfumeId") Integer perfumeId);
+
+    Optional<User> findByRoleId(int roleId);
 }

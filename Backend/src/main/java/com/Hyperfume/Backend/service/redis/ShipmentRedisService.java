@@ -27,8 +27,8 @@ public class ShipmentRedisService {
         this.objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
 
-    String SHIPMENT_INFO_PREFIX = "shipment_info:";
-    int CACHE_TTL_MINUTES = 30;
+    private static final String SHIPMENT_INFO_PREFIX = "shipment_info:";
+    private static final int CACHE_TTL_MINUTES = 30;
 
     public String cacheShipmentInfo(ShipmentResponse shipmentInfo){
         String token = generateUniqueToken();

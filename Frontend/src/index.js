@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import RouterCustom from './router';
 import './styles/style.scss';
 import { UserProvider } from './utils/userContext'; // Import UserProvider
-import NotificationListener from './components/NotificationListener'; // Thêm dòng này
+import NotificationListener from './components/notification/NotificationListener'; // Thêm dòng này
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

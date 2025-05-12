@@ -1,6 +1,7 @@
 package com.Hyperfume.Backend.service.impl;
 
 import com.Hyperfume.Backend.dto.response.NotificationResponse;
+import com.Hyperfume.Backend.dto.response.PageResponse;
 import com.Hyperfume.Backend.entity.Notification;
 import com.Hyperfume.Backend.entity.User;
 import com.Hyperfume.Backend.enums.NotificationType;
@@ -15,9 +16,14 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -29,17 +35,7 @@ public class NotificationServiceImpl implements NotificationService {
     UserRepository userRepository;
     SimpMessagingTemplate messagingTemplate;
 
-    public void sendOrderStatusNotification(Integer userId, String title, String content){
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
-        Notification notification = Notification.builder()
-                .user(user)
-                .title(title)
-                .content(content)
-                .type(NotificationType.ORDER_STATUS)
-                .build();
-
+    public void sendNotification(Notification notification){
         notificationRepository.save(notification);
 
         //websocket
@@ -47,7 +43,7 @@ public class NotificationServiceImpl implements NotificationService {
 
         try{
         messagingTemplate.convertAndSendToUser(
-                user.getUsername(),
+                notification.getUser().getUsername(),
                 "/topic/notifications",
                 notificationResponse
         );
@@ -55,37 +51,75 @@ public class NotificationServiceImpl implements NotificationService {
             log.error("Lỗi khi gửi thông báo WebSocket", e);
         }
     }
-    public void sendSystemNotification(Integer userId, String title, String content){
-        User user = userRepository.findById(userId)
+
+    public void markAsRead(Integer notificationId){
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        User user = userRepository.findByUsername(name)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        Notification notification = Notification.builder()
-                .user(user)
-                .title(title)
-                .content(content)
-                .type(NotificationType.SYSTEM)
-                .build();
+        notificationRepository.findById(notificationId)
+                .orElseThrow(()-> new AppException(ErrorCode.NOTIFICATION_NOT_EXISTED));
 
-        notificationRepository.save(notification);
-
-        //websocket
+        notificationRepository.markAsRead(notificationId, user.getId());
     }
-    public void sendPromotionNotification(Integer userId, String title, String content){
-        User user = userRepository.findById(userId)
+
+    public void markAllAsRead(){
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        User user = userRepository.findByUsername(name)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        Notification notification = Notification.builder()
-                .user(user)
-                .title(title)
-                .content(content)
-                .type(NotificationType.PROMOTION)
+        notificationRepository.markAllAsRead(user.getId());
+    }
+
+    public int countUnreadNotifications(){
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        User user = userRepository.findByUsername(name)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        return notificationRepository.countByUserIdAndReadIsFalse(user.getId());
+    }
+
+    public PageResponse<NotificationResponse> getNotifications(int page, int size){
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        User user = userRepository.findByUsername(name)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        Page<Notification> notifications = notificationRepository.findByUserIdOrderByCreatedAtDesc(user.getId(), pageable);
+
+        return PageResponse.<NotificationResponse>builder()
+                .pageSize(notifications.getSize())
+                .totalPages(notifications.getTotalPages())
+                .totalElements(notifications.getTotalElements())
+                .Data(notifications.stream().map(this::convertToResponse).toList())
                 .build();
+    }
 
-        notificationRepository.save(notification);
+    public PageResponse<NotificationResponse> getNotificationsByType(NotificationType type, int page, int size){
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
 
-        //websocket
+        User user = userRepository.findByUsername(name)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Notification> notifications = notificationRepository.findByUserIdAndTypeOrderByCreatedAtDesc(user.getId(), type, pageable);
 
+        return PageResponse.<NotificationResponse>builder()
+                .pageSize(notifications.getSize())
+                .totalPages(notifications.getTotalPages())
+                .totalElements(notifications.getTotalElements())
+                .Data(notifications.stream().map(this::convertToResponse).toList())
+                .build();
     }
 
     private NotificationResponse convertToResponse(Notification notification) {

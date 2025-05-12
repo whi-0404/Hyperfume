@@ -11,6 +11,7 @@ import com.Hyperfume.Backend.ElasticSearch.ESPerfumeService;
 import com.Hyperfume.Backend.dto.request.order.CreateOrderRequest;
 import com.Hyperfume.Backend.dto.response.ShipmentResponse;
 import com.Hyperfume.Backend.entity.*;
+import com.Hyperfume.Backend.enums.NotificationType;
 import com.Hyperfume.Backend.enums.OrderStatus;
 import com.Hyperfume.Backend.mapper.ShipmentMapper;
 import com.Hyperfume.Backend.repository.*;
@@ -152,16 +153,20 @@ public class OrderServiceImpl implements OrderService {
 
 
         //send notification to customer
-        notificationService.sendOrderStatusNotification(
-                user.getId(),
-                "Đặt hàng thành công",
-                "Đơn hàng của bạn đã được tạo với sản phẩm: " +
+        Notification notification =  Notification.builder()
+                .user(user)
+                .title("Đặt hàng thành công")
+                .type(NotificationType.ORDER_STATUS)
+                .content("Đơn hàng của bạn đã được tạo với sản phẩm: " +
                         orderItemResponses.stream()
                                 .map(item -> item.getPerfumeName() + " "
                                         + item.getPerfumeVariantName())
                                 .collect(Collectors.joining(", "))
-                + ". Tổng tiền: " + finalTotal + " VND"
-        );
+                        + ". Tổng tiền: " + finalTotal + " VND")
+                        .build();
+
+        notificationService.sendNotification(notification);
+
 
         return orderResponse;
     }

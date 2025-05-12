@@ -12,6 +12,8 @@ import { brands } from "../../../services/getBrand";
 import { countries } from "../../../services/getCountry";
 import {useUser} from "../../../utils/userContext";
 import defaultAvatar from "../../../assets/image/UsersImages/avt_default.png";
+import { FaBell } from "react-icons/fa";
+import NotificationBell from "./NotificationBell";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -151,6 +153,7 @@ const Header = () => {
               </span>
               ) : (
                 <div className="user-profile">
+                  <NotificationBell />
                   <div className="avatar-container">
                   <NavLink to="/Profile">
                     <img 

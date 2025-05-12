@@ -1,21 +1,6 @@
 package com.Hyperfume.Backend.service.impl;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import com.Hyperfume.Backend.ElasticSearch.ESPerfumeService;
-import com.Hyperfume.Backend.entity.Perfume;
-import com.Hyperfume.Backend.service.PerfumeService;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.Hyperfume.Backend.dto.request.PerfumeImageRequest;
 import com.Hyperfume.Backend.dto.response.PerfumeImageResponse;
 import com.Hyperfume.Backend.entity.PerfumeImage;
@@ -24,12 +9,20 @@ import com.Hyperfume.Backend.exception.ErrorCode;
 import com.Hyperfume.Backend.mapper.PerfumeImageMapper;
 import com.Hyperfume.Backend.repository.PerfumeImageRepository;
 import com.Hyperfume.Backend.repository.PerfumeRepository;
+import com.Hyperfume.Backend.service.FileService;
 import com.Hyperfume.Backend.service.PerfumeImageService;
-
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,12 +33,10 @@ public class PerfumeImageServiceImpl implements PerfumeImageService {
     PerfumeImageMapper perfumeImageMapper;
     PerfumeRepository perfumeRepository;
     ESPerfumeService esPerfumeService;
+    FileService fileService;
 
-    private static final long MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 5MB
     private static final int MAX_NORMAL_IMAGE_COUNT = 5;
-
-    private static final String UP_LOAD_DIR =
-            "E:\\Final_Hyperfume\\Hyperfume\\Frontend\\src\\assets\\productImages\\images";
+    private static final String DIRECTORY_KEY = "perfumeImages";
 
     @PreAuthorize("hasRole('ADMIN')")
     public PerfumeImageResponse addImageThumbnail(PerfumeImageRequest request) {
@@ -56,23 +47,17 @@ public class PerfumeImageServiceImpl implements PerfumeImageService {
             throw new AppException(ErrorCode.DUPLICATE_THUMBNAIL_IMAGE);
         }
 
-        validateImageSize(request.getImageFile());
-
         MultipartFile imageFile = request.getImageFile();
 
+        String relativePath = fileService.uploadFile(imageFile, DIRECTORY_KEY, "thumbnail");
+
         PerfumeImage perfumeImage = perfumeImageMapper.toPerfumeImage(request);
-
-        String uniqueFileName = uploadImageFileToDir(imageFile);
-
-        // Set the relative path (URL) in the object
-        String relativePath = "images/" + uniqueFileName;
         perfumeImage.setImageUrl(relativePath);
         perfumeImage.setThumbnail(true);
 
         PerfumeImage perfumeImageSaved = perfumeImageRepository.save(perfumeImage);
 
         esPerfumeService.indexPerfume(perfumeImageSaved.getPerfume());
-
 
         return perfumeImageMapper.toResponse(perfumeImageSaved);
     }
@@ -93,12 +78,7 @@ public class PerfumeImageServiceImpl implements PerfumeImageService {
         List<PerfumeImageResponse> responses = new ArrayList<>();
 
         for (MultipartFile imageFile : request.getImageFiles()) {
-            validateImageSize(imageFile);
-
-            String uniqueFileName = uploadImageFileToDir(imageFile);
-
-            // Set the relative path (URL) in the object
-            String relativePath = "images/" + uniqueFileName;
+            String relativePath = fileService.uploadFile(imageFile, DIRECTORY_KEY, "normal");
 
             PerfumeImage perfumeImage = perfumeImageMapper.toPerfumeImage(request);
             perfumeImage.setImageUrl(relativePath);
@@ -109,10 +89,13 @@ public class PerfumeImageServiceImpl implements PerfumeImageService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
     public void deleteImage(Integer imageId) {
-        if (!perfumeImageRepository.existsById(imageId)) {
-            throw new AppException(ErrorCode.IMAGE_NOT_FOUND);
-        }
+        PerfumeImage image = perfumeImageRepository.findById(imageId)
+                .orElseThrow(() -> new AppException(ErrorCode.IMAGE_NOT_FOUND));
+
+        fileService.deleteFile(image.getImageUrl());
+
         perfumeImageRepository.deleteById(imageId);
     }
 
@@ -131,13 +114,9 @@ public class PerfumeImageServiceImpl implements PerfumeImageService {
                 .findByPerfumeIdAndIsThumbnailTrue(request.getPerfumeId())
                 .orElseThrow(() -> new AppException(ErrorCode.THUMBNAIL_NOT_FOUND));
 
-        MultipartFile imageFile = request.getImageFile();
-        validateImageSize(imageFile);
+        fileService.deleteFile(thumbnail.getImageUrl());
 
-        String uniqueFileName = uploadImageFileToDir(imageFile);
-
-        // Set the relative path (URL) in the object
-        String relativePath = "images/" + uniqueFileName;
+        String relativePath = fileService.uploadFile(request.getImageFile(), DIRECTORY_KEY, "thumbnail");
         thumbnail.setImageUrl(relativePath);
 
         PerfumeImage perfumeImageSaved = perfumeImageRepository.save(thumbnail);
@@ -145,36 +124,5 @@ public class PerfumeImageServiceImpl implements PerfumeImageService {
         esPerfumeService.indexPerfume(perfumeImageSaved.getPerfume());
 
         return perfumeImageMapper.toResponse(perfumeImageSaved);
-    }
-
-    private void validateImageSize(MultipartFile file) {
-        if (file.getSize() > MAX_IMAGE_SIZE) {
-            throw new AppException(ErrorCode.INVALID_IMAGE_FILE);
-        }
-    }
-
-    private byte[] extractImageData(MultipartFile file) {
-        try {
-            return file.getBytes();
-        } catch (IOException e) {
-            throw new AppException(ErrorCode.FAILED_READ_IMAGE);
-        }
-    }
-
-    private String uploadImageFileToDir(MultipartFile imageFile) {
-        try {
-            String originalFileName = imageFile.getOriginalFilename();
-            String fileExtension =
-                    originalFileName != null ? originalFileName.substring(originalFileName.lastIndexOf(".")) : ".jpg";
-            String uniqueFileName = UUID.randomUUID().toString() + fileExtension;
-
-            Path filePath = Paths.get(UP_LOAD_DIR, uniqueFileName);
-
-            imageFile.transferTo(filePath.toFile());
-
-            return uniqueFileName;
-        } catch (IOException e) {
-            throw new AppException(ErrorCode.FAILED_READ_IMAGE);
-        }
     }
 }

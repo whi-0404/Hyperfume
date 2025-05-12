@@ -96,7 +96,17 @@ public enum ErrorCode {
     REDIS_SHIPMENT_INFO_NOT_FOUND(1063, "shipment info not found in redis", HttpStatus.BAD_REQUEST),
     SHIPMENT_TOKEN_INVALID(1064, "shipment token invalid", HttpStatus.BAD_REQUEST),
     SHIPMENT_CREATION_FAILED(1065, "shipment creation failed", HttpStatus.BAD_REQUEST),
-    SHIPMENT_NOT_EXISTED(1066, "shipment not existed", HttpStatus.BAD_REQUEST),;
+    SHIPMENT_NOT_EXISTED(1066, "shipment not existed", HttpStatus.BAD_REQUEST),
+
+    NOTIFICATION_NOT_EXISTED(1067, "notification not existed", HttpStatus.BAD_REQUEST),
+
+    INVALID_ROLE_CHAT(1068, "Chat is only allowed between users and admin", HttpStatus.BAD_REQUEST),
+    CHATROOM_NOT_EXISTED(1069, "Chatroom not existed", HttpStatus.BAD_REQUEST),
+    FILE_UPLOAD_FAILED(1070, "File upload failed", HttpStatus.BAD_REQUEST),
+    FILE_NOT_FOUND(1071, "File not found", HttpStatus.BAD_REQUEST),
+    FILE_TOO_LARGE(1072, "File too large", HttpStatus.PAYLOAD_TOO_LARGE),
+    INVALID_FILE_TYPE(1073, "Invalid file type", HttpStatus.BAD_REQUEST),
+    DIRECTORY_CREATION_FAILED(1074, "Directory creation failed", HttpStatus.BAD_REQUEST),;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;
