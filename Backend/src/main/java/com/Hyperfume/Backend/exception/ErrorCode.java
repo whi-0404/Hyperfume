@@ -106,7 +106,8 @@ public enum ErrorCode {
     FILE_NOT_FOUND(1071, "File not found", HttpStatus.BAD_REQUEST),
     FILE_TOO_LARGE(1072, "File too large", HttpStatus.PAYLOAD_TOO_LARGE),
     INVALID_FILE_TYPE(1073, "Invalid file type", HttpStatus.BAD_REQUEST),
-    DIRECTORY_CREATION_FAILED(1074, "Directory creation failed", HttpStatus.BAD_REQUEST),;
+    DIRECTORY_CREATION_FAILED(1074, "Directory creation failed", HttpStatus.BAD_REQUEST),
+    HASH_GENERATION_FAILED(1075, "Hash generation failed", HttpStatus.BAD_REQUEST),;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

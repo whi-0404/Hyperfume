@@ -45,12 +45,13 @@ public class SecurityConfig {
             "/perfumes/{perfumeId}/rates",
             "/payment_method",
             "/shipping_methods",
-            "/shipments"
+            "/shipments",
+            "/payment/vnpay-callback"
     };
 
     public static final String[] PUBLIC_POST_ENDPOINTS = {
             "/users",
-            "/webhook/ghn/status"
+            "/webhook/ghn/status",
     };
 
     @Bean

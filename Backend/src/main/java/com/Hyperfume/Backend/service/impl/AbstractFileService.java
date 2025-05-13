@@ -115,16 +115,10 @@ public abstract class AbstractFileService implements FileService {
         }
     }
 
-    /**
-     * Tạo tên file duy nhất với UUID
-     */
     protected String generateUniqueFilename(String fileExtension) {
         return UUID.randomUUID() + fileExtension;
     }
 
-    /**
-     * Đảm bảo thư mục tồn tại, nếu không thì tạo mới
-     */
     protected void ensureDirectoryExists(Path directoryPath) {
         if (!Files.exists(directoryPath)) {
             try {
@@ -135,9 +129,6 @@ public abstract class AbstractFileService implements FileService {
         }
     }
 
-    /**
-     * Lấy phần mở rộng mặc định dựa vào MIME type
-     */
     protected String getDefaultExtension(String contentType) {
         if (contentType == null) {
             return ".bin";

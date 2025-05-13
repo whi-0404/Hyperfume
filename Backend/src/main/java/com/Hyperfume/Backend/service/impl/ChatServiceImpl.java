@@ -135,18 +135,14 @@ public class ChatServiceImpl implements ChatService {
         Page<ChatMessage> messagePage = chatMessageRepository.findByChatRoomOrderByCreatedAtDesc(chatRoom, pageable);
 
         if (currentUser.getId() == chatRoom.getAdmin().getId()) {
-            // Nếu admin đang xem, đánh dấu tin nhắn từ người dùng là đã đọc
             chatMessageRepository.markMessagesAsReadByReceiverAndSender(
                     currentUser.getId(), chatRoom.getUser().getId());
 
-            // Đặt lại số lượng tin nhắn chưa đọc trong Redis
             chatRedisService.resetUnreadCount(currentUser.getId(), chatRoom.getUser().getId());
         } else {
-            // Nếu người dùng đang xem, đánh dấu tin nhắn từ admin là đã đọc
             chatMessageRepository.markMessagesAsReadByReceiverAndSender(
                     currentUser.getId(), chatRoom.getAdmin().getId());
 
-            // Đặt lại số lượng tin nhắn chưa đọc trong Redis
             chatRedisService.resetUnreadCount(currentUser.getId(), chatRoom.getAdmin().getId());
         }
 

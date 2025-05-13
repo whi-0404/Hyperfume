@@ -53,6 +53,7 @@ public class OrderServiceImpl implements OrderService {
     ShipmentService shipmentService;
     ShipmentMapper shipmentMapper;
     NotificationService notificationService;
+    PaymentMethodRepository paymentMethodRepository;
 
     @Transactional
     public OrderResponse createOrder(CreateOrderRequest request) {
@@ -94,7 +95,15 @@ public class OrderServiceImpl implements OrderService {
         //create and save order
         Order order = orderMapper.toEntity(orderRequest);
         order.setUser(user);
-        order.setStatus(OrderStatus.ORDER_PENDING);
+
+        PaymentMethod paymentMethod = paymentMethodRepository.findById(orderRequest.getPaymentMethodId())
+                .orElseThrow(()-> new AppException(ErrorCode.PAYMENT_METHOD_NOT_EXISTED));
+
+        if(paymentMethod.getName().equals("VNPay")){
+            order.setStatus(OrderStatus.PAYMENT_PENDING);
+        }
+        else order.setStatus(OrderStatus.ORDER_PENDING);
+
         Order orderSaved = orderRepository.save(order);
 
         //Create and save orderItems
@@ -166,7 +175,6 @@ public class OrderServiceImpl implements OrderService {
                         .build();
 
         notificationService.sendNotification(notification);
-
 
         return orderResponse;
     }

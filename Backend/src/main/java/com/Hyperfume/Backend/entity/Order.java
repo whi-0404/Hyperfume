@@ -49,6 +49,12 @@ public class Order {
 //    @JoinColumn(name = "shipping_date")
 //    LocalDate shippingDate;
 
+    @Column(name = "payment_transaction_id")
+    String paymentTransactionId;
+
+    @Column(name = "payment_transaction_time")
+    LocalDate paymentTransactionTime;
+
     @ManyToOne
     @JoinColumn(name = "pay_id")
     PaymentMethod paymentMethod;
@@ -66,7 +72,6 @@ public class Order {
     @PrePersist
     protected void onCreate() {
         this.orderDate = LocalDate.now();
-        this.status = OrderStatus.ORDER_CREATED;
         this.active = true;
     }
 }

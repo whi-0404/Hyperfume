@@ -7,6 +7,7 @@ public enum OrderStatus {
     ORDER_CREATED("Đơn hàng mới được tạo"),
     PAYMENT_PENDING("Đơn hàng đang chờ thanh toán"),
     PAYMENT_COMPLETED("Đã thanh toán thành công"),
+    PAYMENT_FAILED("Thanh toán thất bại"),
     ORDER_PENDING("Chờ xác nhận đơn hàng"),
     PROCESSING("Đơn hàng đang được chuẩn bị"),
     IN_TRANSIT("Đang vận chuyển"),
