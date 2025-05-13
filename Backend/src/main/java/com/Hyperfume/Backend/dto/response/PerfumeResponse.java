@@ -1,16 +1,16 @@
 package com.Hyperfume.Backend.dto.response;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.time.LocalDate;
 import java.util.List;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level= AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class PerfumeResponse {
     int id;
     String name;
@@ -40,6 +40,8 @@ public class PerfumeResponse {
     boolean sale;
     boolean flash_sale;
     int sold;
+
+    double discount;
 
     LocalDate createdAt;
     LocalDate updatedAt;

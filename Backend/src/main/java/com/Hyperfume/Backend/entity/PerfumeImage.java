@@ -1,6 +1,7 @@
 package com.Hyperfume.Backend.entity;
 
 import jakarta.persistence.*;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -10,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name="perfume_image")
+@Table(name = "perfume_image")
 public class PerfumeImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,10 +22,9 @@ public class PerfumeImage {
     @JoinColumn(name = "perfume_id")
     Perfume perfume;
 
-    @Column(name = "is_thumbnail",  nullable = false)
+    @Column(name = "is_thumbnail", nullable = false)
     boolean thumbnail;
 
-    @Lob
-    @Column(columnDefinition = "LONGBLOB")
-    byte[] image_data;
+    @Column(name = "image_url")
+    String imageUrl;
 }

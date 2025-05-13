@@ -1,10 +1,11 @@
 package com.Hyperfume.Backend.mapper;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+
 import com.Hyperfume.Backend.dto.request.BrandRequest;
 import com.Hyperfume.Backend.dto.response.BrandResponse;
 import com.Hyperfume.Backend.entity.Brand;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface BrandMapper {

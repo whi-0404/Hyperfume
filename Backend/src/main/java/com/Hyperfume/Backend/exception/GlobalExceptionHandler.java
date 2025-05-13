@@ -1,29 +1,31 @@
 package com.Hyperfume.Backend.exception;
 
-import com.Hyperfume.Backend.dto.response.ApiResponse;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Objects;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.Objects;
+import com.Hyperfume.Backend.dto.response.ApiResponse;
+
+import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
 
-//    @ExceptionHandler(value = Exception.class)
-//    ResponseEntity<ApiResponse<?>> handlingException(Exception exception) {
-//       log.error("Error : {}", exception.getMessage());
-//        ApiResponse<?> apiResponse = new ApiResponse<>();
-//
-//        apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
-//        apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
-//
-//        return ResponseEntity.badRequest().body(apiResponse);
-//    }
+    @ExceptionHandler(value = Exception.class)
+    ResponseEntity<ApiResponse<?>> handlingException(Exception exception) {
+        log.error("Error : {}", exception.getMessage());
+        ApiResponse<?> apiResponse = new ApiResponse<>();
+
+        apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
+        apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
+
+        return ResponseEntity.badRequest().body(apiResponse);
+    }
 
     @ExceptionHandler(value = AppException.class)
     ResponseEntity<ApiResponse<?>> handlingAppException(AppException exception) {
@@ -33,38 +35,30 @@ public class GlobalExceptionHandler {
         apiResponse.setCode(errorCode.getCode());
         apiResponse.setMessage(errorCode.getMessage());
 
-        return ResponseEntity
-                .status(errorCode.getStatusCode())
-                .body(apiResponse);
+        return ResponseEntity.status(errorCode.getStatusCode()).body(apiResponse);
     }
 
     @ExceptionHandler(value = AccessDeniedException.class)
-    ResponseEntity<ApiResponse<?>> handlingAccessDeniedException(AccessDeniedException exception)
-    {
+    ResponseEntity<ApiResponse<?>> handlingAccessDeniedException(AccessDeniedException exception) {
         ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
 
-        return ResponseEntity
-                .status(errorCode.getStatusCode())
-                .body(ApiResponse
-                        .builder()
+        return ResponseEntity.status(errorCode.getStatusCode())
+                .body(ApiResponse.builder()
                         .code(errorCode.getCode())
                         .result(errorCode.getMessage())
-                        .build()
-                );
+                        .build());
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    ResponseEntity<ApiResponse<?>> handlingValidation(MethodArgumentNotValidException exception)
-    {
-        ApiResponse<?> apiResponse=new ApiResponse<>();
+    ResponseEntity<ApiResponse<?>> handlingValidation(MethodArgumentNotValidException exception) {
+        ApiResponse<?> apiResponse = new ApiResponse<>();
 
-        ErrorCode errorCode=ErrorCode.INVALID_KEY;
+        ErrorCode errorCode = ErrorCode.INVALID_KEY;
 
         String enumKey = Objects.requireNonNull(exception.getFieldError().getDefaultMessage());
         try {
-            errorCode=ErrorCode.valueOf(enumKey);
-        }catch (IllegalArgumentException e)
-        {
+            errorCode = ErrorCode.valueOf(enumKey);
+        } catch (IllegalArgumentException e) {
 
         }
         apiResponse.setCode(errorCode.getCode());

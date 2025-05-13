@@ -1,9 +1,9 @@
 package com.Hyperfume.Backend.dto.response;
 
+import java.math.BigDecimal;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.math.BigDecimal;
 
 @Data
 @Builder
@@ -17,7 +17,7 @@ public class CartResponse {
 
     Integer perfumeVariant;
 
-    String imageData;
+    String imageUrl;
 
     String variantName;
 

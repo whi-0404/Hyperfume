@@ -1,9 +1,10 @@
 package com.Hyperfume.Backend.mapper;
 
+import org.mapstruct.MappingTarget;
+
 import com.Hyperfume.Backend.dto.request.PerfumeVariantRequest;
 import com.Hyperfume.Backend.dto.response.PerfumeVariantResponse;
 import com.Hyperfume.Backend.entity.PerfumeVariant;
-import org.mapstruct.MappingTarget;
 
 public interface PerfumeVariantMapper {
 

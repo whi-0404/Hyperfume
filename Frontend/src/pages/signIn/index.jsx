@@ -1,5 +1,5 @@
-import { memo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { memo, useEffect } from 'react';
+import { Link, useNavigate,useLocation } from 'react-router-dom';
 import './style.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook } from "@fortawesome/free-brands-svg-icons";
@@ -7,11 +7,45 @@ import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import PasswordToggle from '../../components/passHide-Unhide';
 
 import SignInService from '../../services/handleSignIn';
-import { setToken, removeToken } from '../../services/authToken';
-import { UserInfo } from '../../services/handleUserInfo';
+import { useUser } from '../../utils/userContext';
+import { targetGoogleUrl , exchangeTokenGoogle} from '../../services/handleGoogleLogin';
 
 const SignIn = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const { fetchUserInfo } = useUser();
+
+
+    useEffect(() => {
+        const handleGoogleCallback = async () => {
+            try {
+                // Tạo đối tượng URL để dễ dàng trích xuất tham số
+                const url = new URL(window.location.href);
+                
+                // Lấy giá trị của tham số 'code'
+                const code = url.searchParams.get('code');
+                
+                if (code) {
+                    console.log('Đã nhận được code từ Google:', code);
+                    
+                    // Gửi code đến backend
+                    await exchangeTokenGoogle(code);
+                    
+                    // Xóa tham số code khỏi URL (để tránh người dùng refresh trang)
+                    navigate('/', { replace: true });
+                }
+            } catch (error) {
+                console.error('Lỗi khi xử lý callback Google:', error);
+                alert('Đã xảy ra lỗi khi xử lý đăng nhập Google. Vui lòng thử lại sau.');
+            }
+        };
+
+        // Kiểm tra xem URL hiện tại có chứa code từ Google callback không
+        if (location.search.includes('code=')) {
+            handleGoogleCallback();
+        }
+    }, [location, navigate, fetchUserInfo]);
+
 
     const HandleSubmit = async (e) => {
         e.preventDefault();
@@ -25,24 +59,35 @@ const SignIn = () => {
         }
 
         try {
-            removeToken()
             const signInResult = await SignInService(username, password);
-            const token = signInResult.result.token;
-            setToken(token); // Lưu token vào sessionStorage
+            if (signInResult.code !== 1000) {
+                throw new Error('Đăng nhập thất bại!');
+            }
             alert('Đăng nhập thành công!');
 
-            const userInfo = await UserInfo(token);
-            console.log(userInfo);
+            await fetchUserInfo();
 
-            if (userInfo.result.role.name === "USER") {
+            const userInfo = await fetchUserInfo();
+
+            if (userInfo && userInfo.role.name === "USER") {
                 navigate('/'); // Chuyển hướng đến trang chủ
-            } else if (userInfo.result.role.name === "ADMIN") {
+            } else if (userInfo && userInfo.role.name === "ADMIN") {
                 navigate('/admin'); // Chuyển hướng đến trang admin
             }
 
         } catch (error) {
             alert('Sai mật khẩu hoặc tên người dùng!');
             console.error(error);
+        }
+    };
+
+    // Hàm xử lý đăng nhập bằng Google OAuth2
+    const handleGoogleLogin = async () => {
+        try {
+            window.location.href = targetGoogleUrl;
+        } catch (error) {
+            console.error('Lỗi khi đăng nhập với Google:', error);
+            alert('Không thể kết nối với Google. Vui lòng thử lại sau.');
         }
     };
 
@@ -78,7 +123,7 @@ const SignIn = () => {
                         <button className="facebook-button">
                             <FontAwesomeIcon icon={faFacebook} style={{ marginRight: '5px' }} /> Facebook
                         </button>
-                        <button className="google-button">
+                        <button className="google-button" onClick={handleGoogleLogin}>
                             <FontAwesomeIcon icon={faGoogle} style={{ marginRight: '5px' }} /> Google
                         </button>
                     </div>

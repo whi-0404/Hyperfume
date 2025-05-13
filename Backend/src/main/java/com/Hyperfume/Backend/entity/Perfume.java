@@ -1,13 +1,12 @@
 package com.Hyperfume.Backend.entity;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import jakarta.persistence.*;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
@@ -15,12 +14,13 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name="perfumes")
+@Table(name = "perfumes")
 public class Perfume {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "perfume_id")
     int id;
+
     @Column(name = "perfume_name")
     String name;
 
@@ -29,8 +29,10 @@ public class Perfume {
     Brand brand;
 
     String type;
+
     @Column(name = "perfume_description", columnDefinition = "TEXT")
     String perfume_description;
+
     String perfume_gender;
     String concentration;
 
@@ -52,24 +54,32 @@ public class Perfume {
     String top_notes;
     String middle_notes;
     String base_notes;
+
     @Column(name = "is_sale", nullable = false)
     boolean sale;
+
     @Column(name = "is_flash_sale")
     boolean flash_sale;
+
     int sold;
+
+    @Column(name = "discount", columnDefinition = "DOUBLE DEFAULT 0.0")
+    double discount;
+
     @Column(name = "created_at", updatable = false)
     LocalDate createdAt;
+
     @Column(name = "updated_at")
     LocalDate updatedAt;
 
     @PrePersist
-    protected void onCreate(){
+    protected void onCreate() {
         this.createdAt = LocalDate.now();
         this.updatedAt = LocalDate.now();
     }
 
     @PreUpdate
-    protected void onUpdate(){
+    protected void onUpdate() {
         this.updatedAt = LocalDate.now();
     }
 
@@ -81,4 +91,7 @@ public class Perfume {
     @JoinColumn(name = "perfume_id")
     List<PerfumeVariant> variants;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "perfume_id")
+    List<FlashSaleItem> flashSaleItems;
 }

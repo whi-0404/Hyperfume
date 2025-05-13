@@ -1,15 +1,17 @@
 package com.Hyperfume.Backend.dto.request;
 
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level= AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class PerfumeRequest {
     String name;
 
@@ -38,5 +40,8 @@ public class PerfumeRequest {
     String middle_notes;
     String base_notes;
 
-//    boolean flash_sale;
+    @DecimalMin(value = "0.0", inclusive = true, message = "DISCOUNT_INVALID")
+    @DecimalMax(value = "100.0", inclusive = true, message = "DISCOUNT_INVALID")
+    Double discount;
+    //    boolean flash_sale;
 }

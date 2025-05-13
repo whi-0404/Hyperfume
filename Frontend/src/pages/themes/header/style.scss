@@ -248,6 +248,8 @@ nav li i {
     padding: 0;
     margin: 0;
     list-style-type: none;
+    min-width: 180px; /* Thêm chiều rộng tối thiểu cho dropdown */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Thêm bóng đổ nhẹ */
 }
 
 nav li:hover .dropdown {
@@ -258,6 +260,7 @@ nav li:hover .dropdown {
 .dropdown li {
     margin: 0;
     /* Xóa margin cho các mục trong menu sổ xuống */
+    width: 100%; 
 }
 
 .dropdown li a {
@@ -265,10 +268,176 @@ nav li:hover .dropdown {
     /* Padding cho các mục trong menu sổ xuống */
     color: #3E2723;
     /* Màu chữ cho các mục trong menu sổ xuống */
+    display: block; /* Đảm bảo link chiếm toàn bộ không gian */
+    text-align: left; /* Căn chỉnh văn bản sang trái */
 }
 
 .dropdown li a:hover {
     background-color: #E7AE77;
     /* Thay đổi màu nền khi hover trong menu sổ xuống */
     transition: 0.4s;
+}
+
+/* Thêm vào CSS cho dropdown-toggle */
+.dropdown-toggle {
+    display: block;
+    color: #3E2723;
+    text-align: center;
+    font-size: 24px;
+    font-weight: regular;
+    padding: 14px 14px;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+.user-profile {
+    display: flex;
+    align-items: center; /* This keeps items vertically centered */
+    gap: 8px;
+    margin: 6px;
+    
+    .avatar-container {
+      width: 40px; /* Increased size slightly for better visibility */
+      height: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1px solid #ddd;
+      display: flex; /* Added to ensure the image centers properly */
+      justify-content: center; /* Center horizontally */
+      align-items: center; /* Center vertically */
+      
+      .user-avatar {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+    
+    .login-text {
+      margin-top: 0; /* Remove the default top margin that's causing misalignment */
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      height: 40px; /* Match the height of avatar container */
+    }
+  }
+
+.notification-bell {
+  position: relative;
+  margin-right: 10px;
+  .bell-icon {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: #D4A373;
+    transition: color 0.2s;
+    &:hover {
+      color: #b97a56;
+    }
+    .notification-badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: #e74c3c;
+      color: #fff;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 12px;
+      font-weight: bold;
+      min-width: 18px;
+      text-align: center;
+      border: 2px solid #fff;
+      z-index: 2;
+    }
+  }
+  .notification-dropdown {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 36px;
+    min-width: 320px;
+    max-width: 360px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    z-index: 9999;
+    padding: 0.5rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    .dropdown-title {
+      font-weight: bold;
+      font-size: 17px;
+      padding: 12px 20px 8px 20px;
+      border-bottom: 1px solid #f0f0f0;
+      color: #D4A373;
+      background: #fff7ed;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      text-align: left;
+      white-space: normal;
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+    .no-notifications {
+      padding: 20px;
+      color: #888;
+      text-align: center;
+      font-size: 15px;
+      white-space: normal;
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+    .notification-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      max-height: 340px;
+      overflow-y: auto;
+      li {
+        padding: 12px 20px 10px 20px;
+        border-bottom: 1px solid #f6f6f6;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        &.unread {
+          background: #fff7ed;
+        }
+        &.read {
+          background: #f9f9f9;
+        }
+        .notification-title {
+          font-weight: 600;
+          color: #3E2723;
+          font-size: 15px;
+          margin-bottom: 2px;
+          word-break: break-word;
+          white-space: normal;
+          overflow-wrap: break-word;
+          text-align: left;
+        }
+        .notification-content {
+          font-size: 14px;
+          color: #4b2f2f;
+          margin-bottom: 2px;
+          word-break: break-word;
+          white-space: pre-line;
+          overflow-wrap: break-word;
+          text-align: left;
+        }
+        .notification-time {
+          font-size: 12px;
+          color: #aaa;
+          margin-top: 2px;
+          align-self: flex-end;
+          white-space: normal;
+        }
+      }
+    }
+  }
 }

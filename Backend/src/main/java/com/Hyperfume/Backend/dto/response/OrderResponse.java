@@ -1,9 +1,11 @@
 package com.Hyperfume.Backend.dto.response;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
 
 @Data
 @Builder
@@ -13,13 +15,15 @@ import java.util.List;
 public class OrderResponse {
     Integer userId;
 
-    String shippingAddressId;
-
     String notes;
-
-    Integer shippingMethodId;
 
     Integer paymentMethodId;
 
+    BigDecimal totalMoney;
+
+    LocalDate orderDate;
+
     List<OrderItemResponse> orderItemResponses;
+
+    ShipmentResponse shipmentResponse;
 }

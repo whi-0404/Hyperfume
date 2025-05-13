@@ -1,6 +1,7 @@
 package com.Hyperfume.Backend.entity;
 
 import jakarta.persistence.*;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -10,12 +11,13 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name="scrent_family")
+@Table(name = "scrent_family")
 public class ScrentFamily {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "scrent_family_id")
     int id;
-    @Column(name = "scrent_family_name",nullable = false, unique = true)
+
+    @Column(name = "scrent_family_name", nullable = false, unique = true)
     String name;
 }

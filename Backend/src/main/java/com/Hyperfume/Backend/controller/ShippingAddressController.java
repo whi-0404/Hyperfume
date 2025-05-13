@@ -1,20 +1,20 @@
 package com.Hyperfume.Backend.controller;
 
-import com.Hyperfume.Backend.dto.request.PaymentMethodRequest;
+import java.util.List;
+
+import jakarta.validation.Valid;
+
+import org.springframework.web.bind.annotation.*;
+
 import com.Hyperfume.Backend.dto.request.ShippingAddressRequest;
 import com.Hyperfume.Backend.dto.response.ApiResponse;
-import com.Hyperfume.Backend.dto.response.PaymentMethodResponse;
 import com.Hyperfume.Backend.dto.response.ShippingAddressResponse;
-import com.Hyperfume.Backend.service.PaymentMethodService;
 import com.Hyperfume.Backend.service.ShippingAddressService;
-import jakarta.validation.Valid;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/users/shipping_address")
@@ -25,43 +25,42 @@ public class ShippingAddressController {
     ShippingAddressService shippingAddressService;
 
     @PostMapping
-    ApiResponse<ShippingAddressResponse> createShippingAddress(@RequestBody @Valid ShippingAddressRequest request)
-    {
+    ApiResponse<ShippingAddressResponse> createShippingAddress(@RequestBody @Valid ShippingAddressRequest request) {
         return ApiResponse.<ShippingAddressResponse>builder()
                 .result(shippingAddressService.createShippingAddress(request))
                 .build();
     }
 
     @GetMapping
-    ApiResponse<List<ShippingAddressResponse>> getUserShippingAddress()
-    {
+    ApiResponse<List<ShippingAddressResponse>> getUserShippingAddresses() {
         return ApiResponse.<List<ShippingAddressResponse>>builder()
-                .result(shippingAddressService.getUserShippingAddress())
+                .result(shippingAddressService.getUserShippingAddresses())
                 .build();
     }
 
-//    @GetMapping("/{paymentId}")
-//    ApiResponse<PaymentMethodResponse> getPaymentMethod(@PathVariable("paymentId") Integer paymentId)
-//    {
-//        return ApiResponse.<PaymentMethodResponse>builder()
-//                .result(paymentMethodService.getPaymentMethod(paymentId))
-//                .build();
-//    }
-
     @PutMapping("/{shippingAddressId}")
-    ApiResponse<ShippingAddressResponse> updateShippingAddress(@PathVariable("shippingAddressId") Integer shippingAddressId,
-                                                           @RequestBody @Valid ShippingAddressRequest request)
-    {
+    ApiResponse<ShippingAddressResponse> updateShippingAddress(
+            @PathVariable("shippingAddressId") Integer shippingAddressId,
+            @RequestBody @Valid ShippingAddressRequest request) {
         return ApiResponse.<ShippingAddressResponse>builder()
                 .result(shippingAddressService.updateShippingAddress(shippingAddressId, request))
                 .build();
     }
 
     @DeleteMapping("/{shippingAddressId}")
-    ApiResponse<String> deleteShippingAddress(@PathVariable("shippingAddressId") Integer shippingAddressId){
+    ApiResponse<String> deleteShippingAddress(@PathVariable("shippingAddressId") Integer shippingAddressId) {
         shippingAddressService.deleteShippingAddress(shippingAddressId);
         return ApiResponse.<String>builder()
                 .result("Shipping Address has been deleted")
+                .build();
+    }
+
+    @PutMapping("/setDefault/{shippingAddressId}")
+    ApiResponse<String> setDefaultShippingAddress(@PathVariable("shippingAddressId") Integer shippingAddressId) {
+        shippingAddressService.setDefaultShippingAddress(shippingAddressId);
+
+        return ApiResponse.<String>builder()
+                .result("Shipping Address has been set as default")
                 .build();
     }
 }

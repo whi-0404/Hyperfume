@@ -1,67 +1,18 @@
 package com.Hyperfume.Backend.service;
 
+import java.util.List;
+
 import com.Hyperfume.Backend.dto.request.PaymentMethodRequest;
 import com.Hyperfume.Backend.dto.response.PaymentMethodResponse;
-import com.Hyperfume.Backend.entity.PaymentMethod;
-import com.Hyperfume.Backend.exception.AppException;
-import com.Hyperfume.Backend.exception.ErrorCode;
-import com.Hyperfume.Backend.mapper.PaymentMethodMapper;
-import com.Hyperfume.Backend.repository.PaymentMethodRepository;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+public interface PaymentMethodService {
+    PaymentMethodResponse createPaymentMethod(PaymentMethodRequest request);
 
-@Service
-@RequiredArgsConstructor
-@Slf4j
-@FieldDefaults(level= AccessLevel.PRIVATE, makeFinal = true)
-public class PaymentMethodService {
-    PaymentMethodRepository paymentMethodRepository;
-    PaymentMethodMapper paymentMethodMapper;
+    List<PaymentMethodResponse> getPaymentMethods();
 
-    @PreAuthorize("hasRole('ADMIN')")
-    public PaymentMethodResponse createPaymentMethod(PaymentMethodRequest request){
-        if(paymentMethodRepository.existsByName(request.getName()))
-            throw new AppException(ErrorCode.PAYMENT_METHOD_EXISTED);
+    PaymentMethodResponse getPaymentMethod(Integer paymentMethodId);
 
-        PaymentMethod paymentMethod = paymentMethodMapper.toEntity(request);
+    PaymentMethodResponse updatePaymentMethod(Integer paymentMethodId, PaymentMethodRequest request);
 
-        return paymentMethodMapper.toResponse(paymentMethodRepository.save(paymentMethod));
-    }
-
-    public List<PaymentMethodResponse> getPaymentMethods()
-    {
-
-        return paymentMethodRepository.findAll().stream()
-                .map(paymentMethodMapper::toResponse)
-                .collect(Collectors.toList());
-    }
-
-    public PaymentMethodResponse getPaymentMethod(Integer paymentMethodId)
-    {
-        return paymentMethodMapper.toResponse(paymentMethodRepository.findById(paymentMethodId)
-                .orElseThrow(()-> new AppException(ErrorCode.PAYMENT_METHOD_NOT_EXISTED)));
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    public PaymentMethodResponse updatePaymentMethod(Integer paymentMethodId, PaymentMethodRequest request)
-    {
-        PaymentMethod paymentMethod = paymentMethodRepository.findById(paymentMethodId)
-                .orElseThrow(()->new AppException(ErrorCode.PAYMENT_METHOD_NOT_EXISTED));
-        paymentMethodMapper.updatePaymentMethod(paymentMethod, request);
-
-        return  paymentMethodMapper.toResponse(paymentMethodRepository.save(paymentMethod));
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    public void deletePaymentMethod(Integer paymentMethodId)
-    {
-        paymentMethodRepository.deleteById(paymentMethodId);
-    }
+    void deletePaymentMethod(Integer paymentMethodId);
 }

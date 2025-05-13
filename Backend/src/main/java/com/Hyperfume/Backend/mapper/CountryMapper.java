@@ -1,12 +1,11 @@
 package com.Hyperfume.Backend.mapper;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
 import com.Hyperfume.Backend.dto.request.CountryRequest;
 import com.Hyperfume.Backend.dto.response.CountryResponse;
-
 import com.Hyperfume.Backend.entity.Country;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface CountryMapper {

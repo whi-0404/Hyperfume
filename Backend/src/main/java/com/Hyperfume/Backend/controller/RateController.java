@@ -1,19 +1,20 @@
 package com.Hyperfume.Backend.controller;
 
+import java.util.List;
+
+import jakarta.validation.Valid;
+
+import org.springframework.web.bind.annotation.*;
+
 import com.Hyperfume.Backend.dto.request.RateRequest;
 import com.Hyperfume.Backend.dto.response.ApiResponse;
 import com.Hyperfume.Backend.dto.response.RateResponse;
-import com.Hyperfume.Backend.entity.Rate;
 import com.Hyperfume.Backend.service.RateService;
-import jakarta.validation.Valid;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/perfumes/{perfumeId}/rates")
@@ -24,11 +25,10 @@ public class RateController {
     RateService rateService;
 
     @PostMapping
-    public ApiResponse<RateResponse> addRate(@PathVariable Integer perfumeId,
-                                             @Valid @RequestBody RateRequest request){
+    public ApiResponse<RateResponse> addRate(@Valid @RequestBody RateRequest request) {
 
         return ApiResponse.<RateResponse>builder()
-                .result(rateService.addRate(perfumeId, request))
+                .result(rateService.addRate(request))
                 .build();
     }
 
@@ -38,5 +38,11 @@ public class RateController {
         return ApiResponse.<List<RateResponse>>builder()
                 .result(rateService.getRatesByPerfumeId(perfumeId))
                 .build();
+    }
+
+    @PutMapping
+    public ApiResponse<String> updateRate(@Valid @RequestBody RateRequest request) {
+        rateService.updateRate(request);
+        return ApiResponse.<String>builder().result("Rate has been update").build();
     }
 }

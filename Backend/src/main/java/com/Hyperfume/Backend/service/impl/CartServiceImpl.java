@@ -1,0 +1,94 @@
+package com.Hyperfume.Backend.service.impl;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
+import com.Hyperfume.Backend.dto.request.CartRequest;
+import com.Hyperfume.Backend.dto.request.UpdateCartQuantityRequest;
+import com.Hyperfume.Backend.dto.response.CartResponse;
+import com.Hyperfume.Backend.entity.Cart;
+import com.Hyperfume.Backend.entity.PerfumeVariant;
+import com.Hyperfume.Backend.entity.User;
+import com.Hyperfume.Backend.exception.AppException;
+import com.Hyperfume.Backend.exception.ErrorCode;
+import com.Hyperfume.Backend.mapper.CartMapper;
+import com.Hyperfume.Backend.repository.CartRepository;
+import com.Hyperfume.Backend.repository.PerfumeVariantRepository;
+import com.Hyperfume.Backend.repository.UserRepository;
+import com.Hyperfume.Backend.service.CartService;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+public class CartServiceImpl implements CartService {
+    CartRepository cartRepository;
+    CartMapper cartMapper;
+    PerfumeVariantRepository variantRepository;
+    UserRepository userRepository;
+
+    public void addToCart(CartRequest request) {
+
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        PerfumeVariant variant = variantRepository
+                .findById(request.getVariantId())
+                .orElseThrow(() -> new AppException(ErrorCode.VARIANT_NOT_FOUND));
+
+        if(cartRepository.existedByUserIdAndVariantId(user.getId(), variant.getId())){
+            throw new AppException(ErrorCode.VARIANT_ALREADY_IN_CART);
+        }
+
+        if (variant.getPerfume_stock_quantity() < request.getQuantity()) {
+            throw new AppException(ErrorCode.NOT_ENOUGH_STOCK_AVAILABLE);
+        }
+
+        Cart cart = cartMapper.toEntity(request);
+        cart.setUser(user);
+
+        cartRepository.save(cart);
+    }
+
+    public List<CartResponse> getCart() {
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        List<Cart> cart = cartRepository.findByUserId(user.getId());
+
+        return cart.stream().map(cartMapper::toResponse).collect(Collectors.toList());
+    }
+
+    public CartResponse updateQuantityCart(UpdateCartQuantityRequest request) {
+        Cart cart = cartRepository
+                .findById(request.getCartId())
+                .orElseThrow(() -> new AppException(ErrorCode.CART_NOT_FOUND));
+
+        if (cart.getPerfumeVariant().getPerfume_stock_quantity() < request.getQuantity()) {
+            throw new AppException(ErrorCode.NOT_ENOUGH_STOCK_AVAILABLE);
+        }
+
+        cart.setQuantity(request.getQuantity());
+
+        return cartMapper.toResponse(cartRepository.save(cart));
+    }
+
+    public void deleteCart(Integer cartId) {
+        if (!cartRepository.existsById(cartId)) {
+            throw new AppException(ErrorCode.CART_NOT_FOUND);
+        }
+        cartRepository.deleteById(cartId);
+    }
+}

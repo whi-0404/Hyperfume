@@ -1,18 +1,18 @@
 package com.Hyperfume.Backend.mapper.impl;
 
+import org.springframework.stereotype.Component;
+
 import com.Hyperfume.Backend.dto.request.PerfumeImageRequest;
 import com.Hyperfume.Backend.dto.response.PerfumeImageResponse;
 import com.Hyperfume.Backend.entity.Perfume;
 import com.Hyperfume.Backend.entity.PerfumeImage;
 import com.Hyperfume.Backend.mapper.PerfumeImageMapper;
-import com.Hyperfume.Backend.mapper.impl.utils.PerfumeImageUtil;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class PerfumeImageMapperImpl implements PerfumeImageMapper {
-    private final PerfumeImageUtil perfumeImageUtil;
 
     public PerfumeImage toPerfumeImage(PerfumeImageRequest request) {
         if (request == null) {
@@ -32,7 +32,7 @@ public class PerfumeImageMapperImpl implements PerfumeImageMapper {
             perfumeImageResponse.perfumeId(this.perfumeImagePerfumeId(perfumeImage));
             perfumeImageResponse.id(perfumeImage.getId());
             perfumeImageResponse.thumbnail(perfumeImage.isThumbnail());
-            perfumeImageResponse.imageData(perfumeImageUtil.encodeImageData(perfumeImage.getImage_data()));
+            perfumeImageResponse.imageUrl(perfumeImage.getImageUrl());
             return perfumeImageResponse.build();
         }
     }
