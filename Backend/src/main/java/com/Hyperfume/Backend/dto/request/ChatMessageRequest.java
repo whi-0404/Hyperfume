@@ -1,6 +1,7 @@
 package com.Hyperfume.Backend.dto.request;
 
 import com.Hyperfume.Backend.enums.MessageType;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

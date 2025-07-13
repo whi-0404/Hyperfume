@@ -5,8 +5,6 @@ import com.Hyperfume.Backend.dto.response.PageResponse;
 import com.Hyperfume.Backend.entity.Notification;
 import com.Hyperfume.Backend.enums.NotificationType;
 
-import java.util.Map;
-
 public interface NotificationService {
     void sendNotification(Notification notification);
 

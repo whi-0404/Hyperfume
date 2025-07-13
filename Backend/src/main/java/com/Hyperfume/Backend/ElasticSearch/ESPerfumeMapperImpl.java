@@ -1,31 +1,36 @@
 package com.Hyperfume.Backend.ElasticSearch;
 
+import java.math.BigDecimal;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import com.Hyperfume.Backend.mapper.impl.utils.PerfumeVariantUtil;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
 import com.Hyperfume.Backend.dto.response.PerfumeGetAllResponse;
 import com.Hyperfume.Backend.entity.Perfume;
 import com.Hyperfume.Backend.entity.PerfumeImage;
 import com.Hyperfume.Backend.entity.PerfumeVariant;
-import com.Hyperfume.Backend.repository.PerfumeRepository;
-import org.springframework.stereotype.Component;
-
-import java.math.BigDecimal;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
-public class ESPerfumeMapperImpl implements ESPerfumeMapper{
+@RequiredArgsConstructor
+public class ESPerfumeMapperImpl implements ESPerfumeMapper {
+    PerfumeVariantUtil perfumeVariantUtil;
 
     @Override
     public ESPerfume toDocument(Perfume perfume) {
         String thumbnailImageUrl = null;
         List<PerfumeImage> perfumeImageList = perfume.getImages();
 
-        if(perfumeImageList != null && !perfumeImageList.isEmpty()){
-               for(PerfumeImage perfumeImage : perfumeImageList){
-                   if(perfumeImage.isThumbnail()){
-                       thumbnailImageUrl = perfumeImage.getImageUrl();
-                   }
-               }
+        if (perfumeImageList != null && !perfumeImageList.isEmpty()) {
+            for (PerfumeImage perfumeImage : perfumeImageList) {
+                if (perfumeImage.isThumbnail()) {
+                    thumbnailImageUrl = perfumeImage.getImageUrl();
+                }
+            }
         }
 
         Double minPrice = null;
@@ -33,9 +38,9 @@ public class ESPerfumeMapperImpl implements ESPerfumeMapper{
         boolean isAllowedToOrder = false;
         List<PerfumeVariant> perfumeVariants = perfume.getVariants();
 
-        if ( perfumeVariants != null && !perfumeVariants.isEmpty()) {
+        if (perfumeVariants != null && !perfumeVariants.isEmpty()) {
 
-            for(PerfumeVariant variant : perfumeVariants){
+            for (PerfumeVariant variant : perfumeVariants) {
                 if (variant.getPerfume_stock_quantity() > 0) {
                     isAllowedToOrder = true;
                     break;
@@ -62,7 +67,10 @@ public class ESPerfumeMapperImpl implements ESPerfumeMapper{
                 .perfumeDescription(perfume.getPerfume_description())
                 .perfumeGender(perfume.getPerfume_gender())
                 .concentration(perfume.getConcentration())
-                .screntFamilyName(perfume.getScrentFamily() != null ? perfume.getScrentFamily().getName() : null)
+                .screntFamilyName(
+                        perfume.getScrentFamily() != null
+                                ? perfume.getScrentFamily().getName()
+                                : null)
                 .mainNotes(perfume.getMain_notes())
                 .countryName(perfume.getCountry() != null ? perfume.getCountry().getName() : null)
                 .sale(perfume.isSale())
@@ -78,8 +86,8 @@ public class ESPerfumeMapperImpl implements ESPerfumeMapper{
                 .build();
     }
 
-    public PerfumeGetAllResponse toGetAllResponse(ESPerfume esPerfume){
-        return PerfumeGetAllResponse.builder()
+    public PerfumeGetAllResponse toGetAllResponse(ESPerfume esPerfume) {
+        PerfumeGetAllResponse perfumeGetAllResponse = PerfumeGetAllResponse.builder()
                 .id(esPerfume.getPerfumeId())
                 .name(esPerfume.getName())
                 .perfume_gender(esPerfume.getPerfumeGender())
@@ -90,20 +98,38 @@ public class ESPerfumeMapperImpl implements ESPerfumeMapper{
                 .flash_sale(esPerfume.getFlashSale())
                 .longevity(esPerfume.getLongevity())
                 .sold(esPerfume.getSold())
-                .discount(esPerfume.getDiscount())
                 .ThumbnailImageUrl(esPerfume.getThumbnailImageUrl())
                 .brandName(esPerfume.getBrandName())
-                .max_price(esPerfume.getMaxPrice() != null ? BigDecimal.valueOf(esPerfume.getMaxPrice()): null)
-                .min_price(esPerfume.getMinPrice() != null ? BigDecimal.valueOf(esPerfume.getMinPrice()): null)
                 .build();
+
+        perfumeGetAllResponse.setDiscountNormalSale(esPerfume.getDiscount());
+
+        Map<String, Object> finalMaxVariant = perfumeVariantUtil.calculateFinalPrice(Objects.requireNonNull(esPerfume.getVariants().stream()
+                .max(Comparator.comparing(PerfumeVariant::getPrice))
+                .orElse(null)));
+
+        BigDecimal finalMinPrice = (BigDecimal) perfumeVariantUtil.calculateFinalPrice(Objects.requireNonNull(perfume.getVariants().stream()
+                .min(Comparator.comparing(PerfumeVariant::getPrice))
+                .orElse(null))).get("finalPrice");
+
+
+        perfumeGetAllResponse.final_max_price((BigDecimal) finalMaxVariant.get("finalPrice"));
+        perfumeGetAllResponse.final_min_price(finalMinPrice);
+
+
+        perfumeGetAllResponse.discountFlashSale(perfume.isFlash_sale() ? (Double) finalMaxVariant.get("discountPercent") : 0.0);
+
+
+
+        return perfumeGetAllResponse;
     }
 
-//    private ESPerfumeVariant toVariantDocument(PerfumeVariant variant) {
-//        return ESPerfumeVariant.builder()
-//                .id(variant.getId())
-//                .name(variant.getName())
-//                .price(variant.getPrice().doubleValue())
-//                .perfumeStockQuantity(variant.getPerfume_stock_quantity())
-//                .build();
-//    }
+    //    private ESPerfumeVariant toVariantDocument(PerfumeVariant variant) {
+    //        return ESPerfumeVariant.builder()
+    //                .id(variant.getId())
+    //                .name(variant.getName())
+    //                .price(variant.getPrice().doubleValue())
+    //                .perfumeStockQuantity(variant.getPerfume_stock_quantity())
+    //                .build();
+    //    }
 }

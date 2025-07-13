@@ -1,24 +1,17 @@
 package com.Hyperfume.Backend.service.impl.Shipment;
 
-import com.Hyperfume.Backend.entity.Order;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.Hyperfume.Backend.entity.Shipment;
 import com.Hyperfume.Backend.entity.ShipmentTracking;
-import com.Hyperfume.Backend.enums.OrderStatus;
-import com.Hyperfume.Backend.enums.ShipmentStatus;
-import com.Hyperfume.Backend.exception.AppException;
-import com.Hyperfume.Backend.exception.ErrorCode;
-import com.Hyperfume.Backend.repository.OrderRepository;
-import com.Hyperfume.Backend.repository.ShipmentRepository;
 import com.Hyperfume.Backend.repository.ShipmentTrackingRepository;
-import com.Hyperfume.Backend.service.ShipmentService;
 import com.Hyperfume.Backend.service.ShipmentTrackingService;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +34,4 @@ public class ShipmentTrackingServiceImpl implements ShipmentTrackingService {
     public List<ShipmentTracking> getShipmentTrackingHistory(int shipmentId) {
         return shipmentTrackingRepository.findActiveTrackingByShipmentId(shipmentId);
     }
-
-
 }

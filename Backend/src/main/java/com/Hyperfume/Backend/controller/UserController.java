@@ -1,9 +1,7 @@
 package com.Hyperfume.Backend.controller;
 
 import java.util.List;
-import java.util.Set;
 
-import com.Hyperfume.Backend.dto.response.*;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.Hyperfume.Backend.dto.request.UserCreationRequest;
 import com.Hyperfume.Backend.dto.request.UserUpdateRequest;
+import com.Hyperfume.Backend.dto.response.*;
 import com.Hyperfume.Backend.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -70,16 +69,14 @@ public class UserController {
     }
 
     @PostMapping("/favorites/{perfumeId}")
-    ApiResponse<String> addPerfumeToFavorites(
-            @PathVariable("perfumeId") Integer perfumeId) {
+    ApiResponse<String> addPerfumeToFavorites(@PathVariable("perfumeId") Integer perfumeId) {
         userService.addPerfumeToFavorites(perfumeId);
 
         return ApiResponse.<String>builder().result("Successfully").build();
     }
 
     @DeleteMapping("/favorites/{perfumeId}")
-    ApiResponse<String> removePerfumeFromFavorites(
-            @PathVariable("perfumeId") Integer perfumeId) {
+    ApiResponse<String> removePerfumeFromFavorites(@PathVariable("perfumeId") Integer perfumeId) {
         userService.removePerfumeFromFavorites(perfumeId);
 
         return ApiResponse.<String>builder().result("Successfully").build();
@@ -95,7 +92,7 @@ public class UserController {
     }
 
     @GetMapping("/favorites/checkFavorite")
-    ApiResponse<String> checkFavoritePerfume(@RequestParam(value = "perfumeId") Integer perfumeId){
+    ApiResponse<String> checkFavoritePerfume(@RequestParam(value = "perfumeId") Integer perfumeId) {
         boolean isFavoritePerfume = userService.isPerfumeInFavorites(perfumeId);
 
         return ApiResponse.<String>builder()

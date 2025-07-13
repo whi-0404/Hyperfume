@@ -7,22 +7,16 @@ import java.util.Date;
 import java.util.StringJoiner;
 import java.util.UUID;
 
-import com.Hyperfume.Backend.dto.request.*;
-import com.Hyperfume.Backend.repository.RoleRepository;
-import com.Hyperfume.Backend.repository.httpClient.OutboundIdentityClient;
-import com.Hyperfume.Backend.repository.httpClient.OutboundUserClient;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import lombok.AccessLevel;
-import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.Hyperfume.Backend.dto.request.*;
 import com.Hyperfume.Backend.dto.response.AuthenticationResponse;
 import com.Hyperfume.Backend.dto.response.IntrospectResponse;
 import com.Hyperfume.Backend.entity.InvalidatedToken;
@@ -30,7 +24,10 @@ import com.Hyperfume.Backend.entity.User;
 import com.Hyperfume.Backend.exception.AppException;
 import com.Hyperfume.Backend.exception.ErrorCode;
 import com.Hyperfume.Backend.repository.InvalidatedTokenRepository;
+import com.Hyperfume.Backend.repository.RoleRepository;
 import com.Hyperfume.Backend.repository.UserRepository;
+import com.Hyperfume.Backend.repository.httpClient.OutboundIdentityClient;
+import com.Hyperfume.Backend.repository.httpClient.OutboundUserClient;
 import com.Hyperfume.Backend.service.AuthenticationService;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -38,7 +35,10 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -72,7 +72,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @NonFinal
     protected String GRANT_TYPE = "authorization_code";
 
-    protected static final int MAX_AGE_AT_COOKIE = 60*60;
+    protected static final int MAX_AGE_AT_COOKIE = 60 * 60;
     protected static final int MAX_AGE_RT_COOKIE = 7 * 24 * 60 * 60;
 
     public AuthenticationResponse authenticate(AuthenticationRequest request, HttpServletResponse response) {
@@ -97,26 +97,27 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
     }
 
-    public AuthenticationResponse outboundAuthenticate(String code, HttpServletResponse httpServletResponse){
+    public AuthenticationResponse outboundAuthenticate(String code, HttpServletResponse httpServletResponse) {
         var response = outboundIdentityClient.exchangeToken(ExchangeTokenRequest.builder()
-                        .clientId(CLIENT_ID)
-                        .clientSecret(CLIENT_SECRET)
-                        .redirectUri(REDIRECT_URI)
-                        .code(code)
-                        .grantType(GRANT_TYPE)
+                .clientId(CLIENT_ID)
+                .clientSecret(CLIENT_SECRET)
+                .redirectUri(REDIRECT_URI)
+                .code(code)
+                .grantType(GRANT_TYPE)
                 .build());
 
         var userInfo = outboundUserClient.getUserInfo("json", response.getAccessToken());
 
-        //Onboarding user
-        User user = userRepository.findByUsername(userInfo.getEmail()).orElseGet(
-                () -> userRepository.save(User.builder()
-                                .username(userInfo.getEmail())
-                                .email(userInfo.getEmail())
-                                .role(roleRepository.findByName("USER")
-                                        .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED)))
-                        .build())
-        );
+        // Onboarding user
+        User user = userRepository
+                .findByUsername(userInfo.getEmail())
+                .orElseGet(() -> userRepository.save(User.builder()
+                        .username(userInfo.getEmail())
+                        .email(userInfo.getEmail())
+                        .role(roleRepository
+                                .findByName("USER")
+                                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED)))
+                        .build()));
 
         String tokenFromUserGG = generateToken(user, false);
         String tokenRefresh = generateToken(user, true);
@@ -141,14 +142,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             errorCode = e.getErrorCode();
         }
 
-        return IntrospectResponse.builder()
-                .valid(isvalid)
-                .errorCode(errorCode)
-                .build();
+        return IntrospectResponse.builder().valid(isvalid).errorCode(errorCode).build();
     }
 
-    public void logout(HttpServletRequest request, HttpServletResponse response)
-            throws ParseException{
+    public void logout(HttpServletRequest request, HttpServletResponse response) throws ParseException {
 
         var signToken = SignedJWT.parse(request.getHeader("Authorization").substring(7));
 
@@ -175,10 +172,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         // Check SIGNER_KEY
         var verified = signedJWT.verify(verifier);
-        if (!(verified))
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        if (!(verified)) throw new AppException(ErrorCode.UNAUTHENTICATED);
 
-        if(!(expiryTime.after(new Date()))){
+        if (!(expiryTime.after(new Date()))) {
             throw new AppException(ErrorCode.EXPIRED_TOKEN);
         }
         // Check logout
@@ -188,7 +184,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return signedJWT;
     }
 
-    public AuthenticationResponse refreshToken(String refreshToken, HttpServletRequest request, HttpServletResponse response)
+    public AuthenticationResponse refreshToken(
+            String refreshToken, HttpServletRequest request, HttpServletResponse response)
             throws ParseException, JOSEException {
 
         var signedJWT = verifyToken(refreshToken);
@@ -196,17 +193,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var jit = signedJWT.getJWTClaimsSet().getJWTID();
         var expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
 
-        //Check blackList
-        if(invalidatedTokenRepository.existsById(jit)){
+        // Check blackList
+        if (invalidatedTokenRepository.existsById(jit)) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
 
         InvalidatedToken invalidatedToken =
-                InvalidatedToken.builder()
-                        .id(jit).
-                        expiryTime(expiryTime)
-                        .build();
-        //Save into blackList
+                InvalidatedToken.builder().id(jit).expiryTime(expiryTime).build();
+        // Save into blackList
         invalidatedTokenRepository.save(invalidatedToken);
 
         var username = signedJWT.getJWTClaimsSet().getSubject();
@@ -260,7 +254,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return stringJoiner.toString();
     }
 
-    private void setTokenToCookie(String token, boolean isRefresh, HttpServletResponse response){
+    private void setTokenToCookie(String token, boolean isRefresh, HttpServletResponse response) {
         Cookie cookie = new Cookie(isRefresh ? "refresh_jwt" : "jwt", token);
         cookie.setHttpOnly(true);
         cookie.setMaxAge(isRefresh ? MAX_AGE_RT_COOKIE : MAX_AGE_AT_COOKIE);

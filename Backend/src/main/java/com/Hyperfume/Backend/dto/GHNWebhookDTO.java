@@ -1,12 +1,13 @@
 package com.Hyperfume.Backend.dto;
 
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -17,16 +18,17 @@ import java.time.LocalDateTime;
 public class GHNWebhookDTO {
     @JsonProperty("OrderCode")
     String orderCode;
+
     @JsonProperty("Status")
     String status;
+
     @JsonProperty("Warehouse")
     String wareHouse;
+
     @JsonProperty("Time")
-    @JsonFormat(
-            pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX",
-            timezone = "Asia/Ho_Chi_Minh"
-    )
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "Asia/Ho_Chi_Minh")
     LocalDateTime time;
+
     @JsonProperty("Description")
     String description;
 }

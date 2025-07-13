@@ -29,10 +29,11 @@ public class PerfumeGetAllResponse {
     boolean flash_sale;
     int sold;
 
-    double discount;
+    double discountNormalSale;
+    double discountFlashSale;
 
-    BigDecimal min_price;
-    BigDecimal max_price;
+    BigDecimal final_min_price;
+    BigDecimal final_max_price;
 
     String ThumbnailImageUrl;
 }

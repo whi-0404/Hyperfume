@@ -3,7 +3,7 @@ package com.Hyperfume.Backend.enums;
 import lombok.Getter;
 
 @Getter
-public enum ShipmentStatus {
+public enum     ShipmentStatus {
     SHIPMENT_PENDING("Chờ xử lý vận chuyển"),
     READY_TO_PICK("Mới tạo đơn hàng"),
     PICKING("Nhân viên đang lấy hàng"),
@@ -33,5 +33,4 @@ public enum ShipmentStatus {
     ShipmentStatus(String description) {
         this.description = description;
     }
-
 }

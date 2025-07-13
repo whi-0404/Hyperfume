@@ -4,8 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.Hyperfume.Backend.enums.OrderStatus;
 import jakarta.persistence.*;
+
+import com.Hyperfume.Backend.enums.OrderStatus;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -26,9 +27,9 @@ public class Order {
     @JoinColumn(name = "user_id")
     User user;
 
-//    @ManyToOne
-//    @JoinColumn(name = "shipping_address_id")
-//    ShippingAddress shippingAddress;
+    //    @ManyToOne
+    //    @JoinColumn(name = "shipping_address_id")
+    //    ShippingAddress shippingAddress;
 
     @Column(name = "notes", columnDefinition = "TEXT")
     String notes;
@@ -42,12 +43,12 @@ public class Order {
     @JoinColumn(name = "total_money")
     BigDecimal totalMoney;
 
-//    @ManyToOne
-//    @JoinColumn(name = "shipping_method_id")
-//    ShippingMethod shippingMethod;
+    //    @ManyToOne
+    //    @JoinColumn(name = "shipping_method_id")
+    //    ShippingMethod shippingMethod;
 
-//    @JoinColumn(name = "shipping_date")
-//    LocalDate shippingDate;
+    //    @JoinColumn(name = "shipping_date")
+    //    LocalDate shippingDate;
 
     @Column(name = "payment_transaction_id")
     String paymentTransactionId;

@@ -11,5 +11,5 @@ public interface FlashSaleItemMapper {
 
     FlashSaleItemResponse toResponse(FlashSaleItem flashSaleItem);
 
-//    void updateEntity(FlashSaleItem flashSaleItem, FlashSaleItemRequest request);
+    //    void updateEntity(FlashSaleItem flashSaleItem, FlashSaleItemRequest request);
 }

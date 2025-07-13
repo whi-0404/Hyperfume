@@ -1,22 +1,5 @@
 package com.Hyperfume.Backend.service.impl;
 
-import com.Hyperfume.Backend.configuration.VNPayConfig;
-import com.Hyperfume.Backend.dto.VNPayCallBackDTO;
-import com.Hyperfume.Backend.entity.Order;
-import com.Hyperfume.Backend.enums.OrderStatus;
-import com.Hyperfume.Backend.exception.AppException;
-import com.Hyperfume.Backend.exception.ErrorCode;
-import com.Hyperfume.Backend.repository.OrderRepository;
-import com.Hyperfume.Backend.service.VNPayService;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
@@ -26,6 +9,25 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Service;
+
+import com.Hyperfume.Backend.configuration.VNPayConfig;
+import com.Hyperfume.Backend.entity.Order;
+import com.Hyperfume.Backend.enums.OrderStatus;
+import com.Hyperfume.Backend.exception.AppException;
+import com.Hyperfume.Backend.exception.ErrorCode;
+import com.Hyperfume.Backend.repository.OrderRepository;
+import com.Hyperfume.Backend.service.VNPayService;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
@@ -36,8 +38,7 @@ public class VNPayServiceImpl implements VNPayService {
     OrderRepository orderRepository;
 
     public String createPaymentUrl(int orderId, HttpServletRequest request) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
 
         String vnp_Version = vnPayConfig.getVersion();
         String vnp_Command = vnPayConfig.getCommand();
@@ -69,7 +70,7 @@ public class VNPayServiceImpl implements VNPayService {
         String vnp_ExpireDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
-        //create hash to validate data
+        // create hash to validate data
         List<String> fieldNames = new ArrayList<>(vnp_Params.keySet());
         Collections.sort(fieldNames);
 
@@ -139,15 +140,15 @@ public class VNPayServiceImpl implements VNPayService {
 
         return secureHash.equals(fields.get("vnp_SecureHash"));
     }
-    public boolean processPaymentCallback(Map<String, String> fields){
+
+    public boolean processPaymentCallback(Map<String, String> fields) {
         if (!verifyPaymentCallback(fields)) {
             log.error("Invalid VNPay callback signature");
             return false;
         }
         Integer orderId = Integer.parseInt(fields.get("vnp_TxnRef"));
 
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
 
         String vnpResponseCode = fields.get("vnp_ResponseCode");
         String vnpTransactionStatus = fields.get("vnp_TransactionStatus");

@@ -1,17 +1,15 @@
 package com.Hyperfume.Backend.ElasticSearch;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.time.LocalDate;
+
 import jakarta.persistence.Id;
+
+import org.springframework.data.elasticsearch.annotations.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.elasticsearch.annotations.*;
-import org.springframework.data.elasticsearch.core.suggest.Completion;
-
-import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Document(indexName = "perfumes")
 @Setting(settingPath = "elasticsearch-settings.json")
@@ -68,8 +66,8 @@ public class ESPerfume {
     @Field(type = FieldType.Date, format = DateFormat.date)
     LocalDate createdAt;
 
-//    @Field(type = FieldType.Nested)
-//    List<ESPerfumeVariant> variants;
+    //    @Field(type = FieldType.Nested)
+    //    List<ESPerfumeVariant> variants;
 
     @Field(type = FieldType.Text)
     String thumbnailImageUrl;
@@ -81,5 +79,4 @@ public class ESPerfume {
 
     @Field(type = FieldType.Double)
     Double maxPrice;
-
 }

@@ -27,31 +27,27 @@ public class SecurityConfig {
     public static final String BASE_URL = "/hyperfume";
 
     public static final String[] AUTH_ENDPOINTS = {
-            "/auth/token",
-            "/auth/introspect",
-            "/auth/refresh",
-            "/auth/outbound/authentication",
+        "/auth/token", "/auth/introspect", "/auth/refresh", "/auth/outbound/authentication",
     };
 
     public static final String[] PUBLIC_GET_ENDPOINTS = {
-            "/brands",
-            "/countries",
-            "/screntFamilies",
-            "/perfumes",
-            "/perfumes/search",
-            "/perfumes/suggestions",
-            "/perfumes/{perfumeId}",
-            "/perfumes/{perfumeId}/variants",
-            "/perfumes/{perfumeId}/rates",
-            "/payment_method",
-            "/shipping_methods",
-            "/shipments",
-            "/payment/vnpay-callback"
+        "/brands",
+        "/countries",
+        "/screntFamilies",
+        "/perfumes",
+        "/perfumes/search",
+        "/perfumes/suggestions",
+        "/perfumes/{perfumeId}",
+        "/perfumes/{perfumeId}/variants",
+        "/perfumes/{perfumeId}/rates",
+        "/payment_method",
+        "/shipping_methods",
+        "/shipments",
+        "/payment/vnpay-callback"
     };
 
     public static final String[] PUBLIC_POST_ENDPOINTS = {
-            "/users",
-            "/webhook/ghn/status",
+        "/users", "/webhook/ghn/status",
     };
 
     @Bean
@@ -104,7 +100,8 @@ public class SecurityConfig {
                                 .decoder(customJwtDecoder())
                                 .jwtAuthenticationConverter(jwtAuthenticationConverter()))
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint()))
-                .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(jwtAuthenticationEntryPoint()));
+                .exceptionHandling(
+                        exceptionHandling -> exceptionHandling.authenticationEntryPoint(jwtAuthenticationEntryPoint()));
 
         return httpSecurity.build();
     }

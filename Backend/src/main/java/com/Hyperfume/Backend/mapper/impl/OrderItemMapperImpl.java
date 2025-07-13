@@ -38,7 +38,7 @@ public class OrderItemMapperImpl implements OrderItemMapper {
             OrderItem.OrderItemBuilder orderItem = OrderItem.builder();
             orderItem.perfumeVariant(perfumeVariant);
             orderItem.totalPrice(
-                    perfumeVariantUtil.calculateDiscountedPrice(perfumeVariant).multiply(BigDecimal.valueOf(quantity)));
+                    ((BigDecimal) perfumeVariantUtil.calculateFinalPrice(perfumeVariant).get("finalPrice")).multiply(BigDecimal.valueOf(quantity)));
             orderItem.quantity(quantity);
             return orderItem.build();
         }
@@ -146,7 +146,7 @@ public class OrderItemMapperImpl implements OrderItemMapper {
         if (orderItem == null) {
             return null;
         } else {
-            return perfumeVariantUtil.calculateDiscountedPrice(orderItem.getPerfumeVariant());
+            return (BigDecimal) perfumeVariantUtil.calculateFinalPrice(orderItem.getPerfumeVariant()).get("finalPrice");
         }
     }
 }

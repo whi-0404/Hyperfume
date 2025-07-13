@@ -31,3 +31,16 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Environment Variables ###
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+*.env
+
+### Application Properties ###
+application-local.yml
+application-dev.yml
+application-prod.yml

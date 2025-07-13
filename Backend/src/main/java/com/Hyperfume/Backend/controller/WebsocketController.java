@@ -1,11 +1,7 @@
 package com.Hyperfume.Backend.controller;
 
-import com.Hyperfume.Backend.dto.request.ChatMessageRequest;
-import com.Hyperfume.Backend.dto.response.ChatMessageResponse;
-import com.Hyperfume.Backend.service.ChatService;
-import com.Hyperfume.Backend.service.redis.ChatRedisService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.security.Principal;
+
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -14,7 +10,13 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Controller;
 
-import java.security.Principal;
+import com.Hyperfume.Backend.dto.request.ChatMessageRequest;
+import com.Hyperfume.Backend.dto.response.ChatMessageResponse;
+import com.Hyperfume.Backend.service.ChatService;
+import com.Hyperfume.Backend.service.redis.ChatRedisService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequiredArgsConstructor

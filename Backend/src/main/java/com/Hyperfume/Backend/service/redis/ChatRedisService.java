@@ -1,19 +1,17 @@
 package com.Hyperfume.Backend.service.redis;
 
-import com.Hyperfume.Backend.entity.User;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +25,7 @@ public class ChatRedisService {
     private static final String UNREAD_COUNT_KEY = "chat:unread-count:";
     private static final long ONLINE_EXPIRATION = 300; // 5 minutes
 
-    public void markUserOnline(int userId){
+    public void markUserOnline(int userId) {
         String userKey = String.valueOf(userId);
 
         redisTemplate.opsForZSet().add(ONLINE_USERS_KEY, userKey, System.currentTimeMillis());
@@ -91,7 +89,6 @@ public class ChatRedisService {
                         key -> {
                             Object count = redisTemplate.opsForValue().get(key);
                             return count != null ? Integer.parseInt(count.toString()) : 0;
-                        }
-                ));
+                        }));
     }
 }

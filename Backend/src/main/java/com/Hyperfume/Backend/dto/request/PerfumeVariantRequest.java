@@ -15,6 +15,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PerfumeVariantRequest {
     String name;
+
     int perfumeId;
 
     @DecimalMin(value = "0.0", inclusive = true, message = "PRICE_INVALID")

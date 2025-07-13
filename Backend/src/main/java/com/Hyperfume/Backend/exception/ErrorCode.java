@@ -107,7 +107,13 @@ public enum ErrorCode {
     FILE_TOO_LARGE(1072, "File too large", HttpStatus.PAYLOAD_TOO_LARGE),
     INVALID_FILE_TYPE(1073, "Invalid file type", HttpStatus.BAD_REQUEST),
     DIRECTORY_CREATION_FAILED(1074, "Directory creation failed", HttpStatus.BAD_REQUEST),
-    HASH_GENERATION_FAILED(1075, "Hash generation failed", HttpStatus.BAD_REQUEST),;
+    HASH_GENERATION_FAILED(1075, "Hash generation failed", HttpStatus.BAD_REQUEST),
+
+    FLASH_SALE_TIME_CONFLICT(1076, "Flash sale time conflict", HttpStatus.BAD_REQUEST),
+    FLASH_SALE_START_TIME_IN_PAST(1077, "Flash sale start time in past", HttpStatus.BAD_REQUEST),
+    FLASH_SALE_END_TIME_BEFORE_START(1078, "Flash sale end time before start", HttpStatus.BAD_REQUEST),
+    FLASH_SALE_OUTSIDE_TIME_WINDOW(1079, "Flash sale outside time window", HttpStatus.BAD_REQUEST),
+    ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

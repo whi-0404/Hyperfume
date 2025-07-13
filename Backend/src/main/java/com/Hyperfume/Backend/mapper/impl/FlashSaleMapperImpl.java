@@ -1,14 +1,16 @@
 package com.Hyperfume.Backend.mapper.impl;
 
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Component;
+
 import com.Hyperfume.Backend.dto.request.FlashSaleRequest;
 import com.Hyperfume.Backend.dto.response.FlashSaleResponse;
 import com.Hyperfume.Backend.entity.FlashSale;
 import com.Hyperfume.Backend.mapper.FlashSaleItemMapper;
 import com.Hyperfume.Backend.mapper.FlashSaleMapper;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
@@ -49,7 +51,7 @@ public class FlashSaleMapperImpl implements FlashSaleMapper {
                 .startTime(request.getStartTime())
                 .endTime(request.getEndTime())
                 .discountPercentage(request.getDiscountPercentage())
-//                .active(true)
+                .active(false)
                 .build();
     }
 

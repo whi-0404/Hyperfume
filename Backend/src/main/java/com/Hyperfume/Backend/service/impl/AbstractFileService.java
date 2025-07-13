@@ -1,16 +1,5 @@
 package com.Hyperfume.Backend.service.impl;
 
-import com.Hyperfume.Backend.configuration.FileUploadProperties;
-import com.Hyperfume.Backend.exception.AppException;
-import com.Hyperfume.Backend.exception.ErrorCode;
-import com.Hyperfume.Backend.service.FileService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.fileupload.FileUploadException;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,6 +8,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.Hyperfume.Backend.configuration.FileUploadProperties;
+import com.Hyperfume.Backend.exception.AppException;
+import com.Hyperfume.Backend.exception.ErrorCode;
+import com.Hyperfume.Backend.service.FileService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,8 +33,9 @@ public abstract class AbstractFileService implements FileService {
             FileUploadProperties.DirectoryConfig dirConfig = fileUploadProperties.getDirectoryConfig(directoryKey);
 
             String originalFilename = file.getOriginalFilename();
-            String fileExtension = originalFilename != null ?
-                    originalFilename.substring(originalFilename.lastIndexOf(".")) : getDefaultExtension(file.getContentType());
+            String fileExtension = originalFilename != null
+                    ? originalFilename.substring(originalFilename.lastIndexOf("."))
+                    : getDefaultExtension(file.getContentType());
 
             String uniqueFilename = generateUniqueFilename(fileExtension);
 
@@ -72,8 +73,8 @@ public abstract class AbstractFileService implements FileService {
 
         FileUploadProperties.DirectoryConfig dirConfig = fileUploadProperties.getDirectoryConfig(directoryKey);
 
-        long maxFileSize = dirConfig.getMaxFileSize() != null ?
-                dirConfig.getMaxFileSize() : fileUploadProperties.getMaxFileSize();
+        long maxFileSize =
+                dirConfig.getMaxFileSize() != null ? dirConfig.getMaxFileSize() : fileUploadProperties.getMaxFileSize();
 
         if (file.getSize() > maxFileSize) {
             throw new AppException(ErrorCode.FILE_TOO_LARGE);
@@ -82,15 +83,17 @@ public abstract class AbstractFileService implements FileService {
         String contentType = file.getContentType();
         if (contentType != null && dirConfig.getAllowedMimeTypes().containsKey(typeKey)) {
             String[] allowedMimeTypes = dirConfig.getAllowedMimeTypes().get(typeKey);
-            if (!Arrays.asList(allowedMimeTypes).contains(contentType) &&
-                    !Arrays.stream(allowedMimeTypes).anyMatch(contentType::startsWith)) {
+            if (!Arrays.asList(allowedMimeTypes).contains(contentType)
+                    && !Arrays.stream(allowedMimeTypes).anyMatch(contentType::startsWith)) {
                 throw new AppException(ErrorCode.INVALID_FILE_TYPE);
             }
         }
 
         String originalFilename = file.getOriginalFilename();
         if (originalFilename != null && dirConfig.getAllowedExtensions().containsKey(typeKey)) {
-            String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1).toLowerCase();
+            String fileExtension = originalFilename
+                    .substring(originalFilename.lastIndexOf(".") + 1)
+                    .toLowerCase();
             String[] allowedExtensions = dirConfig.getAllowedExtensions().get(typeKey);
             if (!Arrays.asList(allowedExtensions).contains(fileExtension)) {
                 throw new AppException(ErrorCode.INVALID_FILE_TYPE);

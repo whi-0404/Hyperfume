@@ -1,5 +1,14 @@
 package com.Hyperfume.Backend.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.Hyperfume.Backend.ElasticSearch.ESPerfumeService;
 import com.Hyperfume.Backend.dto.request.PerfumeImageRequest;
 import com.Hyperfume.Backend.dto.response.PerfumeImageResponse;
@@ -11,18 +20,11 @@ import com.Hyperfume.Backend.repository.PerfumeImageRepository;
 import com.Hyperfume.Backend.repository.PerfumeRepository;
 import com.Hyperfume.Backend.service.FileService;
 import com.Hyperfume.Backend.service.PerfumeImageService;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,8 +42,9 @@ public class PerfumeImageServiceImpl implements PerfumeImageService {
 
     @PreAuthorize("hasRole('ADMIN')")
     public PerfumeImageResponse addImageThumbnail(PerfumeImageRequest request) {
-        perfumeRepository.findById(request.getPerfumeId())
-                .orElseThrow(()-> new AppException(ErrorCode.PERFUME_NOT_EXISTED));
+        perfumeRepository
+                .findById(request.getPerfumeId())
+                .orElseThrow(() -> new AppException(ErrorCode.PERFUME_NOT_EXISTED));
 
         if (perfumeImageRepository.existsByPerfumeIdAndThumbnailTrue(request.getPerfumeId())) {
             throw new AppException(ErrorCode.DUPLICATE_THUMBNAIL_IMAGE);
@@ -91,8 +94,8 @@ public class PerfumeImageServiceImpl implements PerfumeImageService {
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public void deleteImage(Integer imageId) {
-        PerfumeImage image = perfumeImageRepository.findById(imageId)
-                .orElseThrow(() -> new AppException(ErrorCode.IMAGE_NOT_FOUND));
+        PerfumeImage image =
+                perfumeImageRepository.findById(imageId).orElseThrow(() -> new AppException(ErrorCode.IMAGE_NOT_FOUND));
 
         fileService.deleteFile(image.getImageUrl());
 
