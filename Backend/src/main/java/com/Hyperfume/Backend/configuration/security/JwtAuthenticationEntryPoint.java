@@ -2,7 +2,6 @@ package com.Hyperfume.Backend.configuration.security;
 
 import java.io.IOException;
 
-import com.Hyperfume.Backend.exception.JwtAuthenticationException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,6 +12,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 
 import com.Hyperfume.Backend.dto.response.ApiResponse;
 import com.Hyperfume.Backend.exception.ErrorCode;
+import com.Hyperfume.Backend.exception.JwtAuthenticationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {

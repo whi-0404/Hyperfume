@@ -29,7 +29,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // Prefix cho các tin nhắn cá nhân
         registry.setUserDestinationPrefix("/user");
     }
-    
+
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // Endpoint để client kết nối WebSocket

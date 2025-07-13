@@ -4,8 +4,6 @@ import java.text.ParseException;
 import java.util.Objects;
 import javax.crypto.spec.SecretKeySpec;
 
-import com.Hyperfume.Backend.exception.JwtAuthenticationException;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -16,8 +14,11 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Component;
 
 import com.Hyperfume.Backend.dto.request.IntrospectRequest;
+import com.Hyperfume.Backend.exception.JwtAuthenticationException;
 import com.Hyperfume.Backend.service.impl.AuthenticationServiceImpl;
 import com.nimbusds.jose.JOSEException;
+
+import lombok.extern.log4j.Log4j2;
 
 @Component
 @Log4j2

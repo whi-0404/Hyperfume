@@ -1,7 +1,8 @@
 package com.Hyperfume.Backend.configuration.websocket;
 
-import com.Hyperfume.Backend.configuration.security.CustomJwtDecoder;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -10,10 +11,10 @@ import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Map;
+import com.Hyperfume.Backend.configuration.security.CustomJwtDecoder;
 
 @Component
 public class WebSocketAuthChannelInterceptor implements ChannelInterceptor {
@@ -57,8 +58,8 @@ public class WebSocketAuthChannelInterceptor implements ChannelInterceptor {
     }
 
     private String extractTokenFromCookie(StompHeaderAccessor accessor) {
-        Map<String, List<String>> nativeHeaders = accessor.getMessageHeaders()
-                .get(StompHeaderAccessor.NATIVE_HEADERS, Map.class);
+        Map<String, List<String>> nativeHeaders =
+                accessor.getMessageHeaders().get(StompHeaderAccessor.NATIVE_HEADERS, Map.class);
 
         if (nativeHeaders != null && nativeHeaders.containsKey("Cookie")) {
             List<String> cookies = nativeHeaders.get("Cookie");

@@ -1,11 +1,11 @@
 package com.Hyperfume.Backend.service;
 
+import java.io.IOException;
+
 import com.Hyperfume.Backend.dto.request.PerfumeRequest;
 import com.Hyperfume.Backend.dto.response.PageResponse;
 import com.Hyperfume.Backend.dto.response.PerfumeGetAllResponse;
 import com.Hyperfume.Backend.dto.response.PerfumeResponse;
-
-import java.io.IOException;
 
 public interface PerfumeService {
     PageResponse<PerfumeGetAllResponse> getAllPerfumes(
@@ -18,7 +18,8 @@ public interface PerfumeService {
             String brandName,
             String concentration,
             String screntFamilyName,
-            Long maxPrice) throws IOException;
+            Long maxPrice)
+            throws IOException;
 
     PerfumeResponse getPerfumeById(int id);
 

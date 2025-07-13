@@ -1,21 +1,22 @@
 package com.Hyperfume.Backend.controller;
 
+import java.util.List;
+
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.Hyperfume.Backend.dto.request.ChatMessageRequest;
 import com.Hyperfume.Backend.dto.response.ApiResponse;
 import com.Hyperfume.Backend.dto.response.ChatMessageResponse;
 import com.Hyperfume.Backend.dto.response.ChatRoomDashboard;
 import com.Hyperfume.Backend.dto.response.PageResponse;
 import com.Hyperfume.Backend.service.ChatService;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/chat")
@@ -26,7 +27,7 @@ public class ChatController {
     ChatService chatService;
 
     @PostMapping("/messages")
-    public ApiResponse<ChatMessageResponse> sendMessage(@RequestBody ChatMessageRequest request){
+    public ApiResponse<ChatMessageResponse> sendMessage(@RequestBody ChatMessageRequest request) {
         return ApiResponse.<ChatMessageResponse>builder()
                 .result(chatService.sendMessage(request))
                 .build();
@@ -65,9 +66,7 @@ public class ChatController {
     @PostMapping("/read/{chatRoomId}")
     public ApiResponse<String> markMessagesAsRead(@PathVariable int chatRoomId) {
         chatService.markMessagesAsRead(chatRoomId);
-        return ApiResponse.<String>builder()
-                .result("successful!")
-                .build();
+        return ApiResponse.<String>builder().result("successful!").build();
     }
 
     @GetMapping("/unread/count")

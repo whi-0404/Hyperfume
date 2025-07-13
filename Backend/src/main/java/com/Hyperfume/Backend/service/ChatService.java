@@ -1,14 +1,13 @@
 package com.Hyperfume.Backend.service;
 
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import com.Hyperfume.Backend.dto.request.ChatMessageRequest;
 import com.Hyperfume.Backend.dto.response.ChatMessageResponse;
 import com.Hyperfume.Backend.dto.response.ChatRoomDashboard;
-import com.Hyperfume.Backend.dto.response.ChatRoomResponse;
 import com.Hyperfume.Backend.dto.response.PageResponse;
-import org.springframework.data.domain.Page;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 public interface ChatService {
     ChatMessageResponse sendMessage(ChatMessageRequest request);

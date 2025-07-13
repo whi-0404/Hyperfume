@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.Hyperfume.Backend.dto.request.AuthenticationRequest;
 import com.Hyperfume.Backend.dto.request.IntrospectRequest;
-import com.Hyperfume.Backend.dto.request.LogoutRequest;
-import com.Hyperfume.Backend.dto.request.RefreshRequest;
 import com.Hyperfume.Backend.dto.response.ApiResponse;
 import com.Hyperfume.Backend.dto.response.AuthenticationResponse;
 import com.Hyperfume.Backend.dto.response.IntrospectResponse;
@@ -29,7 +27,8 @@ public class AuthenticationController {
     AuthenticationService authenticationService;
 
     @PostMapping("/outbound/authentication")
-    ApiResponse<AuthenticationResponse> outboundAuthenticate(@RequestParam("code") String code, HttpServletResponse response){
+    ApiResponse<AuthenticationResponse> outboundAuthenticate(
+            @RequestParam("code") String code, HttpServletResponse response) {
         var result = authenticationService.outboundAuthenticate(code, response);
         return ApiResponse.<AuthenticationResponse>builder().result(result).build();
     }
@@ -50,7 +49,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh")
-    ApiResponse<AuthenticationResponse> refresh(@CookieValue("refresh_jwt") String refreshToken, HttpServletRequest request, HttpServletResponse response)
+    ApiResponse<AuthenticationResponse> refresh(
+            @CookieValue("refresh_jwt") String refreshToken, HttpServletRequest request, HttpServletResponse response)
             throws ParseException, JOSEException {
         var result = authenticationService.refreshToken(refreshToken, request, response);
 
@@ -58,7 +58,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/logout")
-    ApiResponse<Void> logout(HttpServletRequest request, HttpServletResponse response) throws ParseException, JOSEException {
+    ApiResponse<Void> logout(HttpServletRequest request, HttpServletResponse response)
+            throws ParseException, JOSEException {
         authenticationService.logout(request, response);
 
         return ApiResponse.<Void>builder().build();

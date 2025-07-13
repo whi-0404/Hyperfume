@@ -11,6 +11,8 @@ import com.Hyperfume.Backend.mapper.impl.utils.PerfumeVariantUtil;
 
 import lombok.RequiredArgsConstructor;
 
+import java.math.BigDecimal;
+
 @RequiredArgsConstructor
 @Component
 public class PerfumeVariantMapperImpl implements PerfumeVariantMapper {
@@ -43,7 +45,7 @@ public class PerfumeVariantMapperImpl implements PerfumeVariantMapper {
             perfumeVariantResponse.name(variant.getName());
             perfumeVariantResponse.price(variant.getPrice());
             perfumeVariantResponse.perfume_stock_quantity(variant.getPerfume_stock_quantity());
-            perfumeVariantResponse.discountedPrice(perfumeVariantUtil.calculateDiscountedPrice(variant));
+            perfumeVariantResponse.discountedPrice((BigDecimal) perfumeVariantUtil.calculateFinalPrice(variant).get("finalPrice"));
             return perfumeVariantResponse.build();
         }
     }

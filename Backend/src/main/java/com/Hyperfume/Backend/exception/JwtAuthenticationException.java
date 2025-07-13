@@ -1,7 +1,8 @@
 package com.Hyperfume.Backend.exception;
 
-import lombok.Getter;
 import org.springframework.security.core.AuthenticationException;
+
+import lombok.Getter;
 
 @Getter
 public class JwtAuthenticationException extends AuthenticationException {

@@ -1,22 +1,22 @@
 package com.Hyperfume.Backend.service.impl.Shipment;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
 import com.Hyperfume.Backend.exception.AppException;
 import com.Hyperfume.Backend.exception.ErrorCode;
-import jakarta.annotation.ManagedBean;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.*;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Service
 @Slf4j
@@ -40,7 +40,6 @@ public class ShipmentAddressService {
     @Value("${shipment.GHN.api.ward}")
     protected String getWardListApi;
 
-
     RestTemplate restTemplate = new RestTemplate();
 
     public int getProvinceId(String provinceName) {
@@ -48,10 +47,8 @@ public class ShipmentAddressService {
             HttpHeaders headers = new HttpHeaders();
             headers.set("token", token);
             HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(headers);
-            ResponseEntity<Map> response = restTemplate.exchange(getProvinceListApi,
-                    HttpMethod.GET,
-                    requestEntity,
-                    Map.class);
+            ResponseEntity<Map> response =
+                    restTemplate.exchange(getProvinceListApi, HttpMethod.GET, requestEntity, Map.class);
             if (response.getStatusCode() == HttpStatus.OK) {
                 Map<String, Object> responseMap = response.getBody();
 
@@ -78,8 +75,7 @@ public class ShipmentAddressService {
                     }
 
                     throw new AppException(ErrorCode.GHN_PROVINCE_NOT_FOUND);
-                } else
-                    throw new AppException(ErrorCode.GHN_NO_DATA_IN_RESPONSE);
+                } else throw new AppException(ErrorCode.GHN_NO_DATA_IN_RESPONSE);
 
             } else {
                 log.warn("Error response getting province ID: {}", response.getStatusCode());
@@ -102,11 +98,7 @@ public class ShipmentAddressService {
             body.put("province_id", provinceId);
 
             HttpEntity<Map<String, Integer>> requestEntity = new HttpEntity<>(body, headers);
-            ResponseEntity<Map> response = restTemplate.postForEntity(
-                    getDistrictListApi,
-                    requestEntity,
-                    Map.class
-            );
+            ResponseEntity<Map> response = restTemplate.postForEntity(getDistrictListApi, requestEntity, Map.class);
 
             if (response.getStatusCode() == HttpStatus.OK) {
                 Map<String, Object> responseMap = response.getBody();
@@ -156,11 +148,7 @@ public class ShipmentAddressService {
             body.put("district_id", districtId);
 
             HttpEntity<Map<String, Integer>> requestEntity = new HttpEntity<>(body, headers);
-            ResponseEntity<Map> response = restTemplate.postForEntity(
-                    getWardListApi,
-                    requestEntity,
-                    Map.class
-            );
+            ResponseEntity<Map> response = restTemplate.postForEntity(getWardListApi, requestEntity, Map.class);
 
             if (response.getStatusCode() == HttpStatus.OK) {
                 Map<String, Object> responseMap = response.getBody();

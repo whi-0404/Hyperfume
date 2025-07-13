@@ -1,5 +1,20 @@
 package com.Hyperfume.Backend.service.impl.Shipment;
 
+import static com.Hyperfume.Backend.util.GetIntValue.getIntValue;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
+
 import com.Hyperfume.Backend.dto.response.ShipmentResponse;
 import com.Hyperfume.Backend.entity.Order;
 import com.Hyperfume.Backend.entity.Shipment;
@@ -15,25 +30,12 @@ import com.Hyperfume.Backend.repository.ShippingAddressRepository;
 import com.Hyperfume.Backend.service.ShipmentService;
 import com.Hyperfume.Backend.service.redis.ShipmentRedisService;
 import com.Hyperfume.Backend.util.ParseAddress;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.http.*;
-
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static com.Hyperfume.Backend.util.GetIntValue.getIntValue;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -69,7 +71,6 @@ public class ShipmentServiceImpl implements ShipmentService {
     @Value("${shipment.GHN.from-address}")
     protected String fromAddressKey;
 
-
     ShipmentRepository shipmentRepository;
     ShipmentRedisService shipmentRedisService;
     ShipmentAddressService shipmentAddressService;
@@ -80,9 +81,9 @@ public class ShipmentServiceImpl implements ShipmentService {
     RestTemplate restTemplate = new RestTemplate();
 
     public ShipmentResponse getShipmentOrderInfo(int shippingAddressId, int quantity) {
-        ShippingAddress shippingAddress = shippingAddressRepository.findById(shippingAddressId)
-                .orElseThrow(() ->new AppException(ErrorCode.SHIPPING_ADDRESS_NOT_EXISTED));
-
+        ShippingAddress shippingAddress = shippingAddressRepository
+                .findById(shippingAddressId)
+                .orElseThrow(() -> new AppException(ErrorCode.SHIPPING_ADDRESS_NOT_EXISTED));
 
         Map<String, String> toAddress = ParseAddress.parseAddress(shippingAddress.getShipAddress());
         Map<String, String> fromAddress = ParseAddress.parseAddress(fromAddressKey);
@@ -103,32 +104,32 @@ public class ShipmentServiceImpl implements ShipmentService {
         int serviceId;
         String serviceName;
 
-//        if (weight <= 49000) {
-            // (≤ 49kg)
-            serviceName = "Hàng nhẹ";
-            Map<String, Object> lightService = findServiceByName(serviceList, serviceName);
-            if (lightService != null) {
-                serviceId = getIntValue(lightService.get("service_id"));
-            } else {
-                throw new IllegalStateException("Không tìm thấy dịch vụ hàng nhẹ");
-            }
-//        } else {
-//            // (> 49kg)
-//            serviceName = "Hàng nặng";
-//            Map<String, Object> heavyService = findServiceByName(serviceList, serviceName);
-//            if (heavyService != null) {
-//                serviceId = getIntValue(heavyService.get("service_id"));
-//            } else {
-//                throw new IllegalStateException("Không tìm thấy dịch vụ hàng nặng");
-//            }
-//        }
+        //        if (weight <= 49000) {
+        // (≤ 49kg)
+        serviceName = "Hàng nhẹ";
+        Map<String, Object> lightService = findServiceByName(serviceList, serviceName);
+        if (lightService != null) {
+            serviceId = getIntValue(lightService.get("service_id"));
+        } else {
+            throw new IllegalStateException("Không tìm thấy dịch vụ hàng nhẹ");
+        }
+        //        } else {
+        //            // (> 49kg)
+        //            serviceName = "Hàng nặng";
+        //            Map<String, Object> heavyService = findServiceByName(serviceList, serviceName);
+        //            if (heavyService != null) {
+        //                serviceId = getIntValue(heavyService.get("service_id"));
+        //            } else {
+        //                throw new IllegalStateException("Không tìm thấy dịch vụ hàng nặng");
+        //            }
+        //        }
 
-        LocalDate expectedDeliveryDate = getExpectedDeliveryDate(serviceId, fromDistrictId, fromWardCode,
-                toDistrictId, toWardCode, weight);
+        LocalDate expectedDeliveryDate =
+                getExpectedDeliveryDate(serviceId, fromDistrictId, fromWardCode, toDistrictId, toWardCode, weight);
 
         int fee = getFee(serviceId, fromDistrictId, fromWardCode, toDistrictId, toWardCode, weight);
 
-        ShipmentResponse response =  ShipmentResponse.builder()
+        ShipmentResponse response = ShipmentResponse.builder()
                 .serviceId(serviceId)
                 .serviceName(serviceName)
                 .fee(fee)
@@ -145,17 +146,18 @@ public class ShipmentServiceImpl implements ShipmentService {
     }
 
     public Shipment createShipment(Order order, String shipmentToken) {
-        if(order.getShipment() != null){
+        if (order.getShipment() != null) {
             return order.getShipment();
         }
 
         ShipmentResponse response = shipmentRedisService.getShipmentInfo(shipmentToken);
 
-        if(response == null){
+        if (response == null) {
             throw new AppException(ErrorCode.REDIS_SHIPMENT_INFO_NOT_FOUND);
         }
 
-        ShippingAddress shippingAddress = shippingAddressRepository.findById(response.getShippingAddressId())
+        ShippingAddress shippingAddress = shippingAddressRepository
+                .findById(response.getShippingAddressId())
                 .orElseThrow(() -> new AppException(ErrorCode.SHIPPING_ADDRESS_NOT_EXISTED));
 
         Shipment shipment = Shipment.builder()
@@ -168,28 +170,28 @@ public class ShipmentServiceImpl implements ShipmentService {
                 .fee(response.getFee())
                 .build();
 
-        //save shipment to db
+        // save shipment to db
         shipment = shipmentRepository.save(shipment);
 
-        //save order
+        // save order
         order.setShipment(shipment);
         orderRepository.save(order);
 
-        //create and save shipment tracking to db
+        // create and save shipment tracking to db
         shipmentTrackingService.createShipmentTracking(shipment);
 
-        //remove cache from redis
+        // remove cache from redis
         shipmentRedisService.deleteShipmentInfo(shipmentToken);
 
         return shipment;
     }
 
-
     @Transactional
-    public Shipment updateShipmentStatus(Shipment shipment, ShipmentStatus status, String location, String description){
+    public Shipment updateShipmentStatus(
+            Shipment shipment, ShipmentStatus status, String location, String description) {
 
         shipment.setStatus(status);
-        if(location!=null && !location.isBlank()){
+        if (location != null && !location.isBlank()) {
             shipment.setCurrentLocation(location);
         }
 
@@ -197,16 +199,19 @@ public class ShipmentServiceImpl implements ShipmentService {
 
         updateOrderStatusByShipment(shipment);
 
-        //Send Status notification
-        //...
-
+        // Send Status notification
+        // ...
 
         return shipmentRepository.save(shipment);
     }
 
-
-
-    private int getFee(Integer serviceId, int fromDistrictId, String fromWardCode, int toDistrictId, String toWardCode, int weight) {
+    private int getFee(
+            Integer serviceId,
+            int fromDistrictId,
+            String fromWardCode,
+            int toDistrictId,
+            String toWardCode,
+            int weight) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
@@ -244,7 +249,13 @@ public class ShipmentServiceImpl implements ShipmentService {
         }
     }
 
-    private LocalDate getExpectedDeliveryDate(Integer serviceId, int fromDistrictId, String fromWardCode, int toDistrictId, String toWardCode, int weight) {
+    private LocalDate getExpectedDeliveryDate(
+            Integer serviceId,
+            int fromDistrictId,
+            String fromWardCode,
+            int toDistrictId,
+            String toWardCode,
+            int weight) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
@@ -260,7 +271,8 @@ public class ShipmentServiceImpl implements ShipmentService {
             body.put("weight", weight);
 
             HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-            ResponseEntity<Map> response = restTemplate.postForEntity(getExpectedDeliveryDateApi, requestEntity, Map.class);
+            ResponseEntity<Map> response =
+                    restTemplate.postForEntity(getExpectedDeliveryDateApi, requestEntity, Map.class);
 
             if (response.getStatusCode() == HttpStatus.OK) {
                 Map<String, Object> responseMap = response.getBody();
@@ -287,7 +299,6 @@ public class ShipmentServiceImpl implements ShipmentService {
             throw new AppException(ErrorCode.GHN_FAILED_GET_EXPECTED_DELIVERY_DATE);
         }
     }
-
 
     private List<Map<String, Object>> getServiceList(int fromDistrictId, int toDistrictId) {
         try {
@@ -325,13 +336,13 @@ public class ShipmentServiceImpl implements ShipmentService {
     private void updateOrderStatusByShipment(Shipment shipment) {
         Order order = shipment.getOrder();
 
-        if(order == null){
+        if (order == null) {
             return;
         }
 
         OrderStatus newStatus = mapShipmentStatusToOrderStatus(shipment.getStatus());
 
-        if(!order.getStatus().equals(newStatus)){
+        if (!order.getStatus().equals(newStatus)) {
             order.setStatus(newStatus);
             orderRepository.save(order);
         }
@@ -346,7 +357,7 @@ public class ShipmentServiceImpl implements ShipmentService {
                 return OrderStatus.IN_TRANSIT;
             }
 
-            case DELIVERING,MONEY_COLLECT_DELIVERING -> {
+            case DELIVERING, MONEY_COLLECT_DELIVERING -> {
                 return OrderStatus.DELIVERING;
             }
             case DELIVERED -> {

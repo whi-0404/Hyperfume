@@ -28,10 +28,7 @@ public class CartController {
     @PostMapping
     public ApiResponse<String> addCart(@RequestBody @Valid CartRequest request) {
         cartService.addToCart(request);
-        return ApiResponse
-                .<String>builder()
-                .result("Successful !!")
-                .build();
+        return ApiResponse.<String>builder().result("Successful !!").build();
     }
 
     @GetMapping

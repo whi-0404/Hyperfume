@@ -1,9 +1,9 @@
 package com.Hyperfume.Backend.dto.response;
 
+import java.math.BigDecimal;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.math.BigDecimal;
 
 @Data
 @Builder
@@ -28,5 +28,4 @@ public class FlashSaleItemResponse {
     int quantitySold;
 
     double specialDiscountPercentage;
-
 }

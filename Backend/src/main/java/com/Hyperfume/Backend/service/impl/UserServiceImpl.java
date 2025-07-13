@@ -1,11 +1,8 @@
 package com.Hyperfume.Backend.service.impl;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.Hyperfume.Backend.dto.response.PageResponse;
-import com.Hyperfume.Backend.dto.response.PerfumeGetAllResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.Hyperfume.Backend.dto.request.UserCreationRequest;
 import com.Hyperfume.Backend.dto.request.UserUpdateRequest;
-import com.Hyperfume.Backend.dto.response.PerfumeResponse;
+import com.Hyperfume.Backend.dto.response.PageResponse;
+import com.Hyperfume.Backend.dto.response.PerfumeGetAllResponse;
 import com.Hyperfume.Backend.dto.response.UserResponse;
 import com.Hyperfume.Backend.entity.Perfume;
 import com.Hyperfume.Backend.entity.Role;
@@ -141,7 +139,7 @@ public class UserServiceImpl implements UserService {
                 .findById(perfumeId)
                 .orElseThrow(() -> new AppException(ErrorCode.PERFUME_NOT_EXISTED));
 
-        if(!user.getFavoritePerfumes().contains(perfume)){
+        if (!user.getFavoritePerfumes().contains(perfume)) {
             throw new AppException(ErrorCode.PERFUME_NOT_IN_FAVORITES);
         }
 
@@ -168,7 +166,7 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    public boolean isPerfumeInFavorites(Integer perfumeId){
+    public boolean isPerfumeInFavorites(Integer perfumeId) {
         var context = SecurityContextHolder.getContext();
         String username = context.getAuthentication().getName();
 

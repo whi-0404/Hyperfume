@@ -3,7 +3,11 @@ package com.Hyperfume.Backend.mapper.impl;
 import static java.util.Collections.max;
 import static java.util.Collections.min;
 
+import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
@@ -17,6 +21,7 @@ import com.Hyperfume.Backend.entity.*;
 import com.Hyperfume.Backend.exception.AppException;
 import com.Hyperfume.Backend.exception.ErrorCode;
 import com.Hyperfume.Backend.mapper.PerfumeMapper;
+import com.Hyperfume.Backend.mapper.impl.utils.PerfumeVariantUtil;
 import com.Hyperfume.Backend.repository.PerfumeImageRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -29,6 +34,7 @@ public class PerfumeMapperImpl implements PerfumeMapper {
     private final PerfumeVariantMapperImpl perfumeVariantMapper;
     private final PerfumeImageMapperImpl perfumeImageMapper;
     private final PerfumeImageRepository perfumeImageRepository;
+    private final PerfumeVariantUtil perfumeVariantUtil;
 
     public PerfumeResponse toResponse(Perfume perfume) {
         if (perfume == null) {
@@ -82,11 +88,23 @@ public class PerfumeMapperImpl implements PerfumeMapper {
             perfumeGetAllResponse.longevity(perfume.getLongevity());
             perfumeGetAllResponse.sale(perfume.isSale());
             perfumeGetAllResponse.flash_sale(perfume.isFlash_sale());
-            perfumeGetAllResponse.discount(perfume.getDiscount());
-            perfumeGetAllResponse.max_price(max(
-                    perfume.getVariants().stream().map(PerfumeVariant::getPrice).toList()));
-            perfumeGetAllResponse.min_price(min(
-                    perfume.getVariants().stream().map(PerfumeVariant::getPrice).toList()));
+            perfumeGetAllResponse.discountNormalSale(perfume.getDiscount());
+
+            Map<String, Object> finalMaxVariant = perfumeVariantUtil.calculateFinalPrice(Objects.requireNonNull(perfume.getVariants().stream()
+                    .max(Comparator.comparing(PerfumeVariant::getPrice))
+                    .orElse(null)));
+
+            BigDecimal finalMinPrice = (BigDecimal) perfumeVariantUtil.calculateFinalPrice(Objects.requireNonNull(perfume.getVariants().stream()
+                    .min(Comparator.comparing(PerfumeVariant::getPrice))
+                    .orElse(null))).get("finalPrice");
+
+
+            perfumeGetAllResponse.final_max_price((BigDecimal) finalMaxVariant.get("finalPrice"));
+            perfumeGetAllResponse.final_min_price(finalMinPrice);
+
+
+            perfumeGetAllResponse.discountFlashSale(perfume.isFlash_sale() ? (Double) finalMaxVariant.get("discountPercent") : 0.0);
+
             perfumeGetAllResponse.ThumbnailImageUrl(perfumeImageRepository
                     .findByPerfumeIdAndIsThumbnailTrue(perfume.getId())
                     .orElseThrow(() -> new AppException(ErrorCode.THUMBNAIL_NOT_FOUND))

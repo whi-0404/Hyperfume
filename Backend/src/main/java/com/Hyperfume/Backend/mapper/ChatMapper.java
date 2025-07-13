@@ -1,5 +1,8 @@
 package com.Hyperfume.Backend.mapper;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
 import com.Hyperfume.Backend.dto.request.ChatMessageRequest;
 import com.Hyperfume.Backend.dto.response.ChatMessageResponse;
 import com.Hyperfume.Backend.dto.response.ChatRoomDashboard;
@@ -7,8 +10,6 @@ import com.Hyperfume.Backend.dto.response.ChatRoomResponse;
 import com.Hyperfume.Backend.entity.ChatMessage;
 import com.Hyperfume.Backend.entity.ChatRoom;
 import com.Hyperfume.Backend.entity.User;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface ChatMapper {
@@ -27,10 +28,8 @@ public interface ChatMapper {
 
     ChatRoomResponse toChatRoomResponse(ChatRoom chatRoom);
 
-    default ChatRoomDashboard toChatRoomDashboard(ChatRoom chatRoom,
-                                                  ChatMessage lastMessage,
-                                                  int unreadCount,
-                                                  boolean isOnline) {
+    default ChatRoomDashboard toChatRoomDashboard(
+            ChatRoom chatRoom, ChatMessage lastMessage, int unreadCount, boolean isOnline) {
         return ChatRoomDashboard.builder()
                 .id(chatRoom.getId())
                 .username(chatRoom.getUser().getUsername())

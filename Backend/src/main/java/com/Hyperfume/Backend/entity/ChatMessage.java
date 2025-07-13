@@ -1,12 +1,13 @@
 package com.Hyperfume.Backend.entity;
 
-import com.Hyperfume.Backend.enums.MessageType;
-import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.time.LocalDateTime;
 
+import jakarta.persistence.*;
+
+import com.Hyperfume.Backend.enums.MessageType;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Data

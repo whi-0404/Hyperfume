@@ -22,8 +22,7 @@ public class ParseAddress {
         // Ưu tiên lấy tỉnh từ phần cuối
         for (int i = cleanedParts.size() - 1; i >= 0; i--) {
             String part = cleanedParts.get(i);
-            if (addressComponents.get("province").isEmpty() &&
-                    part.matches("(?i).*(Tỉnh|Thành phố|TP).*")) {
+            if (addressComponents.get("province").isEmpty() && part.matches("(?i).*(Tỉnh|Thành phố|TP).*")) {
                 addressComponents.put("province", part);
                 cleanedParts.remove(i);
                 break;
@@ -33,8 +32,8 @@ public class ParseAddress {
         // Tìm quận/huyện/thành phố cấp huyện
         for (int i = cleanedParts.size() - 1; i >= 0; i--) {
             String part = cleanedParts.get(i);
-            if (addressComponents.get("district").isEmpty() &&
-                    part.matches("(?i).*(Quận|Huyện|Thị xã|Thành phố|TP).*")) {
+            if (addressComponents.get("district").isEmpty()
+                    && part.matches("(?i).*(Quận|Huyện|Thị xã|Thành phố|TP).*")) {
                 addressComponents.put("district", part);
                 cleanedParts.remove(i);
                 break;
@@ -44,8 +43,7 @@ public class ParseAddress {
         // Tìm phường/xã/thị trấn
         for (int i = 0; i < cleanedParts.size(); i++) {
             String part = cleanedParts.get(i);
-            if (addressComponents.get("ward").isEmpty() &&
-                    part.matches("(?i).*(Phường|Xã|Thị trấn).*")) {
+            if (addressComponents.get("ward").isEmpty() && part.matches("(?i).*(Phường|Xã|Thị trấn).*")) {
                 addressComponents.put("ward", part);
                 cleanedParts.remove(i);
                 break;
@@ -58,5 +56,4 @@ public class ParseAddress {
 
         return addressComponents;
     }
-
 }

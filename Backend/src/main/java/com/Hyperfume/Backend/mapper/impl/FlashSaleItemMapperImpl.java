@@ -1,5 +1,12 @@
 package com.Hyperfume.Backend.mapper.impl;
 
+import static java.util.Collections.min;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+import org.springframework.stereotype.Component;
+
 import com.Hyperfume.Backend.dto.request.FlashSaleItemRequest;
 import com.Hyperfume.Backend.dto.response.FlashSaleItemResponse;
 import com.Hyperfume.Backend.entity.*;
@@ -7,13 +14,8 @@ import com.Hyperfume.Backend.exception.AppException;
 import com.Hyperfume.Backend.exception.ErrorCode;
 import com.Hyperfume.Backend.mapper.FlashSaleItemMapper;
 import com.Hyperfume.Backend.repository.PerfumeImageRepository;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
-import static java.util.Collections.min;
 
 @Component
 @RequiredArgsConstructor
@@ -37,8 +39,7 @@ public class FlashSaleItemMapperImpl implements FlashSaleItemMapper {
 
     @Override
     public FlashSaleItemResponse toResponse(FlashSaleItem flashSaleItem) {
-        if(flashSaleItem == null)
-            return null;
+        if (flashSaleItem == null) return null;
 
         Perfume perfume = flashSaleItem.getPerfume();
 
@@ -49,33 +50,35 @@ public class FlashSaleItemMapperImpl implements FlashSaleItemMapper {
                 : BigDecimal.valueOf(flashSaleItem.getFlashSale().getDiscountPercentage());
 
         BigDecimal hundred = new BigDecimal("100");
-        BigDecimal discountFactor = BigDecimal.ONE.subtract(discountPercentage.divide(hundred, 10, RoundingMode.HALF_UP));
+        BigDecimal discountFactor =
+                BigDecimal.ONE.subtract(discountPercentage.divide(hundred, 10, RoundingMode.HALF_UP));
         BigDecimal discountedPrice = originalMinPrice.multiply(discountFactor);
 
         return FlashSaleItemResponse.builder()
                 .id(flashSaleItem.getId())
                 .perfumeId(perfume.getId())
                 .perfumeName(perfume.getName())
-                .perfumeImage((perfumeImageRepository.findByPerfumeIdAndIsThumbnailTrue(perfume.getId())
-                        .orElseThrow(()-> new AppException(ErrorCode.THUMBNAIL_NOT_FOUND))).getImageUrl())
+                .perfumeImage((perfumeImageRepository
+                                .findByPerfumeIdAndIsThumbnailTrue(perfume.getId())
+                                .orElseThrow(() -> new AppException(ErrorCode.THUMBNAIL_NOT_FOUND)))
+                        .getImageUrl())
                 .originalMinPrice(originalMinPrice)
                 .discountedPrice(discountedPrice)
                 .quantityLimit(flashSaleItem.getQuantityLimit())
                 .quantitySold(flashSaleItem.getQuantitySold())
-                .specialDiscountPercentage(flashSaleItem.getSpecialDiscountPercentage() != null
-                        ? flashSaleItem.getSpecialDiscountPercentage()
-                        : flashSaleItem.getFlashSale().getDiscountPercentage())
+                .specialDiscountPercentage(
+                        flashSaleItem.getSpecialDiscountPercentage() != null
+                                ? flashSaleItem.getSpecialDiscountPercentage()
+                                : flashSaleItem.getFlashSale().getDiscountPercentage())
                 .build();
     }
 
-//    @Override
-//    public void updateEntity(FlashSaleItem flashSaleItem, FlashSaleItemRequest request) {
-//
-//    }
+    //    @Override
+    //    public void updateEntity(FlashSaleItem flashSaleItem, FlashSaleItemRequest request) {
+    //
+    //    }
 
     private BigDecimal getMinPrice(Perfume perfume) {
-        return min(perfume.getVariants().stream()
-                .map(PerfumeVariant::getPrice)
-                .toList());
+        return min(perfume.getVariants().stream().map(PerfumeVariant::getPrice).toList());
     }
 }

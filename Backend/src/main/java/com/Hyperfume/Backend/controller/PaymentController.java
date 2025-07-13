@@ -1,18 +1,21 @@
 package com.Hyperfume.Backend.controller;
 
-import com.Hyperfume.Backend.dto.response.ApiResponse;
-import com.Hyperfume.Backend.service.VNPayService;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
-
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+import org.springframework.web.bind.annotation.*;
+
+import com.Hyperfume.Backend.dto.response.ApiResponse;
+import com.Hyperfume.Backend.service.VNPayService;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/payment")
@@ -23,12 +26,10 @@ public class PaymentController {
     VNPayService vnPayService;
 
     @PostMapping("/create-payment")
-    public ApiResponse<String> createPayment(@RequestParam int orderId, HttpServletRequest request){
+    public ApiResponse<String> createPayment(@RequestParam int orderId, HttpServletRequest request) {
         String paymentUrl = vnPayService.createPaymentUrl(orderId, request);
 
-        return ApiResponse.<String>builder()
-                .result(paymentUrl)
-                .build();
+        return ApiResponse.<String>builder().result(paymentUrl).build();
     }
 
     @GetMapping("/vnpay-callback")
@@ -47,7 +48,7 @@ public class PaymentController {
         boolean success = vnPayService.processPaymentCallback(fields);
 
         return ApiResponse.<String>builder()
-                .result(success ? "successful": "failed")
+                .result(success ? "successful" : "failed")
                 .build();
     }
 }

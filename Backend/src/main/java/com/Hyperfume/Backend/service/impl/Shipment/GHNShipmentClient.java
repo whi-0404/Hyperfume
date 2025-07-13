@@ -1,5 +1,21 @@
 package com.Hyperfume.Backend.service.impl.Shipment;
 
+import static com.Hyperfume.Backend.util.GetIntValue.getIntValue;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
 import com.Hyperfume.Backend.dto.GHNCreateOrderRequest;
 import com.Hyperfume.Backend.dto.GHNWebhookDTO;
 import com.Hyperfume.Backend.entity.OrderItem;
@@ -10,33 +26,18 @@ import com.Hyperfume.Backend.enums.ShipmentStatus;
 import com.Hyperfume.Backend.exception.AppException;
 import com.Hyperfume.Backend.exception.ErrorCode;
 import com.Hyperfume.Backend.repository.OrderItemRepository;
-import com.Hyperfume.Backend.repository.OrderRepository;
 import com.Hyperfume.Backend.repository.ShipmentRepository;
 import com.Hyperfume.Backend.repository.ShippingAddressRepository;
 import com.Hyperfume.Backend.service.OrderService;
 import com.Hyperfume.Backend.service.ShipmentService;
 import com.Hyperfume.Backend.service.ShipmentTrackingService;
 import com.Hyperfume.Backend.util.ParseAddress;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.http.*;
-
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static com.Hyperfume.Backend.util.GetIntValue.getIntValue;
 
 @Service
 @Slf4j
@@ -44,6 +45,7 @@ import static com.Hyperfume.Backend.util.GetIntValue.getIntValue;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class GHNShipmentClient {
     private final ShipmentService shipmentService;
+
     @NonFinal
     @Value("${shipment.GHN.token}")
     protected String token;
@@ -89,13 +91,12 @@ public class GHNShipmentClient {
 
             Map<String, String> toAddress = ParseAddress.parseAddress(shippingAddress.getShipAddress());
 
-
             HttpHeaders headers = new HttpHeaders();
             headers.set("token", token);
             headers.set("ShopId", String.valueOf(shopId));
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-            //from Address Info
+            // from Address Info
             Map<String, String> fromAddress = ParseAddress.parseAddress(fromAddressKey);
 
             Map<String, Object> requestBody = new HashMap<>();
@@ -112,28 +113,29 @@ public class GHNShipmentClient {
             requestBody.put("to_ward_name", toAddress.get("ward"));
             requestBody.put("to_district_name", toAddress.get("district"));
             requestBody.put("to_province_name", toAddress.get("province"));
-//            requestBody.put("to_ward_name", "Bến Thành");
-//            requestBody.put("to_district_name", "Quận 1");
-//            requestBody.put("to_province_name","TP Hồ Chí Minh");
+            //            requestBody.put("to_ward_name", "Bến Thành");
+            //            requestBody.put("to_district_name", "Quận 1");
+            //            requestBody.put("to_province_name","TP Hồ Chí Minh");
             requestBody.put("service_type_id", 2);
             requestBody.put("length", request.getLength());
             requestBody.put("width", request.getWidth());
             requestBody.put("height", request.getHeight());
             requestBody.put("weight", request.getWeight());
             requestBody.put("payment_type_id", request.getPaymentTypeId() != null ? request.getPaymentTypeId() : 1);
-            requestBody.put("required_note", request.getRequiredNote() != null ? request.getRequiredNote() : "CHOXEMHANGKHONGTHU");
-
+            requestBody.put(
+                    "required_note",
+                    request.getRequiredNote() != null ? request.getRequiredNote() : "CHOXEMHANGKHONGTHU");
 
             List<Map<String, Object>> items = new java.util.ArrayList<>();
 
             log.info("Order items: {}", orderItems);
 
-            for(OrderItem item : orderItems) {
+            for (OrderItem item : orderItems) {
                 Map<String, Object> itemMap = new HashMap<>();
 
                 itemMap.put("name", item.getPerfumeVariant().getName());
                 itemMap.put("quantity", item.getQuantity());
-                itemMap.put("price",  item.getPerfumeVariant().getPrice().intValue());
+                itemMap.put("price", item.getPerfumeVariant().getPrice().intValue());
                 itemMap.put("code", String.valueOf(item.getPerfumeVariant().getId()));
                 itemMap.put("length", 10);
                 itemMap.put("width", 10);
@@ -147,11 +149,7 @@ public class GHNShipmentClient {
 
             HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
 
-            ResponseEntity<Map> response = restTemplate.postForEntity(
-                    createOrderApi,
-                    requestEntity,
-                    Map.class
-            );
+            ResponseEntity<Map> response = restTemplate.postForEntity(createOrderApi, requestEntity, Map.class);
 
             if (response.getStatusCode() == HttpStatus.OK) {
                 Map responseBody = response.getBody();
@@ -159,13 +157,14 @@ public class GHNShipmentClient {
                 if (responseBody != null && responseBody.containsKey("data")) {
                     Map<String, Object> data = (Map<String, Object>) responseBody.get("data");
 
-                    Shipment shipment = shipmentRepository.findByOrderId(request.getOrderId())
-                            .orElseThrow(()-> new AppException(ErrorCode.SHIPMENT_NOT_EXISTED));
+                    Shipment shipment = shipmentRepository
+                            .findByOrderId(request.getOrderId())
+                            .orElseThrow(() -> new AppException(ErrorCode.SHIPMENT_NOT_EXISTED));
 
                     shipment.setShippingCode((String) data.get("order_code"));
                     shipment.setFee(getIntValue(data.get("total_fee")));
 
-                    String timestamp = (String)(data.get("expected_delivery_time"));
+                    String timestamp = (String) (data.get("expected_delivery_time"));
 
                     LocalDate expectedDate = Instant.parse(timestamp)
                             .atZone(ZoneId.of("Asia/Ho_Chi_Minh"))
@@ -201,15 +200,11 @@ public class GHNShipmentClient {
             headers.setContentType(MediaType.APPLICATION_JSON);
 
             Map<String, Object> requestBody = new HashMap<>();
-            requestBody.put("order_codes", new String[]{orderCode});
+            requestBody.put("order_codes", new String[] {orderCode});
 
             HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
 
-            ResponseEntity<Map> response = restTemplate.postForEntity(
-                    cancelOrderApi,
-                    requestEntity,
-                    Map.class
-            );
+            ResponseEntity<Map> response = restTemplate.postForEntity(cancelOrderApi, requestEntity, Map.class);
 
             if (response.getStatusCode() == HttpStatus.OK) {
                 Map<String, Object> responseBody = response.getBody();
@@ -234,11 +229,7 @@ public class GHNShipmentClient {
 
             HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
 
-            ResponseEntity<Map> response = restTemplate.postForEntity(
-                    trackingApi,
-                    requestEntity,
-                    Map.class
-            );
+            ResponseEntity<Map> response = restTemplate.postForEntity(trackingApi, requestEntity, Map.class);
 
             if (response.getStatusCode() == HttpStatus.OK) {
                 Map<String, Object> responseBody = response.getBody();
@@ -248,24 +239,33 @@ public class GHNShipmentClient {
 
                     GHNWebhookDTO trackingResponse = GHNWebhookDTO.builder()
                             .orderCode(orderCode)
-                            .status(data.get("Status") != null ? data.get("Status").toString() : null)
-                            .description(data.get("Description") != null ? data.get("Description").toString() : null)
-                            .wareHouse(data.get("Warehouse") != null ? data.get("Warehouse").toString() : null)
-                            .time(data.get("Time") != null ?
-                                    LocalDateTime.ofInstant(Instant.parse(data.get("Time").toString()), ZoneId.of("Asia/Ho_Chi_Minh"))
-                                    : null)
+                            .status(
+                                    data.get("Status") != null
+                                            ? data.get("Status").toString()
+                                            : null)
+                            .description(
+                                    data.get("Description") != null
+                                            ? data.get("Description").toString()
+                                            : null)
+                            .wareHouse(
+                                    data.get("Warehouse") != null
+                                            ? data.get("Warehouse").toString()
+                                            : null)
+                            .time(
+                                    data.get("Time") != null
+                                            ? LocalDateTime.ofInstant(
+                                                    Instant.parse(
+                                                            data.get("Time").toString()),
+                                                    ZoneId.of("Asia/Ho_Chi_Minh"))
+                                            : null)
                             .build();
 
                     return trackingResponse;
-                }
-                else throw new AppException(ErrorCode.GHN_NO_DATA_IN_RESPONSE);
-            }
-            else throw new AppException(ErrorCode.GHN_RETURNED_ERROR);
-        }
-        catch (AppException e) {
+                } else throw new AppException(ErrorCode.GHN_NO_DATA_IN_RESPONSE);
+            } else throw new AppException(ErrorCode.GHN_RETURNED_ERROR);
+        } catch (AppException e) {
             throw e;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new AppException(ErrorCode.GHN_FAILED_GET_ORDER_STATUS);
         }
     }
@@ -279,15 +279,11 @@ public class GHNShipmentClient {
 
             Map<String, Object> requestBody = new HashMap<>();
 
-            requestBody.put("order_codes", new String[]{orderCode});
+            requestBody.put("order_codes", new String[] {orderCode});
 
             HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
 
-            ResponseEntity<Map> response = restTemplate.postForEntity(
-                    returnOrderApi,
-                    requestEntity,
-                    Map.class
-            );
+            ResponseEntity<Map> response = restTemplate.postForEntity(returnOrderApi, requestEntity, Map.class);
 
             if (response.getStatusCode() == HttpStatus.OK) {
                 Map<String, Object> responseBody = response.getBody();
@@ -297,9 +293,7 @@ public class GHNShipmentClient {
                 }
             }
             return false;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new AppException(ErrorCode.GHN_FAILED_RETURN_ORDER);
         }
     }

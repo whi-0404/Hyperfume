@@ -1,9 +1,10 @@
 package com.Hyperfume.Backend.mapper;
 
-import com.Hyperfume.Backend.dto.response.ShipmentResponse;
-import com.Hyperfume.Backend.entity.Shipment;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import com.Hyperfume.Backend.dto.response.ShipmentResponse;
+import com.Hyperfume.Backend.entity.Shipment;
 
 @Mapper(componentModel = "spring")
 public interface ShipmentMapper {

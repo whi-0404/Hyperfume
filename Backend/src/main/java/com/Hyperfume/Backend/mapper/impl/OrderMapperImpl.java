@@ -5,6 +5,8 @@
 
 package com.Hyperfume.Backend.mapper.impl;
 
+import org.springframework.stereotype.Component;
+
 import com.Hyperfume.Backend.dto.request.order.OrderRequest;
 import com.Hyperfume.Backend.dto.response.OrderResponse;
 import com.Hyperfume.Backend.dto.response.ShipmentResponse;
@@ -13,7 +15,6 @@ import com.Hyperfume.Backend.entity.PaymentMethod;
 import com.Hyperfume.Backend.entity.Shipment;
 import com.Hyperfume.Backend.entity.User;
 import com.Hyperfume.Backend.mapper.OrderMapper;
-import org.springframework.stereotype.Component;
 
 @Component
 public class OrderMapperImpl implements OrderMapper {

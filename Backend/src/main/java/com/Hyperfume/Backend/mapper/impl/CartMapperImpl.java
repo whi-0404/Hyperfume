@@ -10,7 +10,7 @@ import com.Hyperfume.Backend.entity.*;
 import com.Hyperfume.Backend.exception.AppException;
 import com.Hyperfume.Backend.exception.ErrorCode;
 import com.Hyperfume.Backend.mapper.CartMapper;
-import com.Hyperfume.Backend.mapper.impl.utils.CartUtil;
+import com.Hyperfume.Backend.mapper.impl.utils.PerfumeVariantUtil;
 import com.Hyperfume.Backend.repository.PerfumeImageRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class CartMapperImpl implements CartMapper {
-    private final CartUtil cartUtil;
+    private final PerfumeVariantUtil perfumeVariantUtil;
     private final PerfumeImageRepository perfumeImageRepository;
 
     @Override
@@ -46,7 +46,9 @@ public class CartMapperImpl implements CartMapper {
             cartResponse.price(this.cartPerfumeVariantPrice(cart));
             cartResponse.discount(this.cartPerfumeVariantDiscount(cart));
             cartResponse.quantity(cart.getQuantity());
-            cartResponse.totalPrice(cartUtil.calculateTotalPrice(cart));
+            cartResponse.totalPrice(((BigDecimal) perfumeVariantUtil
+                    .calculateFinalPrice(cart.getPerfumeVariant()).get("finalPrice"))
+                    .multiply(BigDecimal.valueOf(cart.getQuantity())));
             cartResponse.imageUrl(this.CartImageData(cart));
             cartResponse.perfumeName(this.cartPerfumeName(cart));
             return cartResponse.build();

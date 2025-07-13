@@ -1,13 +1,13 @@
 package com.Hyperfume.Backend.entity;
 
-import com.Hyperfume.Backend.enums.NotificationType;
-import com.Hyperfume.Backend.enums.OrderStatus;
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
+
+import com.Hyperfume.Backend.enums.NotificationType;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -36,12 +36,11 @@ public class Notification {
     @JoinColumn(name = "is_read")
     boolean isRead;
 
-//    @JoinColumn(name = "redirect_url")
-//    String redirectUrl;
+    //    @JoinColumn(name = "redirect_url")
+    //    String redirectUrl;
 
     @Column(name = "created_at")
     LocalDateTime createdAt;
-
 
     @PrePersist
     protected void onCreate() {

@@ -46,7 +46,7 @@ public class CartServiceImpl implements CartService {
                 .findById(request.getVariantId())
                 .orElseThrow(() -> new AppException(ErrorCode.VARIANT_NOT_FOUND));
 
-        if(cartRepository.existedByUserIdAndVariantId(user.getId(), variant.getId())){
+        if (cartRepository.existedByUserIdAndVariantId(user.getId(), variant.getId())) {
             throw new AppException(ErrorCode.VARIANT_ALREADY_IN_CART);
         }
 

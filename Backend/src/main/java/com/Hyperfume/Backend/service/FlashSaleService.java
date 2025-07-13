@@ -3,6 +3,7 @@ package com.Hyperfume.Backend.service;
 import com.Hyperfume.Backend.dto.request.FlashSaleRequest;
 import com.Hyperfume.Backend.dto.response.FlashSaleResponse;
 import com.Hyperfume.Backend.dto.response.PageResponse;
+import com.Hyperfume.Backend.entity.FlashSale;
 
 public interface FlashSaleService {
     FlashSaleResponse getActiveFlashSale();
@@ -11,7 +12,7 @@ public interface FlashSaleService {
 
     PageResponse<FlashSaleResponse> getPastFlashSales(int page, int size);
 
-    PageResponse<FlashSaleResponse> getInactiveCurrentFlashSales(int page, int size);
+    //    PageResponse<FlashSaleResponse> getInactiveCurrentFlashSales(int page, int size);
 
     FlashSaleResponse getFlashSaleById(int flashSaleId);
 
@@ -25,7 +26,15 @@ public interface FlashSaleService {
 
     FlashSaleResponse removePerfumeFromFlashSale(int flashSaleId, int flashSaleItemId);
 
-//    boolean updateSoldQuantity(int flashSaleItemId, int quantitySold);
+    void scheduledFlashSale();
 
-//    boolean incrementSoldQuantity(int flashSaleItemId);
+    boolean incrementFlashSaleItemSold(int flashSaleItemId, int quantity);
+
+    void activateFlashSale(FlashSale flashSale);
+
+    void deactivateFlashSale(FlashSale flashSale);
+
+    //    boolean updateSoldQuantity(int flashSaleItemId, int quantitySold);
+
+    //    boolean incrementSoldQuantity(int flashSaleItemId);
 }

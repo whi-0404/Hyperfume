@@ -1,15 +1,15 @@
 package com.Hyperfume.Backend.entity;
 
-import com.Hyperfume.Backend.enums.ShipmentStatus;
-import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-import org.springframework.cglib.core.Local;
-
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import jakarta.persistence.*;
+
+import com.Hyperfume.Backend.enums.ShipmentStatus;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Data
@@ -49,7 +49,7 @@ public class Shipment {
 
     @Column(name = "current_location", columnDefinition = "TEXT")
     String currentLocation;
-    
+
     @Column(name = "last_updated")
     LocalDateTime time;
 
@@ -59,13 +59,12 @@ public class Shipment {
 
     @OneToOne(mappedBy = "shipment")
     Order order;
-    
+
     @OneToMany(mappedBy = "shipment", cascade = CascadeType.ALL)
     List<ShipmentTracking> trackingHistory;
-    
+
     @PrePersist
     protected void onCreate() {
         this.status = ShipmentStatus.SHIPMENT_PENDING;
     }
-
 }

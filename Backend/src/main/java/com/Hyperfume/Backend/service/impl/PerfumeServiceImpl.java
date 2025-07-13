@@ -1,15 +1,16 @@
 package com.Hyperfume.Backend.service.impl;
 
-import com.Hyperfume.Backend.ElasticSearch.ESPerfumeService;
+import java.io.IOException;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.Hyperfume.Backend.ElasticSearch.ESPerfumeService;
 import com.Hyperfume.Backend.dto.request.PerfumeRequest;
 import com.Hyperfume.Backend.dto.response.PageResponse;
 import com.Hyperfume.Backend.dto.response.PerfumeGetAllResponse;
@@ -18,20 +19,13 @@ import com.Hyperfume.Backend.entity.*;
 import com.Hyperfume.Backend.exception.AppException;
 import com.Hyperfume.Backend.exception.ErrorCode;
 import com.Hyperfume.Backend.mapper.PerfumeMapper;
-import com.Hyperfume.Backend.repository.BrandRepository;
-import com.Hyperfume.Backend.repository.CountryRepository;
-import com.Hyperfume.Backend.repository.PerfumeRepository;
-import com.Hyperfume.Backend.repository.ScrentFamilyRepository;
-import com.Hyperfume.Backend.repository.specification.PerfumeSpecification;
+import com.Hyperfume.Backend.repository.*;
 import com.Hyperfume.Backend.service.PerfumeService;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-
-import java.io.IOException;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -45,36 +39,37 @@ public class PerfumeServiceImpl implements PerfumeService {
     CountryRepository countryRepository;
     ESPerfumeService esPerfumeService;
     PerfumeMapper perfumeMapper;
+    FlashSaleRepository flashSaleRepository;
 
     // Lấy danh sách nước hoa
-//    public PageResponse<PerfumeGetAllResponse> getAllPerfumes(
-//            int page,
-//            int size,
-//            String sortOption,
-//            String gender,
-//            String longevity,
-//            Integer countryId,
-//            Integer brandId,
-//            String concentration,
-//            Integer screntFamilyId,
-//            Long maxPrice) {
-//
-//        Pageable pageable = PageRequest.of(page - 1, size);
-//
-//        Specification<Perfume> spec = PerfumeSpecification.getSpecifications(
-//                gender, longevity, countryId, brandId, concentration, screntFamilyId, maxPrice, sortOption);
-//
-//        Page<Perfume> pageData = perfumeRepository.findAll(spec, pageable);
-//
-//        return PageResponse.<PerfumeGetAllResponse>builder()
-//                .pageSize(pageData.getSize())
-//                .totalPages(pageData.getTotalPages())
-//                .totalElements(pageData.getTotalElements())
-//                .Data(pageData.getContent().stream()
-//                        .map(perfumeMapper::toGetAllPerfumeResponse)
-//                        .toList())
-//                .build();
-//    }
+    //    public PageResponse<PerfumeGetAllResponse> getAllPerfumes(
+    //            int page,
+    //            int size,
+    //            String sortOption,
+    //            String gender,
+    //            String longevity,
+    //            Integer countryId,
+    //            Integer brandId,
+    //            String concentration,
+    //            Integer screntFamilyId,
+    //            Long maxPrice) {
+    //
+    //        Pageable pageable = PageRequest.of(page - 1, size);
+    //
+    //        Specification<Perfume> spec = PerfumeSpecification.getSpecifications(
+    //                gender, longevity, countryId, brandId, concentration, screntFamilyId, maxPrice, sortOption);
+    //
+    //        Page<Perfume> pageData = perfumeRepository.findAll(spec, pageable);
+    //
+    //        return PageResponse.<PerfumeGetAllResponse>builder()
+    //                .pageSize(pageData.getSize())
+    //                .totalPages(pageData.getTotalPages())
+    //                .totalElements(pageData.getTotalElements())
+    //                .Data(pageData.getContent().stream()
+    //                        .map(perfumeMapper::toGetAllPerfumeResponse)
+    //                        .toList())
+    //                .build();
+    //    }
 
     public PageResponse<PerfumeGetAllResponse> getAllPerfumes(
             int page,
@@ -86,7 +81,8 @@ public class PerfumeServiceImpl implements PerfumeService {
             String brandName,
             String concentration,
             String screntFamilyName,
-            Long maxPrice) throws IOException {
+            Long maxPrice)
+            throws IOException {
         return esPerfumeService.advancedSearch(
                 page,
                 size,
@@ -101,13 +97,11 @@ public class PerfumeServiceImpl implements PerfumeService {
                 null);
     }
 
-
     public PerfumeResponse getPerfumeById(int id) {
         Perfume perfume =
                 perfumeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.PERFUME_NOT_EXISTED));
         return perfumeMapper.toResponse(perfume);
     }
-
 
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
@@ -127,8 +121,8 @@ public class PerfumeServiceImpl implements PerfumeService {
 
         esPerfumeService.indexPerfume(perfume);
 
-//        List<Perfume> perfumeList = perfumeRepository.findAll();
-//        esPerfumeService.indexPerfumes(perfumeList);
+        //        List<Perfume> perfumeList = perfumeRepository.findAll();
+        //        esPerfumeService.indexPerfumes(perfumeList);
 
         return perfumeMapper.toResponse(perfume);
     }
@@ -189,7 +183,8 @@ public class PerfumeServiceImpl implements PerfumeService {
 
         perfumeRepository.updateFlashSaleStatus(perfumeId, isFlashSale);
 
-        Perfume perfume = perfumeRepository.findById(perfumeId)
+        Perfume perfume = perfumeRepository
+                .findById(perfumeId)
                 .orElseThrow(() -> new AppException(ErrorCode.PERFUME_NOT_EXISTED));
         esPerfumeService.indexPerfume(perfume);
     }
@@ -285,7 +280,8 @@ public class PerfumeServiceImpl implements PerfumeService {
     }
 
     public PageResponse<PerfumeGetAllResponse> searchPerfumesByNameAndDescription(String name, int page, int size) {
-        PageResponse<PerfumeGetAllResponse> searchResults = esPerfumeService.searchByNameAndDescription(name, page, size);
+        PageResponse<PerfumeGetAllResponse> searchResults =
+                esPerfumeService.searchByNameAndDescription(name, page, size);
 
         if (searchResults.getData().isEmpty()) {
             throw new AppException(ErrorCode.NO_FOUND_BY_SEARCH_NAME);

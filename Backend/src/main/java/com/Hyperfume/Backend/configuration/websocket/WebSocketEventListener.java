@@ -1,7 +1,5 @@
 package com.Hyperfume.Backend.configuration.websocket;
 
-import com.Hyperfume.Backend.service.redis.ChatRedisService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -9,6 +7,10 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
+
+import com.Hyperfume.Backend.service.redis.ChatRedisService;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j

@@ -1,17 +1,20 @@
 package com.Hyperfume.Backend.controller;
 
+import jakarta.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
 import com.Hyperfume.Backend.dto.request.FlashSaleRequest;
 import com.Hyperfume.Backend.dto.response.ApiResponse;
 import com.Hyperfume.Backend.dto.response.FlashSaleResponse;
 import com.Hyperfume.Backend.dto.response.PageResponse;
 import com.Hyperfume.Backend.service.FlashSaleService;
-import jakarta.validation.Valid;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/flash-sales")
@@ -31,8 +34,7 @@ public class FlashSaleController {
     @GetMapping("/upcoming")
     public ApiResponse<PageResponse<FlashSaleResponse>> getUpcomingFlashSales(
             @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "5") int size
-    ) {
+            @RequestParam(value = "size", defaultValue = "5") int size) {
         return ApiResponse.<PageResponse<FlashSaleResponse>>builder()
                 .result(flashSaleService.getUpcomingFlashSales(page, size))
                 .build();
@@ -41,8 +43,7 @@ public class FlashSaleController {
     @GetMapping("/past")
     public ApiResponse<PageResponse<FlashSaleResponse>> getPastFlashSales(
             @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "5") int size
-    ) {
+            @RequestParam(value = "size", defaultValue = "5") int size) {
         return ApiResponse.<PageResponse<FlashSaleResponse>>builder()
                 .result(flashSaleService.getPastFlashSales(page, size))
                 .build();

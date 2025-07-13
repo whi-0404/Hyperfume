@@ -1,11 +1,14 @@
 package com.Hyperfume.Backend.controller;
 
-import com.Hyperfume.Backend.ElasticSearch.ESPerfumeService;
+import java.io.IOException;
+import java.util.List;
+
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.Hyperfume.Backend.ElasticSearch.ESPerfumeService;
 import com.Hyperfume.Backend.dto.request.PerfumeRequest;
 import com.Hyperfume.Backend.dto.response.ApiResponse;
 import com.Hyperfume.Backend.dto.response.PageResponse;
@@ -17,9 +20,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-
-import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequestMapping("/perfumes")
@@ -102,7 +102,8 @@ public class PerfumeController {
             @RequestParam(value = "brandName", required = false) String brandName,
             @RequestParam(value = "concentration", required = false) String concentration,
             @RequestParam(value = "screntFamilyName", required = false) String screntFamilyName,
-            @RequestParam(value = "maxPrice", required = false) Long maxPrice) throws IOException {
+            @RequestParam(value = "maxPrice", required = false) Long maxPrice)
+            throws IOException {
         return ApiResponse.<PageResponse<PerfumeGetAllResponse>>builder()
                 .result(perfumeService.getAllPerfumes(
                         page,
@@ -167,12 +168,9 @@ public class PerfumeController {
 
     @GetMapping("/suggestions")
     public ApiResponse<List<String>> getSuggestions(
-            @RequestParam String keyword,
-            @RequestParam(defaultValue = "5") int maxSuggestions) throws IOException {
+            @RequestParam String keyword, @RequestParam(defaultValue = "5") int maxSuggestions) throws IOException {
 
         List<String> suggestions = esPerfumeService.autoCompletePerfumeName(keyword, maxSuggestions);
-        return ApiResponse.<List<String>> builder()
-                .result(suggestions)
-                .build();
+        return ApiResponse.<List<String>>builder().result(suggestions).build();
     }
 }

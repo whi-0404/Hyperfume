@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.Hyperfume.Backend.dto.request.ShippingAddressRequest;
 import com.Hyperfume.Backend.dto.response.ShippingAddressResponse;
 import com.Hyperfume.Backend.entity.ShippingAddress;
@@ -74,16 +75,16 @@ public class ShippingAddressServiceImpl implements ShippingAddressService {
                 .findById(shippingAddressId)
                 .orElseThrow(() -> new AppException(ErrorCode.SHIPPING_ADDRESS_NOT_EXISTED));
 
-        if(request.getIsDefault() != null && request.getIsDefault()){
+        if (request.getIsDefault() != null && request.getIsDefault()) {
             var context = SecurityContextHolder.getContext();
             String name = context.getAuthentication().getName();
 
+            User user =
+                    userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-            User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
-
-            ShippingAddress shippingAddressDefault = shippingAddressRepository.findByUserIdAndIsDefaultTrue(user.getId())
-                    .orElseThrow(()-> new AppException(ErrorCode.SHIPPING_ADDRESS_NOT_EXISTED));
+            ShippingAddress shippingAddressDefault = shippingAddressRepository
+                    .findByUserIdAndIsDefaultTrue(user.getId())
+                    .orElseThrow(() -> new AppException(ErrorCode.SHIPPING_ADDRESS_NOT_EXISTED));
 
             shippingAddressDefault.setIsDefault(false);
             shippingAddressRepository.save(shippingAddressDefault);
@@ -99,12 +100,11 @@ public class ShippingAddressServiceImpl implements ShippingAddressService {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
 
-
         User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-
-        ShippingAddress shippingAddressDefault = shippingAddressRepository.findByUserIdAndIsDefaultTrue(user.getId())
-                .orElseThrow(()-> new AppException(ErrorCode.SHIPPING_ADDRESS_NOT_EXISTED));
+        ShippingAddress shippingAddressDefault = shippingAddressRepository
+                .findByUserIdAndIsDefaultTrue(user.getId())
+                .orElseThrow(() -> new AppException(ErrorCode.SHIPPING_ADDRESS_NOT_EXISTED));
 
         shippingAddressDefault.setIsDefault(false);
 
@@ -115,22 +115,23 @@ public class ShippingAddressServiceImpl implements ShippingAddressService {
 
     @Transactional
     public void deleteShippingAddress(Integer shippingAddressId) {
-       ShippingAddress addressToDelete = shippingAddressRepository.findById(shippingAddressId)
-               .orElseThrow(() -> new AppException(ErrorCode.SHIPPING_ADDRESS_NOT_EXISTED));
+        ShippingAddress addressToDelete = shippingAddressRepository
+                .findById(shippingAddressId)
+                .orElseThrow(() -> new AppException(ErrorCode.SHIPPING_ADDRESS_NOT_EXISTED));
 
-       boolean wasDefault = addressToDelete.getIsDefault();
+        boolean wasDefault = addressToDelete.getIsDefault();
 
-       shippingAddressRepository.delete(addressToDelete);
+        shippingAddressRepository.delete(addressToDelete);
 
-       if(wasDefault){
-           User user = addressToDelete.getUser();
+        if (wasDefault) {
+            User user = addressToDelete.getUser();
 
-           List<ShippingAddress> addresses = shippingAddressRepository.findByUserId(user.getId());
-           if(!addresses.isEmpty()){
-               ShippingAddress newDefaultAddress = addresses.getFirst();
-               newDefaultAddress.setIsDefault(true);
-               shippingAddressRepository.save(newDefaultAddress);
-           }
-       }
+            List<ShippingAddress> addresses = shippingAddressRepository.findByUserId(user.getId());
+            if (!addresses.isEmpty()) {
+                ShippingAddress newDefaultAddress = addresses.getFirst();
+                newDefaultAddress.setIsDefault(true);
+                shippingAddressRepository.save(newDefaultAddress);
+            }
+        }
     }
 }
